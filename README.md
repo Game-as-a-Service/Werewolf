@@ -26,3 +26,6 @@
 # DevOps (待討論)
 - GitHub Action
 - Azure DevOps
+
+# 如何設置開發環境?
+[請看 setup.md](setup.md)
