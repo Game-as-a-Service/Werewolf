@@ -8,12 +8,12 @@
 - Clean Architecture
 
 # Tech Stack
-## 後端
+## 後端 Rest API + SignalR Server
 - Language: .NET 7 C# 11
 - Database: SQLite or SQL Server
 - ORM: Entity Framework Core
 
-## 前端 
+## 前端 Discoord Bot
 - Language: .NET 7 C# 11
 - Discord Bot SDK: [Discord.Net] (https://discordnet.dev/)
 
