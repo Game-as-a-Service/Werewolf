@@ -14,4 +14,9 @@
     <ProjectReference Include="..\Domain\Wsa.Gaas.Werewolf.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\" />
+    <Folder Include="UseCases\" />
+  </ItemGroup>
+
 </Project>

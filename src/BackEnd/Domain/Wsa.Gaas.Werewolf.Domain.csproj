@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Discord.Net.Core" Version="3.9.0" />
+    <Folder Include="Events\" />
+    <Folder Include="Exceptions\" />
+    <Folder Include="Common\" />
+    <Folder Include="Services\" />
+    <Folder Include="Objects\" />
   </ItemGroup>
 
 </Project>

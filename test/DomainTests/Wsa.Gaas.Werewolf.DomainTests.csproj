@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Domain\Wsa.Gaas.Werewolf.Domain.csproj" />
+    <ProjectReference Include="..\..\src\BackEnd\Domain\Wsa.Gaas.Werewolf.Domain.csproj" />
   </ItemGroup>
 
 </Project>

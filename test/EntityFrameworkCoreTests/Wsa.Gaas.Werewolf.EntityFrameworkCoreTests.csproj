@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Framework\DiscordBot\Wsa.Gaas.Werewolf.DiscordBot.csproj" />
+    <ProjectReference Include="..\..\src\BackEnd\InterfaceAdapter\EntityFrameworkCore\Wsa.Gaas.Werewolf.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
 </Project>

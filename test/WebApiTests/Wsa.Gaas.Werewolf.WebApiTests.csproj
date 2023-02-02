@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Framework\WebApi\Wsa.Gaas.Werewolf.WebApi.csproj" />
+    <ProjectReference Include="..\..\src\BackEnd\InterfaceAdapter\WebApi\Wsa.Gaas.Werewolf.WebApi.csproj" />
   </ItemGroup>
 
 </Project>
