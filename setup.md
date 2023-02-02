@@ -48,5 +48,15 @@ Host:
   6.0.308 [C:\Program Files\dotnet\sdk]
   7.0.101 [C:\Program Files\dotnet\sdk]
 ```
+## Docker Desktop
+https://www.docker.com/products/docker-desktop/
+
+### 要如何知道 Docker Desktop 安裝成功 ?
+在 Terminal 下打 `docker --version`
+你會看到類似以下的訊息, 那就是安裝成功啦
+```
+> docker --version
+Docker version 20.10.21, build baeda1f
+```
 
 
