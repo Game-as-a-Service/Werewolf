@@ -21,8 +21,8 @@ namespace Wsa.Gaas.Werewolf.WebApi
             // 實作 IRepository
             services.AddEntityFrameworkCoreRepository();
 
-            // 實作 IEventPublisher
-            services.AddTransient<IEventPublisher, GameEventHub>();
+            // 實作 IGameEventHandler
+            services.AddScoped<IGameEventHandler, GameEventHub>();
 
             return services;
         }

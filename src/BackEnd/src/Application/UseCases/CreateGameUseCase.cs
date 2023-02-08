@@ -14,11 +14,11 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
     {
         private readonly static object _lock = new();
 
-        public CreateGameUseCase(IRepository repository, IEventPublisher eventPublisher) : base(repository, eventPublisher)
+        public CreateGameUseCase(IRepository repository, GameEventPublisher eventPublisher) : base(repository, eventPublisher)
         {
         }
 
-        public override async Task ExecuteAsync(CreateGameRequest request, IPresenter<GameCreatedEvent> presenter)
+        public override async Task ExecuteAsync(CreateGameRequest request, IPresenter<GameCreatedEvent> presenter, CancellationToken cancellationToken = default)
         {
             Game game;
 
@@ -50,10 +50,10 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
             };
 
             // SignalR
-            await EventPublisher.PublishAsync(gameEvent);
+            await EventPublisher.PublishAsync(gameEvent, cancellationToken);
 
             // Restful API
-            await presenter.PresentAsync(gameEvent);
+            await presenter.PresentAsync(gameEvent, cancellationToken);
         }
     }
 

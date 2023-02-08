@@ -3,14 +3,14 @@
     public abstract class Policy<TGameEvent>
     {
         protected IRepository Repository { get; }
-        protected IEventPublisher EventPublisher { get; }
+        protected GameEventPublisher EventPublisher { get; }
 
-        protected Policy(IRepository repository, IEventPublisher eventPublisher)
+        protected Policy(IRepository repository, GameEventPublisher eventPublisher)
         {
             Repository = repository;
             EventPublisher = eventPublisher;
         }
 
-        public abstract Task ExecuteAsync(TGameEvent request);
+        public abstract Task ExecuteAsync(TGameEvent request, CancellationToken cancellationToken = default);
     }
 }

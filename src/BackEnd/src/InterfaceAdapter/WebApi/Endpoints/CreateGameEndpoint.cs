@@ -14,7 +14,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
     {
         public CreateGameResponse? ViewModel { get; set; }
 
-        public Task PresentAsync(GameCreatedEvent saidEvent)
+        public Task PresentAsync(GameCreatedEvent saidEvent, CancellationToken cancellationToken = default)
         {
             ViewModel = new CreateGameResponse(
                 saidEvent.GameId,

@@ -4,7 +4,7 @@ using Wsa.Gaas.Werewolf.Domain.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApi
 {
-    public class GameEventHub : Hub, IEventPublisher
+    public class GameEventHub : Hub, IGameEventHandler
     {
         private readonly IHubContext<GameEventHub> _hubContext;
 
@@ -13,9 +13,9 @@ namespace Wsa.Gaas.Werewolf.WebApi
             _hubContext = hubContext;
         }
 
-        public Task PublishAsync(GameEvent gameEvent)
+        public Task Handle(GameEvent gameEvent, CancellationToken cancellationToken = default) 
         {
-            return _hubContext.Clients.All.SendAsync("Publish", gameEvent);
+            return _hubContext.Clients.All.SendAsync(WebApiDefaults.SignalrPublishMethodName, gameEvent, cancellationToken);
         }
     }
 

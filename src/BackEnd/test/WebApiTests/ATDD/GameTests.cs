@@ -1,5 +1,4 @@
 using FastEndpoints;
-using Microsoft.AspNetCore.Hosting.Server;
 using System.Net;
 using System.Threading.Tasks.Dataflow;
 using Wsa.Gaas.Werewolf.Application.Common;
@@ -22,9 +21,9 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
 
         [Test]
         [Description("""
-            Given: 已經在語音頻道開了一個遊戲
-            When: 在同一個頻道, 再開一個遊戲時
-            Then: 看到錯誤訊息
+            Given: An active game in voice channel
+            When: trying to create a new game in same voic channel
+            Then: error 500 returned
             """)]
         public async Task CreateGameTest()
         {

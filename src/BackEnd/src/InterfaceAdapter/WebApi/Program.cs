@@ -16,7 +16,7 @@ app.UseDefaultExceptionHandler();
 app.UseFastEndpoints();
 
 // SignalR
-app.MapHub<GameEventHub>("/events");
+app.MapHub<GameEventHub>(WebApiDefaults.SignalrEndpoint);
 
 // Swagger
 app.UseOpenApi();

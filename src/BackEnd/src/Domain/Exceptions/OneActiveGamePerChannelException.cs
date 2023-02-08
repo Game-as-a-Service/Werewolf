@@ -3,7 +3,7 @@
     public class OneActiveGamePerChannelException : Exception
     {
         public OneActiveGamePerChannelException()
-            : base("一個語音頻道只能有一個遊戲")
+            : base("Only one active game per voice channel.")
         {
         }
     }
