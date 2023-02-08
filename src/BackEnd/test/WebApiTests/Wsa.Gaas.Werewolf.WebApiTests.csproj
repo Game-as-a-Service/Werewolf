@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Application\Was.Gaas.Werewolf.Application.csproj" />
+    <ProjectReference Include="..\..\src\Application\Wsa.Gaas.Werewolf.Application.csproj" />
     <ProjectReference Include="..\..\src\Domain\Wsa.Gaas.Werewolf.Domain.csproj" />
     <ProjectReference Include="..\..\src\InterfaceAdapter\EntityFrameworkCore\Wsa.Gaas.Werewolf.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\src\InterfaceAdapter\WebApi\Wsa.Gaas.Werewolf.WebApi.csproj" />

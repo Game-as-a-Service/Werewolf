@@ -1,8 +1,9 @@
 using FastEndpoints;
+using Microsoft.AspNetCore.Hosting.Server;
 using System.Net;
 using System.Threading.Tasks.Dataflow;
-using Was.Gaas.Werewolf.Application.Common;
-using Was.Gaas.Werewolf.Application.UseCases;
+using Wsa.Gaas.Werewolf.Application.Common;
+using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.WebApi.Endpoints;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
@@ -11,7 +12,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
 {
     public class GameTests
     {
-        private readonly WebApiTestServer _server = new();
+        WebApiTestServer _server = new();
 
         [SetUp]
         public async Task Setup()

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Was.Gaas.Werewolf.Application.Common;
+using Wsa.Gaas.Werewolf.Application.Common;
 
-namespace Was.Gaas.Werewolf.Application
+namespace Wsa.Gaas.Werewolf.Application
 {
     public static class DependencyInjection
     {

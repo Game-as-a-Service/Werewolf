@@ -1,6 +1,6 @@
 ﻿using Wsa.Gaas.Werewolf.Domain.Common;
 
-namespace Was.Gaas.Werewolf.Application.Common
+namespace Wsa.Gaas.Werewolf.Application.Common
 {
     public interface IEventPublisher
     {

@@ -1,4 +1,4 @@
-﻿namespace Was.Gaas.Werewolf.Application.Common
+﻿namespace Wsa.Gaas.Werewolf.Application.Common
 {
     public abstract class Policy<TGameEvent>
     {

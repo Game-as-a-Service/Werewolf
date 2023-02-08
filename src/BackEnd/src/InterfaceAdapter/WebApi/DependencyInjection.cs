@@ -1,6 +1,6 @@
 ﻿using FastEndpoints;
-using Was.Gaas.Werewolf.Application;
-using Was.Gaas.Werewolf.Application.Common;
+using Wsa.Gaas.Werewolf.Application;
+using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.EntityFrameworkCore;
 
 namespace Wsa.Gaas.Werewolf.WebApi

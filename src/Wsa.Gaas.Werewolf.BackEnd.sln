@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interface Adapter Layer", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{6DD38477-AD9E-494C-93ED-03F088E825A9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Was.Gaas.Werewolf.Application", "BackEnd\src\Application\Was.Gaas.Werewolf.Application.csproj", "{C721992F-43F8-4C3B-A8EE-99FDCECC68FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wsa.Gaas.Werewolf.Application", "BackEnd\src\Application\Wsa.Gaas.Werewolf.Application.csproj", "{C721992F-43F8-4C3B-A8EE-99FDCECC68FC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wsa.Gaas.Werewolf.Domain", "BackEnd\src\Domain\Wsa.Gaas.Werewolf.Domain.csproj", "{5A713E49-71B7-4C21-A5A2-7EC30572F744}"
 EndProject

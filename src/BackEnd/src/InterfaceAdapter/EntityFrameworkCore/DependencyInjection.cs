@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Was.Gaas.Werewolf.Application.Common;
+using Wsa.Gaas.Werewolf.Application.Common;
 
 namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
 {

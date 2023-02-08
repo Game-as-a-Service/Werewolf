@@ -43,10 +43,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
             }.Uri;
 
             return new HubConnectionBuilder()
-                .WithUrl(uri, opt =>
-                {
-                    opt.HttpMessageHandlerFactory = _ => Server.CreateHandler();
-                })
+                .WithUrl(uri, opt => opt.HttpMessageHandlerFactory = _ => Server.CreateHandler())
                 .Build();
         }
     }

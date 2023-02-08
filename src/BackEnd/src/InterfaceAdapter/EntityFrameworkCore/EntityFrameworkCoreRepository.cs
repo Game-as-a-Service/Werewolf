@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Was.Gaas.Werewolf.Application.Common;
+using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.EntityFrameworkCore

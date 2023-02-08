@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Application\Was.Gaas.Werewolf.Application.csproj" />
+    <ProjectReference Include="..\..\Application\Wsa.Gaas.Werewolf.Application.csproj" />
   </ItemGroup>
 
 </Project>
