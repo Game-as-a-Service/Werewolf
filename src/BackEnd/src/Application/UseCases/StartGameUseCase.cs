@@ -5,45 +5,47 @@ using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.Application.UseCases
 {
-    public class CreateGameRequest
+    public class StartGameRequest
     {
         public ulong DiscordVoiceChannelId { get; set; }
+
+        public ulong[] Players { get; set; } = Array.Empty<ulong>();
     }
 
-    public class CreateGameUseCase : UseCase<CreateGameRequest, GameCreatedEvent>
+    public class StartGameUseCase : UseCase<StartGameRequest, GameStartedEvent>
     {
         private readonly static object _lock = new();
 
-        public CreateGameUseCase(IRepository repository, GameEventBus eventPublisher) : base(repository, eventPublisher)
+        public StartGameUseCase(IRepository repository, GameEventBus eventPublisher) : base(repository, eventPublisher)
         {
         }
 
-        public override async Task ExecuteAsync(CreateGameRequest request, IPresenter<GameCreatedEvent> presenter, CancellationToken cancellationToken = default)
+        public override async Task ExecuteAsync(StartGameRequest request, IPresenter<GameStartedEvent> presenter, CancellationToken cancellationToken = default)
         {
-            Game game;
+            Game? game;
 
             lock (_lock)
             {
-                // Query
-                var anyExistingActiveGame = Repository.FindAll()
+                // 查
+                game = Repository.FindAll()
                     .Where(x => x.DiscordVoiceChannelId == request.DiscordVoiceChannelId)
                     .Where(x => x.Status != GameStatus.Ended)
-                    .Any();
+                    .FirstOrDefault();
 
-                if (anyExistingActiveGame)
+                if (game == null)
                 {
-                    throw new GameChannelException();
+                    throw new GameNotFoundException(request.DiscordVoiceChannelId);
                 }
 
-                // Update
-                game = new Game(request.DiscordVoiceChannelId);
+                // 改
+                game.StartGame(request.Players);
 
-                // Save
+                // 存
                 Repository.Save(game);
             }
 
-            // Push
-            var gameEvent = new GameCreatedEvent(game);
+            // 推
+            var gameEvent = new GameStartedEvent(game);
 
             // SignalR
             await GameEventBus.BroadcastAsync(gameEvent, cancellationToken);

@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks.Dataflow;
+using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Common;
 using Wsa.Gaas.Werewolf.WebApi;
+using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
 {
@@ -19,7 +21,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
         public HubConnection Connection { get; init; }
 
         // Buffer for storing GameEvent received
-        public BufferBlock<GameEvent> EventBuffer { get; } = new BufferBlock<GameEvent>();
+        public BufferBlock<GameVm> EventBuffer { get; } = new();
 
         public WebApiTestServer()
         {
@@ -36,8 +38,8 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
         public void ListenOn<T>()
             where T : GameEvent
         {
-            // Store received GameEvent `T` to EventBuffer
-            Connection.On<T>(WebApiDefaults.SignalrPublishMethodName, e => EventBuffer.Post(e));
+            // Store received GameVm to EventBuffer
+            Connection.On<GameVm>(typeof(T).Name, e => EventBuffer.Post(e));
         }
 
         // Resolve Dependency Injection, Get Required Service
@@ -58,6 +60,11 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
             return new HubConnectionBuilder()
                 .WithUrl(uri, opt => opt.HttpMessageHandlerFactory = _ => Server.CreateHandler())
                 .Build();
+        }
+
+        public GameBuilder CreateGameBuilder()
+        {
+            return new GameBuilder(GetRequiredService<IRepository>());
         }
     }
 }

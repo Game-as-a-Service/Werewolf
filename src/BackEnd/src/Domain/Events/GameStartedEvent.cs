@@ -2,9 +2,9 @@
 
 namespace Wsa.Gaas.Werewolf.Domain.Events
 {
-    public class GameCreatedEvent : GameEvent
+    public class GameStartedEvent : GameEvent
     {
-        public GameCreatedEvent(Game data) : base(data)
+        public GameStartedEvent(Game data) : base(data)
         {
         }
     }

@@ -1,11 +1,14 @@
-﻿namespace Wsa.Gaas.Werewolf.Application.Common
+﻿using Wsa.Gaas.Werewolf.Domain.Common;
+
+namespace Wsa.Gaas.Werewolf.Application.Common
 {
     public abstract class Policy<TGameEvent>
+        where TGameEvent : GameEvent
     {
         protected IRepository Repository { get; }
-        protected GameEventPublisher EventPublisher { get; }
+        protected GameEventBus EventPublisher { get; }
 
-        protected Policy(IRepository repository, GameEventPublisher eventPublisher)
+        protected Policy(IRepository repository, GameEventBus eventPublisher)
         {
             Repository = repository;
             EventPublisher = eventPublisher;

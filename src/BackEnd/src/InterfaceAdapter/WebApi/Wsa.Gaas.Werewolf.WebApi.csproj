@@ -10,6 +10,7 @@
     <PackageReference Include="FastEndpoints" Version="5.7.0" />
     <PackageReference Include="FastEndpoints.Swagger" Version="5.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="7.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 

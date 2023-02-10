@@ -1,8 +1,15 @@
-﻿namespace Wsa.Gaas.Werewolf.Domain.Common
+﻿using Wsa.Gaas.Werewolf.Domain.Objects;
+
+namespace Wsa.Gaas.Werewolf.Domain.Common
 {
     public class GameEvent
     {
-        public Guid GameId { get; set; }
-        public ulong DiscordVoiceChannelId { get; set; }
+        public GameEvent(Game data)
+        {
+            Data = data;
+        }
+
+        public Game Data { get; init; }
+        public DateTimeOffset TriggeredOn { get; } = DateTimeOffset.UtcNow;
     }
 }

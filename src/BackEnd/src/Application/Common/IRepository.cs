@@ -6,6 +6,8 @@ namespace Wsa.Gaas.Werewolf.Application.Common
     {
         Task<Game?> FindByIdAsync(Guid id);
 
+        Task<Game?> FindByDiscordChannelIdAsync(ulong discordChannelId);
+
         IQueryable<Game> FindAll();
 
         Task SaveAsync(Game game);

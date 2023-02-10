@@ -6,12 +6,12 @@ namespace Wsa.Gaas.Werewolf.Application.Common
         where TGameEvent : GameEvent
     {
         protected IRepository Repository { get; }
-        protected GameEventPublisher EventPublisher { get; }
+        protected GameEventBus GameEventBus { get; }
 
-        protected UseCase(IRepository repository, GameEventPublisher eventPublisher)
+        protected UseCase(IRepository repository, GameEventBus gameEventBus)
         {
             Repository = repository;
-            EventPublisher = eventPublisher;
+            GameEventBus = gameEventBus;
         }
 
         public abstract Task ExecuteAsync(TRequest request, IPresenter<TGameEvent> presenter, CancellationToken cancellationToken = default);

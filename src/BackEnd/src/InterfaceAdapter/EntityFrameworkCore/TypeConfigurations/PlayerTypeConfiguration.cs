@@ -4,13 +4,12 @@ using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.EntityFrameworkCore.TypeConfigurations
 {
-    internal class GameTypeConfiguration : IEntityTypeConfiguration<Game>
+    internal class PlayerTypeConfiguration : IEntityTypeConfiguration<Player>
     {
-        public void Configure(EntityTypeBuilder<Game> builder)
+        public void Configure(EntityTypeBuilder<Player> builder)
         {
-            builder.HasKey(x => x.Id);
-
-            builder.Ignore(x => x.Players);
+            builder.HasOne<Game>()
+                .WithMany("_players");
         }
     }
 }

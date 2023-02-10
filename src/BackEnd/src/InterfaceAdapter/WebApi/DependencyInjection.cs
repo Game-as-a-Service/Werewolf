@@ -22,7 +22,7 @@ namespace Wsa.Gaas.Werewolf.WebApi
             services.AddEntityFrameworkCoreRepository();
 
             // 實作 IGameEventHandler
-            services.AddScoped<IGameEventHandler, GameEventHub>();
+            services.AddScoped<IGameEventHandler, GameEventHubHandler>();
 
             return services;
         }
