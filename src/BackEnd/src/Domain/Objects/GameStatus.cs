@@ -5,6 +5,8 @@
         Created,
         Started,
         PlayerRoleConfirmationStarted,
+        LastNightResultAnnounced,
+        PlayerSpeaking,
 
 
         Ended,

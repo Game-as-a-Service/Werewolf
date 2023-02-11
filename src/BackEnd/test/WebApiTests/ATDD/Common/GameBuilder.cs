@@ -16,12 +16,13 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
 
         public GameBuilder WithRandomDiscordVoiceChannel()
         {
-            return WithDiscordVoiceChannel((ulong)new Random().Next());
+            return WithDiscordVoiceChannel((ulong) new Random().Next());
         }
 
         public GameBuilder WithDiscordVoiceChannel(ulong channelId)
         {
             _game.DiscordVoiceChannelId = channelId;
+
             return this;
         }
 
@@ -35,6 +36,16 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
         public GameBuilder WithPlayers(ulong[] players)
         {
             _game.AddPlayers(players);
+
+            return this;
+        }
+
+        public GameBuilder WithRandomPlayers(int count)
+        {
+            _game.AddPlayers(Enumerable.Range(1, count)
+                                       .Select(o => (ulong) o)
+                                       .ToArray());
+
             return this;
         }
 
@@ -45,5 +56,4 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
             return _game;
         }
     }
-
 }
