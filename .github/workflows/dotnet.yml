@@ -25,4 +25,4 @@ jobs:
       run: |
           dotnet restore 
           dotnet build -c Release --no-restore 
-          dotnet test --no-build --verbosity normal
+          dotnet test -c Release --no-build --verbosity normal
