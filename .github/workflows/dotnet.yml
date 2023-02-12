@@ -15,25 +15,37 @@ env:
   DOTNET_VERSION: '7.0.x' # The .NET SDK version to use
 
 jobs:
-  build-and-deploy:
+  build-test-publish:
     runs-on: ubuntu-latest
     environment: dev
     steps:
+    # Checkout the repo
     - uses: actions/checkout@v3
+    
+    # Setup .NET SDK
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-    - name: Restore, Build, Test and Publish
+  
+    # Run dotnet build and test
+    - name: dontet restore, build and test
       working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
       run: |
           dotnet restore 
           dotnet build -c Release --no-restore 
           dotnet test -c Release --no-build --verbosity normal
-          dotnet publish -c Release -o ../publish -r linux-x64 --self-contained true /p:UseAppHost=true
-    - name: Deploy to Azure App Service
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-        package: './publish'
+          
+    # Run dotnet publish
+    - name: Publish
+      working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      run: |
+          dotnet publish -c Release -o ../publish  -r linux-x64 --self-contained true /p:UseAppHost=true
+    
+    # Deploy to Azure App Service
+    #- name: Deploy to Azure App Service
+    #  uses: azure/webapps-deploy@v2
+    #  with:
+    #    app-name: ${{ env.AZURE_WEBAPP_NAME }}
+    #    publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+    #    package: './publish'
