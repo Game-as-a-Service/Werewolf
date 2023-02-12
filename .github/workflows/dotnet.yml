@@ -26,7 +26,7 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     - name: Restore, Build, Test and Publish
-      working-directory: ${{ AZURE_WEBAPP_PACKAGE_PATH }}
+      working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
       run: |
           dotnet restore 
           dotnet build -c Release --no-restore 
