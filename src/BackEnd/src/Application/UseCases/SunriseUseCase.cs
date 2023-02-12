@@ -38,8 +38,7 @@ namespace Application.UseCases
                 }
 
                 // 改
-                //狼人是否自爆
-                //哪些玩家已淘汰
+                //天亮時哪些人已淘汰
 
                 // 存
                 Repository.Save(game);
