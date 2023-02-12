@@ -33,22 +33,22 @@ jobs:
     - name: dotnet restore, build and test
       working-directory: ${{ env.DOTNET_APP_SOURCE_PATH }}
       run: |
-          dotnet restore
-          dotnet build -c Release --no-restore
-          dotnet test -c Release --no-build --verbosity normal
-          
+        dotnet restore
+        dotnet build -c Release --no-restore
+        dotnet test -c Release --no-build --verbosity normal
+
     # Run dotnet publish
     - name: dotnet publish
       run: |
           dotnet publish ${{ env.DOTNET_APP_PUBLISH_PROJECT_PATH }} -c Release -r linux-x64 --no-self-contained -o publish/backend /p:DebugType=None /p:DebugSymbols=false
-          
+
     # Upload Artifact
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
         name: backend-app
         path: publish/backend
-    
+
     # Dump steps context
-    - name: Dump steps context
-      run: echo '${{ toJSON(github) }}'
+    - name: Dump GitHub Context
+      run: echo '${{ toJSON(github) }}' >> $GITHUB_STEP_SUMMARY
