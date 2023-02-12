@@ -51,4 +51,6 @@ jobs:
 
     # Dump steps context
     - name: Dump GitHub Context
+      run: echo '```' >> $GITHUB_STEP_SUMMARY
       run: echo '${{ toJSON(github) }}' >> $GITHUB_STEP_SUMMARY
+      run: echo '```' >> $GITHUB_STEP_SUMMARY
