@@ -19,6 +19,13 @@ jobs:
     environment: dev
     #if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+    # https://blog.pother.ca/github-actions-workflow_run-event/
+    - uses: actions/checkout@v2
+      with:
+        ref: $
+    - run: git branch
+    - run: env
+      
     # Download Artifact
     - name: Download Artifact
       uses: actions/download-artifact@v3
