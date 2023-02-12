@@ -5,6 +5,8 @@
         Created,
         Started,
         PlayerRoleConfirmationStarted,
+        
+        Sunrise,
 
 
         Ended,
