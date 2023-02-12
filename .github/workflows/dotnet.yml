@@ -38,10 +38,14 @@ jobs:
           
     # Run dotnet publish
     - name: Publish
-      working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
       run: |
-          dotnet publish -c Release -o ../publish  -r linux-x64 --self-contained true /p:UseAppHost=true
+          dotnet publish -c Release -o publish  -r linux-x64 --self-contained true /p:UseAppHost=true
     
+    - uses: actions/upload-artifact@v3
+      with:
+        name: ${{env.AZURE_WEBAPP_NAME}}
+        path: publish
+        
     # Deploy to Azure App Service
     #- name: Deploy to Azure App Service
     #  uses: azure/webapps-deploy@v2
