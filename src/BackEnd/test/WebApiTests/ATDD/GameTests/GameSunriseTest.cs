@@ -26,10 +26,10 @@ namespace WebApiTests.ATDD.GameTests
 
         [Test]
         [Description("""
-            Issue #11
-            Given: Game Created
-            When: Starting game with 6 Players
-            Then: Error, not enough players
+            Issue #14
+            Given: 白天發言環節
+            When: 狼人選擇自爆
+            Then: 公布狼人身分，結束白天發言環節, 直接進入黑夜
             """)]
         public async Task WerewolfSuicideTest()
         {
