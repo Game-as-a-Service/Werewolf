@@ -48,6 +48,7 @@ jobs:
         name: backend-app
         path: publish/backend
   deploy:
+    needs: build-test-publish
     runs-on: ubuntu-latest
     environment: dev
     steps:
