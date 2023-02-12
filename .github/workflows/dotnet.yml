@@ -10,9 +10,9 @@ on:
     branches: [ "*" ]
 
 env:
-  AZURE_WEBAPP_NAME: 'werewolf-api-dev'
+  DOTNET_VERSION: '7.0.x'
   DOTNET_APP_SOURCE_PATH: './src/'
-  DOTNET_VERSION: '7.0.x' # The .NET SDK version to use
+  AZURE_WEBAPP_NAME: 'werewolf-api-dev'
 
 jobs:
   build-test-publish:
@@ -40,13 +40,11 @@ jobs:
       run: |
           dotnet publish ${{ env.DOTNET_APP_SOURCE_PATH }} -c Release -o publish -r linux-x64 --no-self-contained
           
-  upload-artifact:
-    runs-on: ubuntu-latest
-    needs: build-test-publish
-    steps:
-    - uses: actions/upload-artifact@v3
+    # Publish Artifact
+    - name: Publish Artifact
+      uses: actions/upload-artifact@v3
       with:
-        name: ${{env.AZURE_WEBAPP_NAME}}
+        name: dotnet-app
         path: publish
         
     # Deploy to Azure App Service
