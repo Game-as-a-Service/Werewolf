@@ -1,12 +1,7 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
 name: Build and Deploy
 
 on:
   push:
-    branches: [ "*" ]
-  pull_request:
     branches: [ "*" ]
 
 env:
@@ -17,7 +12,7 @@ env:
 
 jobs:
   build:
-    name: Build, Test and Publish
+    name: Build, Test and Publish Artifact
     runs-on: ubuntu-latest
     steps:
     # Checkout the repo
