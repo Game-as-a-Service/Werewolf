@@ -10,11 +10,12 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
         public GameStatus Status { get; internal set; }
 
         private List<Player> _players = new();
-        public ImmutableList<Player> Players { get => _players.ToImmutableList(); }
 
-        internal Game()
-        {
-        }
+        public ImmutableList<Player> Players => _players.ToImmutableList();
+
+        public Player? CurrentSpeakingPlayer { get; private set; }
+
+        internal Game() { }
 
         public Game(ulong discordVoiceChannelId)
         {
@@ -77,11 +78,11 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
         private List<Role> GetRoles(int n)
         {
             var roles = new List<Role>()
-            {
-                new Villager(), new Villager(), new Villager(),
-                new Werewolf(), new Werewolf(), new Werewolf(),
-                new Witch(), new Seer(), new Hunter(),
-            };
+                        {
+                            new Villager(), new Villager(), new Villager(),
+                            new Werewolf(), new Werewolf(), new Werewolf(),
+                            new Witch(), new Seer(), new Hunter(),
+                        };
 
             if (n >= 10)
             {
@@ -99,6 +100,14 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             }
 
             return roles;
+        }
+
+        public void StartPlayerSpeaking()
+        {
+            Status = GameStatus.PlayerSpeaking;
+
+            CurrentSpeakingPlayer = Players.OrderBy(_ => Guid.NewGuid())
+                                           .First();
         }
     }
 }
