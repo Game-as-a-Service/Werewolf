@@ -48,3 +48,9 @@ jobs:
       with:
         name: backend-app
         path: publish/backend
+    
+    # Dump steps context
+    - name: Dump steps context
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
+        run: echo "$STEPS_CONTEXT"
