@@ -40,6 +40,11 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             Status = GameStatus.PlayerRoleConfirmationStarted;
         }
 
+        public void StartSunriseing(ulong[] players)
+        {
+            Status = GameStatus.Sunriseing;
+        }
+
         public void StartSunrise()
         {
             Status = GameStatus.Sunrise;

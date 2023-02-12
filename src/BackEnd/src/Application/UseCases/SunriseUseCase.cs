@@ -38,7 +38,8 @@ namespace Application.UseCases
                 }
 
                 // 改
-                game.StartGame(request.Players);
+                //狼人是否自爆
+                //哪些玩家已淘汰
 
                 // 存
                 Repository.Save(game);

@@ -1,12 +1,9 @@
 using System.Net;
-using System.Threading.Tasks.Dataflow;
 using Application.UseCases;
 using Domain.Events;
 using FastEndpoints;
-using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 using Wsa.Gaas.Werewolf.WebApi.Endpoints;
-using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
 namespace WebApiTests.ATDD.GameTests
