@@ -17,7 +17,6 @@ env:
 jobs:
   build-test-publish:
     runs-on: ubuntu-latest
-    environment: dev
     steps:
     # Checkout the repo
     - uses: actions/checkout@v3
@@ -29,7 +28,7 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
   
     # Run dotnet build and test
-    - name: dontet restore, build and test
+    - name: dotnet restore, build and test
       working-directory: ${{ env.DOTNET_APP_SOURCE_PATH }}
       run: |
           dotnet restore 
@@ -37,9 +36,9 @@ jobs:
           dotnet test -c Release --no-build --verbosity normal
           
     # Run dotnet publish
-    - name: Publish
+    - name: dotnet publish
       run: |
-          dotnet publish ${{ env.DOTNET_APP_SOURCE_PATH }} -c Release -o publish
+          dotnet publish ${{ env.DOTNET_APP_SOURCE_PATH }} -c Release -o publish -r linux-x64
     
     - uses: actions/upload-artifact@v3
       with:
