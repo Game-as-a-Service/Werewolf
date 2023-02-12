@@ -4,11 +4,13 @@
 name: Deploy to Azure App Service
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows:
       - Build
     types:
       - completed
+  
 
 env:
   AZURE_WEBAPP_NAME: 'werewolf-api-dev'
