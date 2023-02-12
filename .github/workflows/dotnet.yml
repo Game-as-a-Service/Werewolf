@@ -12,9 +12,7 @@ on:
 env:
   AZURE_WEBAPP_NAME: werewolf-api-dev
   AZURE_WEBAPP_PACKAGE_PATH: './src/'
-  
   DOTNET_VERSION: '7.0.x' # The .NET SDK version to use
-
 
 jobs:
   build-and-deploy:
