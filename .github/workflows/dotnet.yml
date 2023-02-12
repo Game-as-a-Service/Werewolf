@@ -32,12 +32,14 @@ jobs:
     - name: dotnet restore, build and test
       working-directory: ${{ env.DOTNET_APP_SOURCE_PATH }}
       run: |
-          dotnet test -c Release --verbosity normal
+          dotnet restore
+          dotnet build -c Release --no-restore
+          dotnet test -c Release --no-build --verbosity normal
           
     # Run dotnet publish
     - name: dotnet publish
       run: |
-          dotnet publish ${{ env.DOTNET_APP_PUBLISH_PROJECT_PATH }} -c Release -r linux-x64 -o publish/backend
+          dotnet publish ${{ env.DOTNET_APP_PUBLISH_PROJECT_PATH }} -c Release -r linux-x64 --no-self-contained -o publish/backend
           
     # Publish Artifact
     - name: Publish Artifact
