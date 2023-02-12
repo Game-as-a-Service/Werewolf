@@ -11,7 +11,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: 'werewolf-api-dev'
-  AZURE_WEBAPP_PACKAGE_PATH: './src/'
+  DOTNET_APP_SOURCE_PATH: './src/'
   DOTNET_VERSION: '7.0.x' # The .NET SDK version to use
 
 jobs:
@@ -30,7 +30,7 @@ jobs:
   
     # Run dotnet build and test
     - name: dontet restore, build and test
-      working-directory: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      working-directory: ${{ env.DOTNET_APP_SOURCE_PATH }}
       run: |
           dotnet restore 
           dotnet build -c Release --no-restore 
@@ -39,7 +39,7 @@ jobs:
     # Run dotnet publish
     - name: Publish
       run: |
-          dotnet publish ${{ env.AZURE_WEBAPP_PACKAGE_PATH }} -c Release -o publish  -r linux-x64 --self-contained true /p:UseAppHost=true
+          dotnet publish ${{ env.DOTNET_APP_SOURCE_PATH }} -c Release -o publish
     
     - uses: actions/upload-artifact@v3
       with:
