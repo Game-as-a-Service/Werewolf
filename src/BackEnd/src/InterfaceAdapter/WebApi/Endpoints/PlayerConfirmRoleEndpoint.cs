@@ -18,7 +18,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
         /// </summary>
         public override void Configure()
         {
-            Post("/games/{gameId}/players/{playerId}:confirm-role");
+            Get("/games/{DiscordVoiceChannelId}/players/{PlayerId}/Role");
             AllowAnonymous();
         }
 
