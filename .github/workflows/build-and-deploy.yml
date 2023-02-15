@@ -52,6 +52,7 @@ jobs:
 
   deploy:
     name: Deploy to Azure App Service
+    if: github.ref_name == 'dev'
     needs: build
     runs-on: ubuntu-latest
     environment: dev
