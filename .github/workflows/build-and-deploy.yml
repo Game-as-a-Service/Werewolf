@@ -67,7 +67,7 @@ jobs:
     if: env.DEPLOYMENT_ENVIRONMENT != '' && env.AZURE_WEBAPP_NAME != ''
     needs: build
     runs-on: ubuntu-latest
-    environment: ${{ env.DEPLOYMENT_ENVIRONMENT }}
+    environment: dev
     steps:
     # Download Artifact
     - name: Download Artifact
