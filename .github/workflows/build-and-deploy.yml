@@ -72,7 +72,7 @@ jobs:
     if: jobs.build.outputs.deploy == 'true'
     needs: build
     runs-on: ubuntu-latest
-    environment: ${{ env.DEPLOYMENT_ENVIRONMENT }}
+    environment: $DEPLOYMENT_ENVIRONMENT
     steps:
     # Download Artifact
     - name: Download Artifact
