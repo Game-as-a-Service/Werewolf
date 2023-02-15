@@ -1,9 +1,4 @@
 ﻿using FastEndpoints;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Objects;
@@ -14,13 +9,8 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
 {
     public class PlayerConfirmRoleTests
     {
-        WebApiTestServer _server = new();
-        Random _random = new();
-
-        /// <summary>
-        /// 每個Test執行前，都會執行一次
-        /// </summary>
-        /// <returns></returns>
+        readonly WebApiTestServer _server = new();
+        
         [OneTimeSetUp]
         public async Task OneTimeSetup()
         {
@@ -45,15 +35,19 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
         public async Task PlayerConfirmRoleTest() 
         {
             // Arrange - Set up game in database
+            // TODO: We need GameBuilder to build the Game with different status correctly.
+            
             var game = _server.CreateGameBuilder()
                 .WithRandomDiscordVoiceChannel()
-                //.WithRandomPlayers(10)
                 .WithGameStatus(GameStatus.Created)
                 .Build();
+
             var players = Enumerable.Range(0, 10)
                 .Select(x => (ulong)x)
                 .ToArray();
+            
             game.StartGame(players);
+            
             var repository = _server.GetRequiredService<IRepository>();
             repository.Save(game);
 
@@ -67,16 +61,13 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
                 PlayerId = playerId,
             };
 
-            var (response, result) = await _server.Client.POSTAsync<PlayerConfirmRoleEndpoint, PlayerConfirmRoleRequest, PlayerConfirmRoleResponse>(request);
+            var (response, result) = await _server.Client
+                .GETAsync<PlayerConfirmRoleEndpoint, PlayerConfirmRoleRequest, PlayerConfirmRoleResponse>(request);
 
             // Asert 
             response!.EnsureSuccessStatusCode();
             result!.PlayerId.Should().Be(playerId.ToString());
             result!.Role.Should().Be(expectedRole);
-
-
-
-
         }
     }
 }

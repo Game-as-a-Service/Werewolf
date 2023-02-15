@@ -113,10 +113,22 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
 
         public PlayerRoleConfirmedEvent ConfirmPlayerRole(ulong playerId)
         {
+            var player = Players.FirstOrDefault(x => x.Id == playerId);
+
+            if (player == null)
+            {
+                throw new PlayerNotFoundException(DiscordVoiceChannelId, playerId);
+            }
+
+            if (player.Role == null)
+            {
+                throw new GameNotStartedException(DiscordVoiceChannelId);
+            }
+
             var gameEvent = new PlayerRoleConfirmedEvent(this)
             {
                 PlayerId = playerId,
-                Role = Players.FirstOrDefault(x => x.Id == playerId)!.Role!.Name,
+                Role = player.Role.Name,
             };
 
             return gameEvent;
