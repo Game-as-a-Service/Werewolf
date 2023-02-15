@@ -64,7 +64,7 @@ jobs:
 
   deploy:
     name: Deploy to Azure App Service
-    if: DEPLOYMENT_ENVIRONMENT != '' && AZURE_WEBAPP_NAME != ''
+    #if: DEPLOYMENT_ENVIRONMENT != '' && AZURE_WEBAPP_NAME != ''
     needs: build
     runs-on: ubuntu-latest
     environment: dev
