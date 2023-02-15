@@ -38,7 +38,7 @@ jobs:
 
     # Upload Artifact
     - name: Upload Artifact
-      if: github.event_name = 'push' && (github.ref == 'dev' || github.ref == 'master')
+      if: github.event_name == 'push' && (github.ref == 'dev' || github.ref == 'master')
       uses: actions/upload-artifact@v3
       with:
         name: backend-app
