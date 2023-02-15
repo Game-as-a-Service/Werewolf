@@ -69,7 +69,7 @@ jobs:
 
   deploy:
     name: Deploy to Azure App Service
-    if: jobs.build.steps.set-deploy.outputs.deploy == 'true'
+    if: steps.set-deploy.outputs.deploy == 'true'
     needs: build
     runs-on: ubuntu-latest
     environment: $DEPLOYMENT_ENVIRONMENT
