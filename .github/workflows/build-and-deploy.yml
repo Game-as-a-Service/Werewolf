@@ -51,26 +51,23 @@ jobs:
         echo '${{ toJSON(github) }}' >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
 
-    # Setting Dev Deployment
-    - name: Setting Dev Deployment
-      if: github.ref_name == 'dev'
+    # Setting Deployment Environment
+    - name: Setting Deployment Environment
       run: |
-        echo "DEPLOYMENT_ENVIRONMENT=dev" >> $GITHUB_ENV
-        echo "AZURE_WEBAPP_NAME=werewolf-api-dev" >> $GITHUB_ENV
-
-    # Setting Production Deployment
-    - name: Setting Production Deployment
-      if: github.ref_name == 'master'
-      run: |
-        echo "DEPLOYMENT_ENVIRONMENT=production" >> $GITHUB_ENV
-        echo "AZURE_WEBAPP_NAME=werewolf-api" >> $GITHUB_ENV
+        if [[ $GITHUB_REF == 'dev' ]]; then
+          echo "DEPLOYMENT_ENVIRONMENT=dev" >> $GITHUB_ENV
+          echo "AZURE_WEBAPP_NAME=werewolf-api-dev" >> $GITHUB_ENV
+        elif [[ $GITHUB_REF == 'master' ]]; then
+          echo "DEPLOYMENT_ENVIRONMENT=production" >> $GITHUB_ENV
+          echo "AZURE_WEBAPP_NAME=werewolf-api" >> $GITHUB_ENV
+        fi
 
   deploy:
     name: Deploy to Azure App Service
-    if: $env.DEPLOYMENT_ENVIRONMENT != '' && $env.AZURE_WEBAPP_NAME != ''
+    if: env.DEPLOYMENT_ENVIRONMENT != '' && env.AZURE_WEBAPP_NAME != ''
     needs: build
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ env.DEPLOYMENT_ENVIRONMENT }}
     steps:
     # Download Artifact
     - name: Download Artifact
