@@ -44,13 +44,6 @@ jobs:
         name: backend-app
         path: publish/backend
 
-    # Dump GitHub Context
-    - name: Dump GitHub Context
-      run: |
-        echo '```' >> $GITHUB_STEP_SUMMARY
-        echo '${{ toJSON(github) }}' >> $GITHUB_STEP_SUMMARY
-        echo '```' >> $GITHUB_STEP_SUMMARY
-
     # Setting Deployment Environment
     - name: Setting Deployment Environment
       run: |
@@ -61,6 +54,14 @@ jobs:
           echo "DEPLOYMENT_ENVIRONMENT=production" >> $GITHUB_ENV
           echo "AZURE_WEBAPP_NAME=werewolf-api" >> $GITHUB_ENV
         fi
+
+    # Dump GitHub Context
+    - name: Dump GitHub Context
+      run: |
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        echo '${{ toJSON(env) }}' >> $GITHUB_STEP_SUMMARY
+        echo '${{ toJSON(github) }}' >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
 
   deploy:
     name: Deploy to Azure App Service
@@ -92,5 +93,6 @@ jobs:
     - name: Dump GitHub Context
       run: |
         echo '```' >> $GITHUB_STEP_SUMMARY
+        echo '${{ toJSON(env) }}' >> $GITHUB_STEP_SUMMARY
         echo '${{ toJSON(github) }}' >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
