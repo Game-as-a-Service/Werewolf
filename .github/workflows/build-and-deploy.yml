@@ -65,10 +65,10 @@ jobs:
 
   deploy:
     name: Deploy to Azure App Service
-    #if: DEPLOYMENT_ENVIRONMENT != '' && AZURE_WEBAPP_NAME != ''
+    if: ${{ env.DEPLOYMENT_ENVIRONMENT }} != '' && ${{ env.AZURE_WEBAPP_NAME }} != ''
     needs: build
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ env.DEPLOYMENT_ENVIRONMENT }}
     steps:
     # Download Artifact
     - name: Download Artifact
