@@ -48,11 +48,15 @@ jobs:
     - name: Setting Deployment Environment
       run: |
         if [[ $GITHUB_REF == 'dev' ]]; then
+          echo ::set-output name=deploy::true
           echo "DEPLOYMENT_ENVIRONMENT=dev" >> $GITHUB_ENV
           echo "AZURE_WEBAPP_NAME=werewolf-api-dev" >> $GITHUB_ENV
         elif [[ $GITHUB_REF == 'master' ]]; then
+          echo ::set-output name=deploy::true
           echo "DEPLOYMENT_ENVIRONMENT=production" >> $GITHUB_ENV
           echo "AZURE_WEBAPP_NAME=werewolf-api" >> $GITHUB_ENV
+        else
+          echo ::set-output name=deploy::false
         fi
 
     # Dump GitHub Context
@@ -65,7 +69,7 @@ jobs:
 
   deploy:
     name: Deploy to Azure App Service
-    if: ${{ env.DEPLOYMENT_ENVIRONMENT }} != '' && ${{ env.AZURE_WEBAPP_NAME }} != ''
+    if: jobs.build.outputs.deploy == 'true'
     needs: build
     runs-on: ubuntu-latest
     environment: ${{ env.DEPLOYMENT_ENVIRONMENT }}
