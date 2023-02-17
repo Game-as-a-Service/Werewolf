@@ -32,7 +32,7 @@ jobs:
 
     # Run dotnet publish
     - name: dotnet publish
-      if: github.event_name == 'push' && (github.ref == 'dev' || github.ref == 'master')
+      if: github.event_name == 'push' && (github.ref_name == 'dev' || github.ref_name == 'master')
       run: |
           dotnet publish ${{ env.DOTNET_APP_PUBLISH_PROJECT_PATH }} -c Release -r linux-x64 --no-self-contained -o publish/backend /p:DebugType=None /p:DebugSymbols=false
 
