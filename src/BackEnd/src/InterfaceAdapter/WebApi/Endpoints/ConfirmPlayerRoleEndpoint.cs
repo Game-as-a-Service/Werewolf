@@ -3,18 +3,14 @@ using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.WebApi.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
-{ 
-    public class PlayerConfirmRoleResponse
-    {
-        public string GameId { get; set; } = string.Empty;
-        public string PlayerId { get; set; } = string.Empty;
-        public string Role { get; set; } = string.Empty;
-    }
+{
+    public record ConfirmPlayerRoleResponse(string GameId, string PlayerId, string Role);
+    
 
-    public class PlayerConfirmRoleEndpoint : WebApiEndpoint<PlayerConfirmRoleRequest, PlayerRoleConfirmedEvent, PlayerConfirmRoleResponse>
+    public class ConfirmPlayerRoleEndpoint : WebApiEndpoint<ConfirmPlayerRoleRequest, PlayerRoleConfirmedEvent, ConfirmPlayerRoleResponse>
     {
         /// <summary>
-        /// 註冊api Route
+        /// Register API Route
         /// </summary>
         public override void Configure()
         {
@@ -28,7 +24,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
         /// <param name="req"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public async override Task<PlayerConfirmRoleResponse> ExecuteAsync(PlayerConfirmRoleRequest req, CancellationToken ct)
+        public async override Task<ConfirmPlayerRoleResponse> ExecuteAsync(ConfirmPlayerRoleRequest req, CancellationToken ct)
         {
             await UseCase.ExecuteAsync(req, this, ct);
 
@@ -42,12 +38,11 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
 
         public override Task PresentAsync(PlayerRoleConfirmedEvent gameEvent, CancellationToken cancellationToken = default)
         {
-            ViewModel = new PlayerConfirmRoleResponse
-            {
-                GameId = gameEvent.Data.DiscordVoiceChannelId.ToString(),
-                PlayerId = gameEvent.PlayerId.ToString(),
-                Role = gameEvent.Role,
-            };
+            ViewModel = new ConfirmPlayerRoleResponse(
+                gameEvent.Data.DiscordVoiceChannelId.ToString(),
+                gameEvent.PlayerId.ToString(),
+                gameEvent.Role
+            );
 
             return Task.CompletedTask;
         }

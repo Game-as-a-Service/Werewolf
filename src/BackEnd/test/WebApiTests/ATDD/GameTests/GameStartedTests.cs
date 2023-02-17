@@ -97,14 +97,15 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             game.Players.Should().HaveSameCount(request.Players);
 
             // Assert event received
-            var gameEvent = await _server.EventBuffer.ReceiveAsync();
-            gameEvent.Should().BeOfType<GameVm>();
-            gameEvent.Status.Should().Be(GameStatus.Started.ToString());
-            gameEvent.Players.Should().HaveSameCount(request.Players);
+            var gameVm = await _server.EventBuffer.ReceiveAsync();
+            gameVm.Should().BeOfType<GameVm>();
+            gameVm.Status.Should().Be(GameStatus.Started.ToString());
+            gameVm.Players.Should().HaveSameCount(request.Players);
+
 
             // next event should be PlayerRoleConfirmationStarted
-            gameEvent = await _server.EventBuffer.ReceiveAsync();
-            gameEvent.Status.Should().Be(GameStatus.PlayerRoleConfirmationStarted.ToString());
+            gameVm = await _server.EventBuffer.ReceiveAsync();
+            gameVm.Status.Should().Be(GameStatus.PlayerRoleConfirmationStarted.ToString());
 
             // game already started, expect error
             (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))

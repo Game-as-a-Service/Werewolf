@@ -5,12 +5,11 @@ using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 using Wsa.Gaas.Werewolf.WebApi.Endpoints;
-using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
 {
-    public class PlayerConfirmRoleTests
+    public class PlayerRoleConfirmedTests
     {
         readonly WebApiTestServer _server = new();
         
@@ -35,7 +34,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             告知玩家角色身分
             """
             )]
-        public async Task PlayerConfirmRoleTest() 
+        public async Task ConfirmPlayerRoleTest() 
         {
             // Arrange - Set up game in database
             // TODO: We need GameBuilder to build the Game with different status correctly.
@@ -63,14 +62,14 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
                 var expectedRole = player.Role!.Name;
 
                 // Act - Rest API call
-                var request = new PlayerConfirmRoleRequest()
+                var request = new ConfirmPlayerRoleRequest()
                 {
                     DiscordVoiceChannelId = game.DiscordVoiceChannelId,
                     PlayerId = playerId,
                 };
 
                 var (response, result) = await _server.Client
-                    .GETAsync<PlayerConfirmRoleEndpoint, PlayerConfirmRoleRequest, PlayerConfirmRoleResponse>(request);
+                    .GETAsync<ConfirmPlayerRoleEndpoint, ConfirmPlayerRoleRequest, ConfirmPlayerRoleResponse>(request);
 
                 // Assert API Result
                 response!.EnsureSuccessStatusCode();
@@ -81,16 +80,8 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
                 var gameVm = await _server.EventBuffer.ReceiveAsync();
                 foreach (var playerVm in gameVm.Players)
                 {
-                    if (playerVm.Id == playerId.ToString())
-                    {
-                        // Only one player role is revealed
-                        playerVm.Role.Should().Be(expectedRole);
-                    }
-                    else
-                    {
-                        // Other player's role should be null
-                        playerVm.Role.Should().BeNull();
-                    }
+                    // Player's role should be null
+                    playerVm.Role.Should().BeNull();
                 }
             }
             

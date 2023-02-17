@@ -4,19 +4,19 @@ using Wsa.Gaas.Werewolf.Domain.Exceptions;
 
 namespace Wsa.Gaas.Werewolf.Application.UseCases
 {
-    public class PlayerConfirmRoleRequest
+    public class ConfirmPlayerRoleRequest
     {
         public ulong DiscordVoiceChannelId { get; set; }
         public ulong PlayerId { get; set; }
     }
 
-    public class PlayerConfirmRoleUseCase : UseCase<PlayerConfirmRoleRequest, PlayerRoleConfirmedEvent>
+    public class ConfirmPlayerRoleUseCase : UseCase<ConfirmPlayerRoleRequest, PlayerRoleConfirmedEvent>
     {
-        public PlayerConfirmRoleUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
+        public ConfirmPlayerRoleUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
         {
         }
 
-        public async override Task ExecuteAsync(PlayerConfirmRoleRequest request, IPresenter<PlayerRoleConfirmedEvent> presenter, CancellationToken cancellationToken = default)
+        public async override Task ExecuteAsync(ConfirmPlayerRoleRequest request, IPresenter<PlayerRoleConfirmedEvent> presenter, CancellationToken cancellationToken = default)
         {
             // Query
             var game = await Repository.FindByDiscordChannelIdAsync(request.DiscordVoiceChannelId);

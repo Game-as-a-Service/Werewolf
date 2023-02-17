@@ -30,22 +30,9 @@ namespace Wsa.Gaas.Werewolf.WebApi
 
         public async Task Handle(GameEvent gameEvent, CancellationToken cancellationToken = default)
         {
-            var gameVm = GameVm.FromDomain(gameEvent.Data);
-
-            if (gameEvent is PlayerRoleConfirmedEvent confirmedEvent)
-            {
-                // Populate Role
-                if (gameVm.Players.FirstOrDefault(x => x.Id == confirmedEvent.PlayerId.ToString()) is PlayerVm playerVm
-                    && gameEvent.Data.Players.FirstOrDefault(x => x.Id == confirmedEvent.PlayerId) is Player player
-                )
-                {
-                    playerVm.Role = player.Role!.Name;
-                }
-            }
-
             await _hubContext.Clients.All.SendAsync(
                 gameEvent.GetType().Name, 
-                gameVm, 
+                GameVm.FromDomain(gameEvent.Data), 
                 cancellationToken
             );
         }

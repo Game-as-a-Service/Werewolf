@@ -122,7 +122,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
 
             if (player.Role == null)
             {
-                throw new GameNotStartedException(DiscordVoiceChannelId);
+                throw new PlayerRoleNotAssignedException(playerId);
             }
 
             var gameEvent = new PlayerRoleConfirmedEvent(this)
