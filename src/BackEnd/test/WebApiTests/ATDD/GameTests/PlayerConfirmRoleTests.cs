@@ -5,6 +5,7 @@ using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 using Wsa.Gaas.Werewolf.WebApi.Endpoints;
+using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
@@ -53,43 +54,46 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             var repository = _server.GetRequiredService<IRepository>();
             repository.Save(game);
 
-            var randomPlayer = game.Players.OrderBy(x => Guid.NewGuid()).First();
-            var playerId = randomPlayer.Id;
-            var expectedRole = randomPlayer.Role!.Name;
-
             _server.ListenOn<PlayerRoleConfirmedEvent>();
 
 
-            // Act - Rest API call
-            var request = new PlayerConfirmRoleRequest()
+            foreach (var player in game.Players)
             {
-                DiscordVoiceChannelId = game.DiscordVoiceChannelId,
-                PlayerId = playerId,
-            };
+                var playerId = player.Id;
+                var expectedRole = player.Role!.Name;
 
-            var (response, result) = await _server.Client
-                .GETAsync<PlayerConfirmRoleEndpoint, PlayerConfirmRoleRequest, PlayerConfirmRoleResponse>(request);
-
-            // Assert API Result
-            response!.EnsureSuccessStatusCode();
-            result!.PlayerId.Should().Be(playerId.ToString());
-            result.Role.Should().Be(expectedRole);
-
-            // Assert SignalR
-            var gameVm  = await _server.EventBuffer.ReceiveAsync();
-            foreach (var playerVm in gameVm.Players)
-            {
-                if (playerVm.Id == playerId.ToString())
+                // Act - Rest API call
+                var request = new PlayerConfirmRoleRequest()
                 {
-                    // Only one player role is revealed
-                    playerVm.Role.Should().Be(expectedRole);
-                }
-                else
+                    DiscordVoiceChannelId = game.DiscordVoiceChannelId,
+                    PlayerId = playerId,
+                };
+
+                var (response, result) = await _server.Client
+                    .GETAsync<PlayerConfirmRoleEndpoint, PlayerConfirmRoleRequest, PlayerConfirmRoleResponse>(request);
+
+                // Assert API Result
+                response!.EnsureSuccessStatusCode();
+                result!.PlayerId.Should().Be(playerId.ToString());
+                result.Role.Should().Be(expectedRole);
+
+                // Assert SignalR
+                var gameVm = await _server.EventBuffer.ReceiveAsync();
+                foreach (var playerVm in gameVm.Players)
                 {
-                    // Other player's role should be null
-                    playerVm.Role.Should().BeNull();
+                    if (playerVm.Id == playerId.ToString())
+                    {
+                        // Only one player role is revealed
+                        playerVm.Role.Should().Be(expectedRole);
+                    }
+                    else
+                    {
+                        // Other player's role should be null
+                        playerVm.Role.Should().BeNull();
+                    }
                 }
             }
+            
 
         }
     }
