@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Common;
+using Wsa.Gaas.Werewolf.Domain.Events;
+using Wsa.Gaas.Werewolf.Domain.Objects;
 using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 
 namespace Wsa.Gaas.Werewolf.WebApi
@@ -28,7 +30,11 @@ namespace Wsa.Gaas.Werewolf.WebApi
 
         public async Task Handle(GameEvent gameEvent, CancellationToken cancellationToken = default)
         {
-            await _hubContext.Clients.All.SendAsync(gameEvent.GetType().Name, GameVm.FromDomain(gameEvent.Data), cancellationToken);
+            await _hubContext.Clients.All.SendAsync(
+                gameEvent.GetType().Name, 
+                GameVm.FromDomain(gameEvent.Data), 
+                cancellationToken
+            );
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 
 namespace Wsa.Gaas.Werewolf.Domain.Objects
@@ -108,6 +109,29 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
 
             CurrentSpeakingPlayer = Players.OrderBy(_ => Guid.NewGuid())
                                            .First();
+        }
+
+        public PlayerRoleConfirmedEvent ConfirmPlayerRole(ulong playerId)
+        {
+            var player = Players.FirstOrDefault(x => x.Id == playerId);
+
+            if (player == null)
+            {
+                throw new PlayerNotFoundException(DiscordVoiceChannelId, playerId);
+            }
+
+            if (player.Role == null)
+            {
+                throw new PlayerRoleNotAssignedException(playerId);
+            }
+
+            var gameEvent = new PlayerRoleConfirmedEvent(this)
+            {
+                PlayerId = playerId,
+                Role = player.Role.Name,
+            };
+
+            return gameEvent;
         }
     }
 }
