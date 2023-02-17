@@ -54,7 +54,7 @@ jobs:
 
   deploy-dev:
     name: Deploy Dev
-    if: github.ref == 'dev' && github.event_name == 'push'
+    if: github.ref == 'develop' && github.event_name == 'push'
     needs: build
     runs-on: ubuntu-latest
     environment: dev
