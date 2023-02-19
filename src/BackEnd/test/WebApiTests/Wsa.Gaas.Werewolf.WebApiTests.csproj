@@ -39,7 +39,6 @@
   <ItemGroup>
     <Folder Include="TDD\ApplicationTest\" />
     <Folder Include="TDD\DomainTest\" />
-    <Folder Include="TDD\EntityFrameworkCoreTest\" />
     <Folder Include="TDD\WebApiTest\" />
   </ItemGroup>
 

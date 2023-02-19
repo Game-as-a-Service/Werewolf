@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Wsa.Gaas.Werewolf.Application.Common;
 
 namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
@@ -10,6 +11,10 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
             //services.AddDbContext<IRepository, EntityFrameworkCoreRepository>(opt =>
             //{
             //    opt.UseInMemoryDatabase(nameof(EntityFrameworkCoreRepository));
+            //    //opt.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;Initial Catalog=TestDb");
+
+            //    opt.EnableDetailedErrors();
+            //    opt.EnableSensitiveDataLogging();
             //});
 
             services.AddSingleton<IRepository, InMemoryRepository>();

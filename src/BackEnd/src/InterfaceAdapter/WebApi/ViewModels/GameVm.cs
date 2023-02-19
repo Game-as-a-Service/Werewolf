@@ -18,7 +18,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.ViewModels
                 Id = game.DiscordVoiceChannelId.ToString(),
                 Players = game.Players.Select(PlayerVm.FromDomain).ToList(),
                 Status = game.Status.ToString(),
-                CurrentSpeakingPlayer = game.CurrentSpeakingPlayer?.Id
+                CurrentSpeakingPlayer = game.CurrentSpeakingPlayer?.UserId
             };
         }
     }
