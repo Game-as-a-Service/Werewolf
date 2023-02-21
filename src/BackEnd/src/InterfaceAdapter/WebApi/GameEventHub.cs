@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using FastEndpoints;
+using Microsoft.AspNetCore.SignalR;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Common;
 using Wsa.Gaas.Werewolf.Domain.Events;

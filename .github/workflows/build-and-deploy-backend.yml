@@ -1,11 +1,16 @@
-name: Build and Deploy
+name: Backend - Build and Deploy
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - src/Backend/**
+      - .github/workflows/build-and-deploy-backend.yml
 
 env:
   DOTNET_VERSION: '7.0.x'
   DOTNET_APP_SOURCE_PATH: './src/'
-  DOTNET_APP_PUBLISH_PROJECT_PATH: './src/BackEnd/src/InterfaceAdapter/WebApi'
+  DOTNET_APP_BACKEND_SOLUTION: 'Wsa.Gaas.Werewolf.BackEnd.sln'
+  DOTNET_APP_BACKEND_PROJECT_PATH: './src/BackEnd/src/InterfaceAdapter/WebApi'
 
 jobs:
   build:
@@ -23,21 +28,21 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
   
     # Run dotnet build and test
-    - name: dotnet restore, build and test
+    - name: Backend - dotnet restore, build and test
       working-directory: ${{ env.DOTNET_APP_SOURCE_PATH }}
       run: |
-        dotnet restore
-        dotnet build -c Release --no-restore
-        dotnet test -c Release --no-build --verbosity normal
+        dotnet restore ${{ env.DOTNET_APP_BACKEND_SOLUTION }}
+        dotnet build ${{ env.DOTNET_APP_BACKEND_SOLUTION }} -c Release --no-restore
+        dotnet test ${{ env.DOTNET_APP_BACKEND_SOLUTION }} -c Release --no-build --verbosity normal
 
     # Run dotnet publish
-    - name: dotnet publish
+    - name: Backend - dotnet publish
       if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'master')
       run: |
-          dotnet publish ${{ env.DOTNET_APP_PUBLISH_PROJECT_PATH }} -c Release -r linux-x64 --no-self-contained -o publish/backend /p:DebugType=None /p:DebugSymbols=false
+          dotnet publish ${{ env.DOTNET_APP_BACKEND_PROJECT_PATH }} -c Release -r linux-x64 --no-self-contained -o publish/backend /p:DebugType=None /p:DebugSymbols=false
 
     # Upload Artifact
-    - name: Upload Artifact
+    - name: Backend - Upload Artifact
       if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'master')
       uses: actions/upload-artifact@v3
       with:
@@ -52,34 +57,31 @@ jobs:
         echo '${{ toJSON(github) }}' >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
 
-  deploy-dev:
-    name: Deploy Dev
+  deploy-backend-dev:
+    name: Deploy Backend Dev
     if: github.ref_name == 'develop' && github.event_name == 'push'
     needs: build
     runs-on: ubuntu-latest
     environment: dev
     env:
-      AZURE_WEBAPP_NAME: 'werewolf-api-dev'
+      AZURE_BACKEND_WEBAPP_NAME: 'werewolf-api-dev'
     steps:
-    # Download Artifact
-    - name: Download Artifact
+    # Download All Artifacts
+    - name: Download All Artifacts
       uses: actions/download-artifact@v3
-      with:
-        name: backend-app
-        path: ./backend-app
     
     # Display file structures
     - name: Display structure of downloaded files
       run: ls -R
   
     # Deploy to Azure App Service
-    - name: Deploy to Azure App Service
+    - name: Deploy to Backend Azure App Service
       uses: azure/webapps-deploy@v2
       with:
-        app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        app-name: ${{ env.AZURE_BACKEND_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_BACKEND_WEBAPP_PUBLISH_PROFILE }}
         package: './backend-app'
-  
+
   deploy-production:
     name: Deploy Production
     if: github.ref_name == 'main' && github.event_name == 'push'

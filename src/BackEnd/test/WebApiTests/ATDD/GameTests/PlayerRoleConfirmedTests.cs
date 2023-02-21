@@ -48,9 +48,8 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
                 .Select(x => (ulong)x)
                 .ToArray();
 
-
             game.StartGame(players);
-
+            game.StartPlayerRoleConfirmation();
 
             var repository = _server.GetRequiredService<IRepository>();
             repository.Save(game);
@@ -74,7 +73,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
                     .GETAsync<ConfirmPlayerRoleEndpoint, ConfirmPlayerRoleRequest, ConfirmPlayerRoleResponse>(request);
 
                 // Assert API Result
-                response!.EnsureSuccessStatusCode();
+                response!.Should().BeSuccessful();
                 result!.PlayerId.Should().Be(playerId.ToString());
                 result.Role.Should().Be(expectedRole);
 
