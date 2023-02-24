@@ -1,9 +1,4 @@
 ﻿using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
@@ -19,33 +14,60 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest
         public async Task UseCaseTest()
         {
             // Given
-            var repository = new Mock<IRepository>();
-            var gameEventBus = new Mock<GameEventBus>();
-            var presenter = new Mock<IPresenter<PlayerRoleConfirmedEvent>>();
+            var random = new Random();
 
-           
+            // Arrange Ids
+            var discordVoiceChannelId = (ulong)random.Next();
+            var playerIds = Enumerable.Range(0, 10).Select(x => (ulong)random.Next()).ToArray();
+            var playerId = playerIds[random.Next(0, playerIds.Length)];
+
+            // Arrange Game
+            var game = new Game(discordVoiceChannelId);
+            game.StartGame(playerIds);
+            game.StartPlayerRoleConfirmation();
+            var expectedRole = game.Players.First(x => x.Id == playerId).Role!.Name;
+
+            // Arrange Repository
+            var repository = new Mock<IRepository>();
+            repository
+                .Setup(x => x.FindByDiscordChannelIdAsync(It.Is<ulong>(x => x == discordVoiceChannelId)))
+                .Returns(() => Task.FromResult<Game?>(game))
+                ;
+
+            // Arrange Game Event Bus
+            var gameEventBus = new Mock<GameEventBus>();
+            gameEventBus.Setup(x => x.BroadcastAsync(It.IsAny<PlayerRoleConfirmedEvent>(), It.IsAny<CancellationToken>()));
+
+            // Arrange Presenter
+            var presenter = new Mock<IPresenter<PlayerRoleConfirmedEvent>>();
+            presenter.Setup(x => x.PresentAsync(It.IsAny<PlayerRoleConfirmedEvent>(), It.IsAny<CancellationToken>()));
+
+            // Arrange Use Case
             var useCase = new ConfirmPlayerRoleUseCase(
                 repository.Object,
                 gameEventBus.Object
             );
 
+            // Arrange Request
             var request = new ConfirmPlayerRoleRequest
             {
-                DiscordVoiceChannelId = 1,
-                PlayerId = 3,
+                DiscordVoiceChannelId = discordVoiceChannelId,
+                PlayerId = playerId,
             };
 
             // When
             await useCase.ExecuteAsync(request, presenter.Object);
 
             // Then
-            repository.Verify(r => r.Save(It.Is<Game>(g => g.DiscordVoiceChannelId == 1)));
             gameEventBus.Verify(bus => bus.BroadcastAsync(
-                It.Is<PlayerRoleConfirmedEvent>(gameEvent => gameEvent.PlayerId == 3),
+                It.Is<PlayerRoleConfirmedEvent>(gameEvent => gameEvent.PlayerId == playerId),
                 It.IsAny<CancellationToken>()
             ));
             presenter.Verify(p => p.PresentAsync(
-                It.Is<PlayerRoleConfirmedEvent>(gameEvent => gameEvent.PlayerId == 3 && gameEvent.Role != string.Empty),
+                It.Is<PlayerRoleConfirmedEvent>(gameEvent => 
+                       gameEvent.PlayerId == playerId 
+                    && gameEvent.Role == expectedRole
+                ),
                 It.IsAny<CancellationToken>()
             ));
 
