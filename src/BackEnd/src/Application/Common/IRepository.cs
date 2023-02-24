@@ -13,5 +13,7 @@ namespace Wsa.Gaas.Werewolf.Application.Common
         Task SaveAsync(Game game);
 
         void Save(Game game);
+
+        void Initialize();
     }
 }

@@ -8,8 +8,11 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore.TypeConfigurations
     {
         public void Configure(EntityTypeBuilder<Player> builder)
         {
-            builder.HasOne<Game>()
-                .WithMany("_players");
+            builder.HasKey(e => e.Id);
+
+            builder.HasOne(e => e.Role).WithMany();
+
+            builder.Navigation(e => e.Role).AutoInclude();
         }
     }
 }

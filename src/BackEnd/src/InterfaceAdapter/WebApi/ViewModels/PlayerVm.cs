@@ -13,7 +13,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.ViewModels
         {
             return new PlayerVm
             {
-                Id = player.Id.ToString(),
+                Id = player.UserId.ToString(),
                 PlayerNumber = player.PlayerNumber,
                 IsDead = player.IsDead,
             };

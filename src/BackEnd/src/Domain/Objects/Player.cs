@@ -2,21 +2,22 @@
 {
     public class Player
     {
-        public ulong Id { get; init; }
+        public Guid Id { get; init; }
+        public ulong UserId { get; init; }
         public int PlayerNumber { get; internal set; }
-        public Role? Role { get; internal set; }
+        public Role Role { get; internal set; }
         public BuffStatus BuffStatus { get; internal set; }
         public bool IsDead { get; internal set; }
 
-        public Player(ulong id)
-        {
-            Id = id;
-        }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        private Player() { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        internal void SetRole(Role role, int playerNumber)
+        public Player(ulong userId, int playerNumber, Role role)
         {
-            Role = role;
+            UserId = userId;
             PlayerNumber = playerNumber;
+            Role = role;
         }
     }
 
