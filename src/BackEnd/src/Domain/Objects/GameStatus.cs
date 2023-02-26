@@ -7,8 +7,7 @@
         PlayerRoleConfirmationStarted,
         LastNightResultAnnounced,
         PlayerSpeaking,
-
-
+        SeerRoundStarted,
         Ended,
     }
 }

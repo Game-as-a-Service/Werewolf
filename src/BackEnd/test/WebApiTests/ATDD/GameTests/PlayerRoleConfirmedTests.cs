@@ -12,13 +12,13 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
     public class PlayerRoleConfirmedTests
     {
         readonly WebApiTestServer _server = new();
-        
+
         [OneTimeSetUp]
         public async Task OneTimeSetup()
         {
             await _server.StartAsync();
         }
-        
+
         /// <summary>
         /// Test
         /// </summary>
@@ -34,11 +34,11 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             告知玩家角色身分
             """
             )]
-        public async Task ConfirmPlayerRoleTest() 
+        public async Task ConfirmPlayerRoleTest()
         {
             // Arrange - Set up game in database
             // TODO: We need GameBuilder to build the Game with different status correctly.
-            
+
             var game = _server.CreateGameBuilder()
                 .WithRandomDiscordVoiceChannel()
                 .WithGameStatus(GameStatus.Created)
@@ -47,9 +47,11 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             var players = Enumerable.Range(0, 10)
                 .Select(x => (ulong)x)
                 .ToArray();
-            
+
+
             game.StartGame(players);
-            
+
+
             var repository = _server.GetRequiredService<IRepository>();
             repository.Save(game);
 
@@ -59,7 +61,8 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             foreach (var player in game.Players)
             {
                 var playerId = player.Id;
-                var expectedRole = player.Role!.Name;
+                var expectedRole = player.Role?.Name;
+
 
                 // Act - Rest API call
                 var request = new ConfirmPlayerRoleRequest()
@@ -84,7 +87,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
                     playerVm.Role.Should().BeNull();
                 }
             }
-            
+
 
         }
     }
