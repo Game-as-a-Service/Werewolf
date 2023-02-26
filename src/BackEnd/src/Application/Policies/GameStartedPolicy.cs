@@ -2,32 +2,31 @@
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 
-namespace Wsa.Gaas.Werewolf.Application.Policies
+namespace Wsa.Gaas.Werewolf.Application.Policies;
+
+internal class GameStartedPolicy : Policy<GameStartedEvent>
 {
-    internal class GameStartedPolicy : Policy<GameStartedEvent>
+    public GameStartedPolicy(IRepository repository, GameEventBus eventPublisher) : base(repository, eventPublisher)
     {
-        public GameStartedPolicy(IRepository repository, GameEventBus eventPublisher) : base(repository, eventPublisher)
+    }
+
+    public override async Task ExecuteAsync(GameStartedEvent request, CancellationToken cancellationToken = default)
+    {
+        // Query
+        var game = await Repository.FindByDiscordChannelIdAsync(request.Data.DiscordVoiceChannelId);
+
+        if (game == null)
         {
+            throw new GameNotFoundException(request.Data.DiscordVoiceChannelId);
         }
 
-        public override async Task ExecuteAsync(GameStartedEvent request, CancellationToken cancellationToken = default)
-        {
-            // Query
-            var game = await Repository.FindByDiscordChannelIdAsync(request.Data.DiscordVoiceChannelId);
+        // Update
+        game.StartPlayerRoleConfirmation();
 
-            if (game == null)
-            {
-                throw new GameNotFoundException(request.Data.DiscordVoiceChannelId);
-            }
+        // Save
+        Repository.Save(game);
 
-            // Update
-            game.StartPlayerRoleConfirmation();
-
-            // Save
-            Repository.Save(game);
-
-            // Push
-            await EventPublisher.BroadcastAsync(new PlayerRoleConfirmationStartedEvent(game), cancellationToken); ;
-        }
+        // Push
+        await GameEventBus.BroadcastAsync(new PlayerRoleConfirmationStartedEvent(game), cancellationToken); ;
     }
 }

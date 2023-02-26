@@ -21,6 +21,6 @@ internal class LastNightResultAnnouncedPolicy : Policy<LastNightResultAnnouncedE
         await Repository.SaveAsync(game);
 
         // Push
-        await EventPublisher.BroadcastAsync(new PlayerSpeakingEvent(game), cancellationToken);
+        await GameEventBus.BroadcastAsync(new PlayerSpeakingEvent(game), cancellationToken);
     }
 }

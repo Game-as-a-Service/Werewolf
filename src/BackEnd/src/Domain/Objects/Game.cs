@@ -23,21 +23,36 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             Status = GameStatus.Created;
         }
 
-        public void StartGame(ulong[] playerIds)
+        public IEnumerable<GameEvent> StartGame(ulong[] playerIds)
         {
             if (Status != GameStatus.Created)
             {
                 throw new GameAlreadyStartedException();
             }
 
+            var gameEvents = new List<GameEvent>();
+
             AddPlayers(playerIds);
 
-            Status = GameStatus.Started;
+            gameEvents.Add(new GameStartedEvent(this));
+
+            gameEvents.Add(StartPlayerRoleConfirmation());
+
+            return gameEvents;
         }
 
-        public void StartPlayerRoleConfirmation()
+        protected PlayerRoleConfirmationStartedEvent StartPlayerRoleConfirmation()
         {
             Status = GameStatus.PlayerRoleConfirmationStarted;
+
+            return new PlayerRoleConfirmationStartedEvent(this);
+        }
+
+        public PlayerRoleConfirmationEndedEvent EndPlayerRoleConfirmation()
+        {
+            Status = GameStatus.PlayerRoleConfirmationEnded;
+
+            return new PlayerRoleConfirmationEndedEvent(this);
         }
 
         internal void AddPlayers(ulong[] playerIds)
@@ -127,6 +142,20 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             };
 
             return gameEvent;
+        }
+
+        public NightfallStartedEvent StartNightfall()
+        {
+            Status = GameStatus.NightfallStarted;
+
+            return new NightfallStartedEvent(this);
+        }
+
+        public WereWolvesRoundStartedEvent StartWereWolvesRound()
+        {
+            Status = GameStatus.WereWolvesRoundStarted;
+
+            return new WereWolvesRoundStartedEvent(this);
         }
     }
 }

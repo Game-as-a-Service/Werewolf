@@ -5,10 +5,16 @@
         Created,
         Started,
         PlayerRoleConfirmationStarted,
+        PlayerRoleConfirmationEnded,
+
+        NightfallStarted,
+        WereWolvesRoundStarted,
+
         LastNightResultAnnounced,
         PlayerSpeaking,
 
 
         Ended,
+        
     }
 }

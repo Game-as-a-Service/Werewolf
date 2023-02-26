@@ -36,6 +36,11 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
             return ViewModel;
         }
 
+        public override Task HandleAsync(ConfirmPlayerRoleRequest req, CancellationToken ct)
+        {
+            return base.HandleAsync(req, ct);
+        }
+
         public override Task PresentAsync(PlayerRoleConfirmedEvent gameEvent, CancellationToken cancellationToken = default)
         {
             ViewModel = new ConfirmPlayerRoleResponse(
