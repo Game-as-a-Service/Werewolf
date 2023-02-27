@@ -60,9 +60,8 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
 
             foreach (var player in game.Players)
             {
-                var playerId = player.Id;
-                var expectedRole = player.Role?.Name;
-
+                var playerId = player.UserId;
+                var expectedRole = player.Role!.Name;
 
                 // Act - Rest API call
                 var request = new ConfirmPlayerRoleRequest()

@@ -39,11 +39,11 @@ public class PlayerSpeakingTests
 
         var gameEvent = await _server.EventBuffer.ReceiveAsync();
 
-        game.Status.Should().Be(GameStatus.PlayerSpeaking);
+        game!.Status.Should().Be(GameStatus.PlayerSpeaking);
         game.Status.ToString().Should().Be(gameEvent.Status);
 
         game.CurrentSpeakingPlayer.Should().NotBeNull();
-        game.CurrentSpeakingPlayer!.Id.Should().Be(gameEvent.CurrentSpeakingPlayer);
+        game.CurrentSpeakingPlayer!.UserId.Should().Be(gameEvent.CurrentSpeakingPlayer);
 
         game.DiscordVoiceChannelId.ToString().Should().Be(gameEvent.Id);
     }

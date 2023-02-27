@@ -60,6 +60,11 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
                 .WithGameStatus(GameStatus.Created)
                 .Build();
 
+            var gameCreated2 = _server.CreateGameBuilder()
+                .WithRandomDiscordVoiceChannel()
+                .WithGameStatus(GameStatus.Created)
+                .Build();
+
             var request = new StartGameRequest
             {
                 DiscordVoiceChannelId = gameCreated.DiscordVoiceChannelId,
@@ -111,6 +116,10 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
                 .response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
 
+            request.DiscordVoiceChannelId = gameCreated2.DiscordVoiceChannelId;
+            (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
+                .response!.StatusCode.Should().Be(HttpStatusCode.OK);
+                ;
         }
 
         private ulong[] RandomDuplicatePlayers(int n)
