@@ -46,8 +46,6 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
             // Save
 
             // Push
-            var gameEvent = new GameCreatedEvent(game);
-            await GameEventBus.BroadcastAsync(gameEvent, cancellationToken);
             await presenter.PresentAsync(seerDiscoveredEvent, cancellationToken);
         }
     }
