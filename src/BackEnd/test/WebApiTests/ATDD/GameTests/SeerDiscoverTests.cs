@@ -122,7 +122,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
                 }
                 if (player.Role?.GetType() == typeof(Seer))
                 {
-                    seerId = player.Id;
+                    seerId = player.UserId;
                 }
                 if (player.PlayerNumber == expectedPlayNumber)
                 {
