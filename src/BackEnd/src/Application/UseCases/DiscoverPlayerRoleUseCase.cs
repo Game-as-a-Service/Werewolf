@@ -21,7 +21,14 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
         public override async Task ExecuteAsync(DiscoverPlayerRoleRequest request, IPresenter<SeerDiscoveredEvent> presenter, CancellationToken cancellationToken = default)
         {
             // Query
-            var discoverPlayer = Repository.FindAll()
+            var game = await Repository.FindByDiscordChannelIdAsync(request.DiscordVoiceChannelId);
+
+            if (game == null)
+            {
+                throw new GameNotFoundException(request.DiscordVoiceChannelId);
+            }
+
+            var discoverPlayer = Repository.FindAll().Where(x => x.DiscordVoiceChannelId == request.DiscordVoiceChannelId)
                 .Where(x => x.Status == GameStatus.SeerRoundStarted)
                 .SelectMany(y => y.Players)
                 .Where(y => y.IsDead == false)
@@ -32,9 +39,14 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
             {
                 throw new PlayerNotSurvivedException(request.DiscoverPlayerNumber);
             }
+
             // Update
+            var seerDiscoveredEvent = game.DiscoverPlayerRole(request.PlayerId, discoverPlayer);
+
             // Save
+
             // Push
+            await presenter.PresentAsync(seerDiscoveredEvent, cancellationToken);
         }
     }
 }

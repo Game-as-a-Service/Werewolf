@@ -128,5 +128,17 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
 
             return gameEvent;
         }
+
+        public SeerDiscoveredEvent DiscoverPlayerRole(ulong playerId, Player discoverPlayer)
+        {
+            var gameEvent = new SeerDiscoveredEvent(this)
+            {
+                PlayerId = playerId,
+                DiscoveredPlayerNumber = discoverPlayer.PlayerNumber,
+                DiscoveredRoleFaction = discoverPlayer.Role!.Faction
+            };
+
+            return gameEvent;
+        }
     }
 }

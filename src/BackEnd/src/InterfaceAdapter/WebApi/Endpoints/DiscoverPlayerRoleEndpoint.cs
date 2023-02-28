@@ -1,11 +1,10 @@
-﻿using FluentValidation.Results;
-using Wsa.Gaas.Werewolf.Application.UseCases;
+﻿using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.WebApi.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
 {
-    public record DiscoverPlayerRoleResponse(string GameId, string PlayerId, string Role);
+    public record DiscoverPlayerRoleResponse(string GameId, string PlayerId, int DiscoveredPlayerNumber, string DiscoveredRoleFaction);
 
 
     public class DiscoverPlayerRoleEndpoint : WebApiEndpoint<DiscoverPlayerRoleRequest, SeerDiscoveredEvent, DiscoverPlayerRoleResponse>
@@ -30,7 +29,14 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
 
         public override Task PresentAsync(SeerDiscoveredEvent gameEvent, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            ViewModel = new DiscoverPlayerRoleResponse(
+                gameEvent.Data.DiscordVoiceChannelId.ToString(),
+                gameEvent.PlayerId.ToString(),
+                gameEvent.DiscoveredPlayerNumber,
+                gameEvent.DiscoveredRoleFaction.ToString()
+            );
+
+            return Task.CompletedTask;
         }
     }
 }
