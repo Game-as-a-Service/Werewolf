@@ -2,6 +2,7 @@
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
+using Wsa.Gaas.Werewolf.Domain.Exceptions;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest
@@ -72,6 +73,53 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest
             ));
 
 
+
+        }
+
+        [Test]
+        public async Task UseCaseTest2()
+        {
+            // Arrange or Given
+            ulong discordVoiceChannelId = 3;
+            ulong playerId = 2;
+            var request = new ConfirmPlayerRoleRequest
+            {
+                DiscordVoiceChannelId = discordVoiceChannelId,
+                PlayerId = playerId,
+            };
+            var presenter = new Mock<IPresenter<PlayerRoleConfirmedEvent>>();
+            presenter.Setup(p => p.PresentAsync(It.IsAny<PlayerRoleConfirmedEvent>(), default))
+                .Returns(Task.CompletedTask);
+                ;
+
+            var cancellationToken = new CancellationToken();
+            
+            Game? game = null;
+
+            var repository = new Mock<IRepository>();
+            repository.Setup(r => r.FindByDiscordChannelIdAsync(It.IsAny<ulong>()))
+                .Returns(Task.FromResult(game));
+
+            var gameEventBus = new Mock<GameEventBus>();
+            gameEventBus.Setup(x => x.BroadcastAsync(It.IsAny<PlayerRoleConfirmedEvent>(), It.IsAny<CancellationToken>()));
+
+
+            var useCase = new ConfirmPlayerRoleUseCase(
+                repository.Object, 
+                gameEventBus.Object
+            );
+
+            // Act or When
+            //await useCase.ExecuteAsync(request, presenter.Object, cancellationToken);
+            
+
+            // Assert or Then
+
+            // ONLY For Exception
+            Assert.ThrowsAsync(
+                typeof(GameNotFoundException),
+                async () => await useCase.ExecuteAsync(request, presenter.Object, cancellationToken)
+            );
 
         }
     }
