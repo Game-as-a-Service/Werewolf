@@ -9,7 +9,6 @@ namespace Wsa.Gaas.Werewolf.WebApi.ViewModels
         public string Id { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public List<PlayerVm> Players { get; set; } = new List<PlayerVm>();
-        public long? CurrentSpeakingPlayer { get; set; }
 
         public static GameVm FromDomain(Game game)
         {
@@ -18,7 +17,6 @@ namespace Wsa.Gaas.Werewolf.WebApi.ViewModels
                 Id = game.DiscordVoiceChannelId.ToString(),
                 Players = game.Players.Select(PlayerVm.FromDomain).ToList(),
                 Status = game.Status.ToString(),
-                CurrentSpeakingPlayer = game.CurrentSpeakingPlayer?.Id
             };
         }
     }

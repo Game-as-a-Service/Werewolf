@@ -14,8 +14,6 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
 
         public ImmutableList<Player> Players => _players.ToImmutableList();
 
-        public Player? CurrentSpeakingPlayer { get; private set; }
-
         internal Game() { }
 
         public Game(long discordVoiceChannelId)
