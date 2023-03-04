@@ -15,7 +15,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
     {
         public override void Configure()
         {
-            Post("/games/{DiscordVoiceChannelId}/start");
+            Post("/games/{RoomId}/start");
             AllowAnonymous();
         }
 
@@ -35,7 +35,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
         {
             ViewModel = new StartGameResponse
             (
-                gameEvent.Data.DiscordVoiceChannelId.ToString(),
+                gameEvent.Data.RoomId.ToString(),
                 gameEvent.Data.Players.Select(PlayerVm.FromDomain).ToArray()
             );
             return Task.CompletedTask;

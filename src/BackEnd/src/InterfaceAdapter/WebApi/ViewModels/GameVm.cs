@@ -14,7 +14,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.ViewModels
         {
             return new GameVm
             {
-                Id = game.DiscordVoiceChannelId.ToString(),
+                Id = game.RoomId.ToString(),
                 Players = game.Players.Select(PlayerVm.FromDomain).ToList(),
                 Status = game.Status.ToString(),
             };

@@ -25,7 +25,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
             HubListenOn(nameof(GameStartedEvent));
 
             //When
-            var (response, _) = await ExecuteStartGame(game.DiscordVoiceChannelId,
+            var (response, _) = await ExecuteStartGame(game.RoomId,
                                                        RandomDistinctPlayers(playerCount));
 
             //Then
@@ -37,13 +37,13 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
             {
                 case HttpStatusCode.OK:
                     _fakeAction.Received(1)
-                               .Invoke(Arg.Is<GameVm>(o => o.Id == game.DiscordVoiceChannelId.ToString()
+                               .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
                                                         && o.Status == GameStatus.Started.ToString()));
 
                     break;
                 case HttpStatusCode.InternalServerError:
                     _fakeAction.DidNotReceive()
-                               .Invoke(Arg.Is<GameVm>(o => o.Id == game.DiscordVoiceChannelId.ToString()
+                               .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
                                                         && o.Status == GameStatus.Started.ToString()));
 
                     break;
@@ -61,14 +61,14 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
             HubListenOn(nameof(GameStartedEvent));
 
             //When
-            var (response, _) = await ExecuteStartGame(game.DiscordVoiceChannelId,
+            var (response, _) = await ExecuteStartGame(game.RoomId,
                                                        1, 1, 2, 3, 4, 5, 6, 7);
 
             //Then
             response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
 
             _fakeAction.DidNotReceive()
-                       .Invoke(Arg.Is<GameVm>(o => o.Id == game.DiscordVoiceChannelId.ToString()
+                       .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
                                                 && o.Status == GameStatus.Started.ToString()));
         }
 
@@ -80,30 +80,30 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
             HubListenOn(nameof(GameStartedEvent));
 
             //When
-            var (response, _) = await ExecuteStartGame(game.DiscordVoiceChannelId,
+            var (response, _) = await ExecuteStartGame(game.RoomId,
                                                        RandomDistinctPlayers(8));
 
             //Then
             response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
 
             _fakeAction.DidNotReceive()
-                       .Invoke(Arg.Is<GameVm>(o => o.Id == game.DiscordVoiceChannelId.ToString()
+                       .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
                                                 && o.Status == GameStatus.Started.ToString()));
         }
 
-        private async Task<(HttpResponseMessage? response, StartGameResponse? result)> ExecuteStartGame(long discordVoiceChannelId, params long[] randomDistinctPlayers)
+        private async Task<(HttpResponseMessage? response, StartGameResponse? result)> ExecuteStartGame(long roomId, params long[] randomDistinctPlayers)
         {
-            return await _httpClient.POSTAsync<StartGameRequest, StartGameResponse>($"/games/{discordVoiceChannelId}/start",
+            return await _httpClient.POSTAsync<StartGameRequest, StartGameResponse>($"/games/{roomId}/start",
                                                                                     new StartGameRequest
                                                                                     {
-                                                                                        DiscordVoiceChannelId = discordVoiceChannelId,
+                                                                                        RoomId = roomId,
                                                                                         Players = randomDistinctPlayers,
                                                                                     });
         }
 
         private Game GivenGame(GameStatus gameStatus)
         {
-            return _gameBuilder.WithRandomDiscordVoiceChannel()
+            return _gameBuilder.WithRandomRoom()
                                .WithGameStatus(gameStatus)
                                .Build();
         }

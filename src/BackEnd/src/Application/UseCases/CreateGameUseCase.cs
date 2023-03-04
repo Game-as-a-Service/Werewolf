@@ -7,7 +7,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
 {
     public class CreateGameRequest
     {
-        public long DiscordVoiceChannelId { get; set; }
+        public long RoomId { get; set; }
     }
 
     public class CreateGameUseCase : UseCase<CreateGameRequest, GameCreatedEvent>
@@ -26,7 +26,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
             {
                 // Query
                 var anyExistingActiveGame = Repository.FindAll()
-                    .Where(x => x.DiscordVoiceChannelId == request.DiscordVoiceChannelId)
+                    .Where(x => x.RoomId == request.RoomId)
                     .Where(x => x.Status != GameStatus.Ended)
                     .Any();
 
@@ -36,7 +36,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
                 }
 
                 // Update
-                game = new Game(request.DiscordVoiceChannelId);
+                game = new Game(request.RoomId);
 
                 // Save
                 Repository.Save(game);

@@ -17,10 +17,10 @@ internal class GameStartedPolicy : Policy<GameStartedEvent>
     {
         await _taskService.Delay(TimeSpan.FromSeconds(60));
 
-        var game = await Repository.FindByDiscordChannelIdAsync(request.Data.DiscordVoiceChannelId);
+        var game = await Repository.FindByRoomIdAsync(request.Data.RoomId);
 
         if (game == null)
-            throw new GameNotFoundException(request.Data.DiscordVoiceChannelId);
+            throw new GameNotFoundException(request.Data.RoomId);
 
         game.StopPlayerRoleConfirmation();
 

@@ -25,8 +25,8 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
 
             result!.GameId.Should().Be(new CreateGameRequest()
                                        {
-                                           DiscordVoiceChannelId = _channelId,
-                                       }.DiscordVoiceChannelId.ToString());
+                                           RoomId = _channelId,
+                                       }.RoomId.ToString());
 
 
             await WaitNetworkTransmission();
@@ -35,7 +35,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
                        .Invoke(Arg.Is<GameVm>(o => o.Id == result.GameId));
 
             GetGame(long.Parse(result.GameId))!
-               .DiscordVoiceChannelId.ToString()
+               .RoomId.ToString()
                .Should().Be(result.GameId);
 
             //Create game in same channel
@@ -53,7 +53,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
         {
             var req = new CreateGameRequest()
                       {
-                          DiscordVoiceChannelId = _channelId,
+                          RoomId = _channelId,
                       };
 
             return await _httpClient.POSTAsync<CreateGameRequest, CreateGameResponse>("/games", req);

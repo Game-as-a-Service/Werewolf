@@ -6,7 +6,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
 {
     public class ConfirmPlayerRoleRequest
     {
-        public long DiscordVoiceChannelId { get; set; }
+        public long RoomId { get; set; }
         public long PlayerId { get; set; }
     }
 
@@ -17,11 +17,11 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
         public override async Task ExecuteAsync(ConfirmPlayerRoleRequest request, IPresenter<PlayerRoleConfirmedEvent> presenter, CancellationToken cancellationToken = default)
         {
             // Query
-            var game = await Repository.FindByDiscordChannelIdAsync(request.DiscordVoiceChannelId);
+            var game = await Repository.FindByRoomIdAsync(request.RoomId);
 
             if (game == null)
             {
-                throw new GameNotFoundException(request.DiscordVoiceChannelId);
+                throw new GameNotFoundException(request.RoomId);
             }
 
             // Update (Query)

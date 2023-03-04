@@ -5,5 +5,5 @@ namespace Wsa.Gaas.Werewolf.Domain.Exceptions;
 internal class InvalidGameStatusException : Exception
 {
     public InvalidGameStatusException(Game game)
-        : base($"Game #{game.DiscordVoiceChannelId} at Status{game.Status}") { }
+        : base($"Game #{game.RoomId} at Status{game.Status}") { }
 }

@@ -7,7 +7,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
     public class Game
     {
         public Guid Id { get; internal set; }
-        public long DiscordVoiceChannelId { get; internal set; }
+        public long RoomId { get; internal set; }
         public GameStatus Status { get; internal set; }
 
         private List<Player> _players = new();
@@ -16,9 +16,9 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
 
         internal Game() { }
 
-        public Game(long discordVoiceChannelId)
+        public Game(long roomId)
         {
-            DiscordVoiceChannelId = discordVoiceChannelId;
+            RoomId = roomId;
             Status = GameStatus.Created;
         }
 
@@ -109,7 +109,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
 
             if (player == null)
             {
-                throw new PlayerNotFoundException(DiscordVoiceChannelId, playerId);
+                throw new PlayerNotFoundException(RoomId, playerId);
             }
 
             if (player.Role == null)

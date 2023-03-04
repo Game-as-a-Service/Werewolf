@@ -49,12 +49,12 @@ public class TestsBase
         await _hubConnection.StartAsync();
     }
 
-    protected Game? GetGame(Game game) => GetGame(game.DiscordVoiceChannelId);
+    protected Game? GetGame(Game game) => GetGame(game.RoomId);
 
-    protected Game? GetGame(long discordVoiceChannelId)
+    protected Game? GetGame(long roomId)
     {
         return _repository
-              .FindByDiscordChannelIdAsync(discordVoiceChannelId)
+              .FindByRoomIdAsync(roomId)
               .GetAwaiter()
               .GetResult();
     }

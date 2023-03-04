@@ -31,7 +31,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
         public override Task PresentAsync(GameCreatedEvent saidEvent, CancellationToken cancellationToken = default)
         {
             ViewModel = new CreateGameResponse(
-                saidEvent.Data.DiscordVoiceChannelId.ToString()
+                saidEvent.Data.RoomId.ToString()
             );
 
             return Task.CompletedTask;

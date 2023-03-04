@@ -2,8 +2,8 @@
 {
     public class PlayerNotFoundException : Exception
     {
-        public PlayerNotFoundException(long discordVoiceChannelId, long playerId)
-            : base($"Game #{discordVoiceChannelId}, Player #{playerId} not found")
+        public PlayerNotFoundException(long roomId, long playerId)
+            : base($"Game #{roomId}, Player #{playerId} not found")
         {
 
         }

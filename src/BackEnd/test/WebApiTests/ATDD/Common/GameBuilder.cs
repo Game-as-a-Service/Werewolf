@@ -14,14 +14,14 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
             _repository = repository;
         }
 
-        public GameBuilder WithRandomDiscordVoiceChannel()
+        public GameBuilder WithRandomRoom()
         {
-            return WithDiscordVoiceChannel(new Random().Next());
+            return WithRoom(new Random().Next());
         }
 
-        public GameBuilder WithDiscordVoiceChannel(long channelId)
+        public GameBuilder WithRoom(long roomId)
         {
-            _game.DiscordVoiceChannelId = channelId;
+            _game.RoomId = roomId;
 
             return this;
         }

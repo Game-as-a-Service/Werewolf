@@ -14,7 +14,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
         /// </summary>
         public override void Configure()
         {
-            Get("/games/{DiscordVoiceChannelId}/players/{PlayerId}/Role");
+            Get("/games/{RoomId}/players/{PlayerId}/Role");
             AllowAnonymous();
         }
 
@@ -39,7 +39,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
         public override Task PresentAsync(PlayerRoleConfirmedEvent gameEvent, CancellationToken cancellationToken = default)
         {
             ViewModel = new ConfirmPlayerRoleResponse(
-                gameEvent.Data.DiscordVoiceChannelId.ToString(),
+                gameEvent.Data.RoomId.ToString(),
                 gameEvent.PlayerId.ToString(),
                 gameEvent.Role
             );

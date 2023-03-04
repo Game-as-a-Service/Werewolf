@@ -7,7 +7,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
 {
     public class StartGameRequest
     {
-        public long DiscordVoiceChannelId { get; set; }
+        public long RoomId { get; set; }
 
         public long[] Players { get; set; } = Array.Empty<long>();
     }
@@ -26,13 +26,13 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
             {
                 // 查
                 game = Repository.FindAll()
-                                 .Where(x => x.DiscordVoiceChannelId == request.DiscordVoiceChannelId)
+                                 .Where(x => x.RoomId == request.RoomId)
                                  .Where(x => x.Status != GameStatus.Ended)
                                  .FirstOrDefault();
 
                 if (game == null)
                 {
-                    throw new GameNotFoundException(request.DiscordVoiceChannelId);
+                    throw new GameNotFoundException(request.RoomId);
                 }
 
                 // 改

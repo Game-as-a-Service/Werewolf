@@ -35,7 +35,7 @@ public class PlayerConfirmRoleTests : TestsBase
 
         //started
 
-        await ExecuteStartGame(game.DiscordVoiceChannelId, playerIds);
+        await ExecuteStartGame(game.RoomId, playerIds);
 
         //TODO all role need appear
 
@@ -50,7 +50,7 @@ public class PlayerConfirmRoleTests : TestsBase
                                                                  result.Should()
                                                                        .BeEquivalentTo(new
                                                                                        {
-                                                                                           GameId = game.DiscordVoiceChannelId.ToString(),
+                                                                                           GameId = game.RoomId.ToString(),
                                                                                            PlayerId = playerId.ToString(),
                                                                                        });
                                                              }));
@@ -72,7 +72,7 @@ public class PlayerConfirmRoleTests : TestsBase
         GetGame(game)!.Status.Should().Be(GameStatus.PlayerRoleConfirmationStopped);
 
         _fakeAction.Received(1)
-                   .Invoke(Arg.Is<GameVm>(o => o.Id == game.DiscordVoiceChannelId.ToString()
+                   .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
                                             && o.Status == GameStatus.PlayerRoleConfirmationStopped.ToString()));
 
         var (responseAfterStopped, _) = await ExecutePlayerConfirmRole(game);
@@ -86,27 +86,27 @@ public class PlayerConfirmRoleTests : TestsBase
 
     private async Task<(HttpResponseMessage? response, ConfirmPlayerRoleResponse? result)> ExecutePlayerConfirmRole(Game game, long playerId = 1)
     {
-        return await _httpClient.GETAsync<ConfirmPlayerRoleRequest, ConfirmPlayerRoleResponse>($"/games/{game.DiscordVoiceChannelId}/players/{playerId}/Role",
+        return await _httpClient.GETAsync<ConfirmPlayerRoleRequest, ConfirmPlayerRoleResponse>($"/games/{game.RoomId}/players/{playerId}/Role",
                                                                                                new ConfirmPlayerRoleRequest
                                                                                                {
-                                                                                                   DiscordVoiceChannelId = game.DiscordVoiceChannelId,
+                                                                                                   RoomId = game.RoomId,
                                                                                                    PlayerId = playerId
                                                                                                });
     }
 
     private Game GivenGame(GameStatus gameStatus)
     {
-        return _gameBuilder.WithRandomDiscordVoiceChannel()
+        return _gameBuilder.WithRandomRoom()
                            .WithGameStatus(gameStatus)
                            .Build();
     }
 
-    private async Task ExecuteStartGame(long gameDiscordVoiceChannelId, IEnumerable<long> players)
+    private async Task ExecuteStartGame(long roomId, IEnumerable<long> players)
     {
-        await _httpClient.POSTAsync<StartGameRequest, StartGameResponse>($"/games/{gameDiscordVoiceChannelId}/start",
+        await _httpClient.POSTAsync<StartGameRequest, StartGameResponse>($"/games/{roomId}/start",
                                                                          new StartGameRequest
                                                                          {
-                                                                             DiscordVoiceChannelId = gameDiscordVoiceChannelId,
+                                                                             RoomId = roomId,
                                                                              Players = players.ToArray()
                                                                          });
     }
