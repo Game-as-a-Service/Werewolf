@@ -1,33 +1,32 @@
-﻿using Wsa.Gaas.Werewolf.Application.Common;
+using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 
-namespace Wsa.Gaas.Werewolf.Application.Policies
+namespace Wsa.Gaas.Werewolf.Application.Policies;
+
+internal class GameStartedPolicy : Policy<GameStartedEvent>
 {
-    internal class GameStartedPolicy : Policy<GameStartedEvent>
+    private readonly ITaskService _taskService;
+
+    public GameStartedPolicy(IRepository repository, GameEventBus eventPublisher, ITaskService taskService) : base(repository, eventPublisher)
     {
-        public GameStartedPolicy(IRepository repository, GameEventBus eventPublisher) : base(repository, eventPublisher)
-        {
-        }
+        _taskService = taskService;
+    }
 
-        public override async Task ExecuteAsync(GameStartedEvent request, CancellationToken cancellationToken = default)
-        {
-            // Query
-            var game = await Repository.FindByDiscordChannelIdAsync(request.Data.DiscordVoiceChannelId);
+    public override async Task ExecuteAsync(GameStartedEvent request, CancellationToken cancellationToken = default)
+    {
+        await _taskService.Delay(TimeSpan.FromSeconds(60));
 
-            if (game == null)
-            {
-                throw new GameNotFoundException(request.Data.DiscordVoiceChannelId);
-            }
+        var game = await Repository.FindByDiscordChannelIdAsync(request.Data.DiscordVoiceChannelId);
 
-            // Update
-            game.StartPlayerRoleConfirmation();
+        if (game == null)
+            throw new GameNotFoundException(request.Data.DiscordVoiceChannelId);
 
-            // Save
-            Repository.Save(game);
+        game.StopPlayerRoleConfirmation();
 
-            // Push
-            await EventPublisher.BroadcastAsync(new PlayerRoleConfirmationStartedEvent(game), cancellationToken); ;
-        }
+        await Repository.SaveAsync(game);
+
+        // Push
+        await EventPublisher.BroadcastAsync(new PlayerRoleConfirmationStoppedEvent(game), cancellationToken);
     }
 }

@@ -12,11 +12,9 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
 
     public class ConfirmPlayerRoleUseCase : UseCase<ConfirmPlayerRoleRequest, PlayerRoleConfirmedEvent>
     {
-        public ConfirmPlayerRoleUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
-        {
-        }
+        public ConfirmPlayerRoleUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus) { }
 
-        public async override Task ExecuteAsync(ConfirmPlayerRoleRequest request, IPresenter<PlayerRoleConfirmedEvent> presenter, CancellationToken cancellationToken = default)
+        public override async Task ExecuteAsync(ConfirmPlayerRoleRequest request, IPresenter<PlayerRoleConfirmedEvent> presenter, CancellationToken cancellationToken = default)
         {
             // Query
             var game = await Repository.FindByDiscordChannelIdAsync(request.DiscordVoiceChannelId);

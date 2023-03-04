@@ -37,10 +37,6 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             Status = GameStatus.Started;
         }
 
-        public void StartPlayerRoleConfirmation()
-        {
-            Status = GameStatus.PlayerRoleConfirmationStarted;
-        }
 
         internal void AddPlayers(ulong[] players)
         {
@@ -103,16 +99,14 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             return roles;
         }
 
-        public void StartPlayerSpeaking()
-        {
-            Status = GameStatus.PlayerSpeaking;
-
-            CurrentSpeakingPlayer = Players.OrderBy(_ => Guid.NewGuid())
-                                           .First();
-        }
 
         public PlayerRoleConfirmedEvent ConfirmPlayerRole(ulong playerId)
         {
+            if (Status != GameStatus.Started)
+            {
+                throw new InvalidGameStatusException(this);
+            }
+
             var player = Players.FirstOrDefault(x => x.Id == playerId);
 
             if (player == null)
@@ -126,12 +120,20 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             }
 
             var gameEvent = new PlayerRoleConfirmedEvent(this)
-            {
-                PlayerId = playerId,
-                Role = player.Role.Name,
-            };
+                            {
+                                PlayerId = playerId,
+                                Role = player.Role.Name,
+                            };
 
             return gameEvent;
+        }
+
+        public void StopPlayerRoleConfirmation()
+        {
+            if (Status != GameStatus.Started)
+                throw new InvalidOperationException();
+
+            Status = GameStatus.PlayerRoleConfirmationStopped;
         }
     }
 }

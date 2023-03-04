@@ -23,6 +23,7 @@ namespace Wsa.Gaas.Werewolf.WebApi
 
             // 實作 IGameEventHandler
             services.AddScoped<IGameEventHandler, GameEventHubHandler>();
+            services.AddSingleton<ITaskService, TaskService>();
 
             return services;
         }
