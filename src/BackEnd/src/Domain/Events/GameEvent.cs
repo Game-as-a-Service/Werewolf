@@ -9,7 +9,6 @@ namespace Wsa.Gaas.Werewolf.Domain.Events
             Data = data;
         }
 
-        public Game Data { get; init; }
-        public DateTimeOffset TriggeredOn { get; } = DateTimeOffset.UtcNow;
+        public Game Data { get; }
     }
 }
