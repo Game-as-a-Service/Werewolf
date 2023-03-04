@@ -7,30 +7,28 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
 {
     public class StartGameRequest
     {
-        public ulong DiscordVoiceChannelId { get; set; }
+        public long DiscordVoiceChannelId { get; set; }
 
-        public ulong[] Players { get; set; } = Array.Empty<ulong>();
+        public long[] Players { get; set; } = Array.Empty<long>();
     }
 
     public class StartGameUseCase : UseCase<StartGameRequest, GameStartedEvent>
     {
-        private readonly static object _lock = new();
+        private static readonly object Lock = new();
 
-        public StartGameUseCase(IRepository repository, GameEventBus eventPublisher) : base(repository, eventPublisher)
-        {
-        }
+        public StartGameUseCase(IRepository repository, GameEventBus eventPublisher) : base(repository, eventPublisher) { }
 
         public override async Task ExecuteAsync(StartGameRequest request, IPresenter<GameStartedEvent> presenter, CancellationToken cancellationToken = default)
         {
             Game? game;
 
-            lock (_lock)
+            lock (Lock)
             {
                 // 查
                 game = Repository.FindAll()
-                    .Where(x => x.DiscordVoiceChannelId == request.DiscordVoiceChannelId)
-                    .Where(x => x.Status != GameStatus.Ended)
-                    .FirstOrDefault();
+                                 .Where(x => x.DiscordVoiceChannelId == request.DiscordVoiceChannelId)
+                                 .Where(x => x.Status != GameStatus.Ended)
+                                 .FirstOrDefault();
 
                 if (game == null)
                 {
@@ -54,5 +52,4 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
             await presenter.PresentAsync(gameEvent, cancellationToken);
         }
     }
-
 }

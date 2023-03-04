@@ -6,7 +6,7 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
 {
     public class InMemoryRepository : IRepository
     {
-        private readonly Dictionary<ulong, Game> _discordIdMemory = new();
+        private readonly Dictionary<long, Game> _discordIdMemory = new();
         private readonly Dictionary<Guid, Game> _idMemory = new();
 
         public InMemoryRepository() { }
@@ -16,7 +16,7 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
             return _idMemory.Values.AsQueryable();
         }
 
-        public Task<Game?> FindByDiscordChannelIdAsync(ulong discordChannelId)
+        public Task<Game?> FindByDiscordChannelIdAsync(long discordChannelId)
         {
             _discordIdMemory.TryGetValue(discordChannelId, out var game);
 
@@ -62,7 +62,7 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
             return await FindAsync<Game>(id);
         }
 
-        public Task<Game?> FindByDiscordChannelIdAsync(ulong discordVoiceChannelId)
+        public Task<Game?> FindByDiscordChannelIdAsync(long discordVoiceChannelId)
         {
             return FindAll().FirstOrDefaultAsync(x => x.DiscordVoiceChannelId == discordVoiceChannelId && x.Status != GameStatus.Ended);
         }

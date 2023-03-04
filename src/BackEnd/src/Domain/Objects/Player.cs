@@ -2,13 +2,13 @@
 {
     public class Player
     {
-        public ulong Id { get; init; }
+        public long Id { get; init; }
         public int PlayerNumber { get; internal set; }
         public Role? Role { get; internal set; }
         public BuffStatus BuffStatus { get; internal set; }
         public bool IsDead { get; internal set; }
 
-        public Player(ulong id)
+        public Player(long id)
         {
             Id = id;
         }

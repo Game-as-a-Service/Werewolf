@@ -7,7 +7,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
     public class Game
     {
         public Guid Id { get; internal set; }
-        public ulong DiscordVoiceChannelId { get; internal set; }
+        public long DiscordVoiceChannelId { get; internal set; }
         public GameStatus Status { get; internal set; }
 
         private List<Player> _players = new();
@@ -18,13 +18,13 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
 
         internal Game() { }
 
-        public Game(ulong discordVoiceChannelId)
+        public Game(long discordVoiceChannelId)
         {
             DiscordVoiceChannelId = discordVoiceChannelId;
             Status = GameStatus.Created;
         }
 
-        public void StartGame(ulong[] players)
+        public void StartGame(long[] players)
         {
             if (Status != GameStatus.Created)
             {
@@ -38,7 +38,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
         }
 
 
-        internal void AddPlayers(ulong[] players)
+        internal void AddPlayers(long[] players)
         {
             var uniquePlayers = players.Distinct().ToList();
 
@@ -55,7 +55,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             _players.AddRange(players.Select(x => new Player(x)));
         }
 
-        internal void AssignRolesToPlayers()
+        private void AssignRolesToPlayers()
         {
             // Shuffle
             _players = _players.OrderBy(_ => Guid.NewGuid()).ToList();
@@ -100,7 +100,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
         }
 
 
-        public PlayerRoleConfirmedEvent ConfirmPlayerRole(ulong playerId)
+        public PlayerRoleConfirmedEvent ConfirmPlayerRole(long playerId)
         {
             if (Status != GameStatus.Started)
             {

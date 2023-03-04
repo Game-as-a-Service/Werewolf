@@ -11,7 +11,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
 {
     public class HostCrateGameTests : TestsBase
     {
-        private ulong _channelId;
+        private long _channelId;
 
         [Test]
         public async Task CreateGameTest()
@@ -34,7 +34,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
             _fakeAction.Received(1)
                        .Invoke(Arg.Is<GameVm>(o => o.Id == result.GameId));
 
-            GetGame(ulong.Parse(result.GameId))!
+            GetGame(long.Parse(result.GameId))!
                .DiscordVoiceChannelId.ToString()
                .Should().Be(result.GameId);
 
@@ -46,7 +46,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
 
         private void GivenRandomChannelId()
         {
-            _channelId = (ulong) new Random().Next();
+            _channelId = (long) new Random().Next();
         }
 
         private async Task<(HttpResponseMessage? response, CreateGameResponse? result)> ExecuteCreateGame()

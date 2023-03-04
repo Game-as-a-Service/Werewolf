@@ -51,7 +51,7 @@ public class TestsBase
 
     protected Game? GetGame(Game game) => GetGame(game.DiscordVoiceChannelId);
 
-    protected Game? GetGame(ulong discordVoiceChannelId)
+    protected Game? GetGame(long discordVoiceChannelId)
     {
         return _repository
               .FindByDiscordChannelIdAsync(discordVoiceChannelId)
@@ -59,15 +59,15 @@ public class TestsBase
               .GetResult();
     }
 
-    protected ulong[] RandomDistinctPlayers(int n = NORMAL_PLAYER_COUNT)
+    protected long[] RandomDistinctPlayers(int n = NORMAL_PLAYER_COUNT)
     {
-        var result = new HashSet<ulong>();
+        var result = new HashSet<long>();
 
         if (n > 0)
         {
             while (result.Count < n)
             {
-                result.Add((ulong) new Random().Next());
+                result.Add((long) new Random().Next());
             }
         }
 

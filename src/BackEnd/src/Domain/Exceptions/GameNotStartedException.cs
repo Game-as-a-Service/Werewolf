@@ -4,7 +4,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Exceptions
 {
     internal class GameNotStartedException : Exception
     {
-        public GameNotStartedException(ulong discordVoiceChannelId)
+        public GameNotStartedException(long discordVoiceChannelId)
             : base($"Game #{discordVoiceChannelId} not started")
         {
         }

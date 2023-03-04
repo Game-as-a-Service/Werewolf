@@ -16,10 +16,10 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
 
         public GameBuilder WithRandomDiscordVoiceChannel()
         {
-            return WithDiscordVoiceChannel((ulong) new Random().Next());
+            return WithDiscordVoiceChannel(new Random().Next());
         }
 
-        public GameBuilder WithDiscordVoiceChannel(ulong channelId)
+        public GameBuilder WithDiscordVoiceChannel(long channelId)
         {
             _game.DiscordVoiceChannelId = channelId;
 
@@ -33,7 +33,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
             return this;
         }
 
-        public GameBuilder WithPlayers(ulong[] players)
+        public GameBuilder WithPlayers(long[] players)
         {
             _game.AddPlayers(players);
 
@@ -43,7 +43,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
         public GameBuilder WithRandomPlayers(int count)
         {
             _game.AddPlayers(Enumerable.Range(1, count)
-                                       .Select(o => (ulong) o)
+                                       .Select(o => (long) o)
                                        .ToArray());
 
             return this;

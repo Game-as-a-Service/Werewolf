@@ -6,8 +6,8 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
 {
     public class ConfirmPlayerRoleRequest
     {
-        public ulong DiscordVoiceChannelId { get; set; }
-        public ulong PlayerId { get; set; }
+        public long DiscordVoiceChannelId { get; set; }
+        public long PlayerId { get; set; }
     }
 
     public class ConfirmPlayerRoleUseCase : UseCase<ConfirmPlayerRoleRequest, PlayerRoleConfirmedEvent>

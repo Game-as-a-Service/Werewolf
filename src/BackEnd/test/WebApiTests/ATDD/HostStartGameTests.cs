@@ -91,7 +91,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
                                                 && o.Status == GameStatus.Started.ToString()));
         }
 
-        private async Task<(HttpResponseMessage? response, StartGameResponse? result)> ExecuteStartGame(ulong discordVoiceChannelId, params ulong[] randomDistinctPlayers)
+        private async Task<(HttpResponseMessage? response, StartGameResponse? result)> ExecuteStartGame(long discordVoiceChannelId, params long[] randomDistinctPlayers)
         {
             return await _httpClient.POSTAsync<StartGameRequest, StartGameResponse>($"/games/{discordVoiceChannelId}/start",
                                                                                     new StartGameRequest

@@ -7,7 +7,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
 {
     public class CreateGameRequest
     {
-        public ulong DiscordVoiceChannelId { get; set; }
+        public long DiscordVoiceChannelId { get; set; }
     }
 
     public class CreateGameUseCase : UseCase<CreateGameRequest, GameCreatedEvent>

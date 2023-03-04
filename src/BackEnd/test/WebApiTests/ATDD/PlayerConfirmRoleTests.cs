@@ -18,7 +18,7 @@ public class PlayerConfirmRoleTests : TestsBase
         //Init
         var game = GivenGame(gameStatus: GameStatus.Created);
         var manualDelay = new ManualResetEventSlim();
-        var playerIds = Enumerable.Range(1, 9).Select(o => (ulong) o);
+        var playerIds = Enumerable.Range(1, 9).Select(o => (long) o);
 
         _fakeTaskService.Delay(Arg.Any<TimeSpan>())
                         .Returns(_ =>
@@ -84,7 +84,7 @@ public class PlayerConfirmRoleTests : TestsBase
         await Task.Delay(TimeSpan.FromSeconds(1));
     }
 
-    private async Task<(HttpResponseMessage? response, ConfirmPlayerRoleResponse? result)> ExecutePlayerConfirmRole(Game game, ulong playerId = 1)
+    private async Task<(HttpResponseMessage? response, ConfirmPlayerRoleResponse? result)> ExecutePlayerConfirmRole(Game game, long playerId = 1)
     {
         return await _httpClient.GETAsync<ConfirmPlayerRoleRequest, ConfirmPlayerRoleResponse>($"/games/{game.DiscordVoiceChannelId}/players/{playerId}/Role",
                                                                                                new ConfirmPlayerRoleRequest
@@ -101,7 +101,7 @@ public class PlayerConfirmRoleTests : TestsBase
                            .Build();
     }
 
-    private async Task ExecuteStartGame(ulong gameDiscordVoiceChannelId, IEnumerable<ulong> players)
+    private async Task ExecuteStartGame(long gameDiscordVoiceChannelId, IEnumerable<long> players)
     {
         await _httpClient.POSTAsync<StartGameRequest, StartGameResponse>($"/games/{gameDiscordVoiceChannelId}/start",
                                                                          new StartGameRequest
