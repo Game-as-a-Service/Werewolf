@@ -4,7 +4,7 @@ namespace Wsa.Gaas.Werewolf.Application.Common
 {
     public interface IRepository
     {
-        Task<Game?> FindByIdAsync(Guid id);
+        Task<Game?> FindByIdAsync(long id);
 
         Task<Game?> FindByRoomIdAsync(long roomId);
 

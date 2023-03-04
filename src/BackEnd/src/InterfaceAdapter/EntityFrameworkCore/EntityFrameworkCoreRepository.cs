@@ -4,48 +4,6 @@ using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
 {
-    public class InMemoryRepository : IRepository
-    {
-        private readonly Dictionary<long, Game> _roomIdMemory = new();
-        private readonly Dictionary<Guid, Game> _idMemory = new();
-
-        public InMemoryRepository() { }
-
-        public IQueryable<Game> FindAll()
-        {
-            return _idMemory.Values.AsQueryable();
-        }
-
-        public Task<Game?> FindByRoomIdAsync(long roomId)
-        {
-            _roomIdMemory.TryGetValue(roomId, out var game);
-
-            return Task.FromResult(game);
-        }
-
-        public Task<Game?> FindByIdAsync(Guid id)
-        {
-            _idMemory.TryGetValue(id, out var game);
-
-            return Task.FromResult(game);
-        }
-
-        public void Save(Game game)
-        {
-            if (game.Id == Guid.Empty)
-            {
-                game.GetType().GetProperty(nameof(game.Id))!.SetValue(game, Guid.NewGuid());
-            }
-            _idMemory[game.Id] = game;
-            _roomIdMemory[game.RoomId] = game;
-        }
-
-        public Task SaveAsync(Game game)
-        {
-            Save(game);
-            return Task.CompletedTask;
-        }
-    }
     public class EntityFrameworkCoreRepository : DbContext, IRepository
     {
         public EntityFrameworkCoreRepository(DbContextOptions opt) : base(opt)
@@ -57,7 +15,7 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
             return Set<Game>();
         }
 
-        public async Task<Game?> FindByIdAsync(Guid id)
+        public async Task<Game?> FindByIdAsync(long id)
         {
             return await FindAsync<Game>(id);
         }

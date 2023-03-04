@@ -12,6 +12,7 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
             //    opt.UseInMemoryDatabase(nameof(EntityFrameworkCoreRepository));
             //});
 
+            services.AddSingleton<IIdGenerator, SimpleIdGenerator>();
             services.AddSingleton<IRepository, InMemoryRepository>();
 
             return services;

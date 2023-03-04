@@ -6,7 +6,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
 {
     public class Game
     {
-        public Guid Id { get; internal set; }
+        public long Id { get; internal set; }
         public long RoomId { get; internal set; }
         public GameStatus Status { get; internal set; }
 
