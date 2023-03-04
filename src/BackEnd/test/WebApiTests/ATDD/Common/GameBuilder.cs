@@ -1,5 +1,6 @@
 ﻿using Wsa.Gaas.Werewolf.Application.Common;
-using Wsa.Gaas.Werewolf.Domain.Objects;
+using Wsa.Gaas.Werewolf.Domain.Entities;
+using Wsa.Gaas.Werewolf.Domain.Enums;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
 {

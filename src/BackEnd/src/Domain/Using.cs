@@ -1,1 +1,1 @@
-﻿global using Wsa.Gaas.Werewolf.Domain.Common;
+﻿

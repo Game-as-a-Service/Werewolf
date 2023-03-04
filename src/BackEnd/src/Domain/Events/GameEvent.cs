@@ -1,10 +1,10 @@
-﻿using Wsa.Gaas.Werewolf.Domain.Objects;
+using Wsa.Gaas.Werewolf.Domain.Entities;
 
-namespace Wsa.Gaas.Werewolf.Domain.Common
+namespace Wsa.Gaas.Werewolf.Domain.Events
 {
-    public class GameEvent
+    public abstract class GameEvent
     {
-        public GameEvent(Game data)
+        protected GameEvent(Game data)
         {
             Data = data;
         }

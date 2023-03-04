@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <InternalsVisibleTo Include="Wsa.Gaas.Werewolf.WebApiTests" />
   </ItemGroup>
 </Project>

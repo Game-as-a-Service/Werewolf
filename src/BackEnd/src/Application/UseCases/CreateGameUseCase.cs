@@ -1,7 +1,8 @@
 ﻿using Wsa.Gaas.Werewolf.Application.Common;
+using Wsa.Gaas.Werewolf.Domain.Entities;
+using Wsa.Gaas.Werewolf.Domain.Enums;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
-using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.Application.UseCases
 {

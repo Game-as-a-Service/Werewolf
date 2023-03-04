@@ -1,6 +1,6 @@
 ﻿using FastEndpoints;
 using Wsa.Gaas.Werewolf.Application.Common;
-using Wsa.Gaas.Werewolf.Domain.Common;
+using Wsa.Gaas.Werewolf.Domain.Events;
 
 namespace Wsa.Gaas.Werewolf.WebApi.Common
 {

@@ -1,4 +1,7 @@
-﻿namespace Wsa.Gaas.Werewolf.Domain.Objects
+﻿using Wsa.Gaas.Werewolf.Domain.Entities.Rules;
+using Wsa.Gaas.Werewolf.Domain.Enums;
+
+namespace Wsa.Gaas.Werewolf.Domain.Entities
 {
     public class Player
     {
@@ -18,16 +21,5 @@
             Role = role;
             PlayerNumber = playerNumber;
         }
-    }
-
-    [Flags]
-    public enum BuffStatus
-    {
-        None = 0,
-        KilledByWerewolf = 1,
-        SavedByWitch = 2,
-        KilledByWitch = 4,
-        SavedByGuardian = 8,
-        VotedByMajority = 16,
     }
 }

@@ -1,4 +1,4 @@
-﻿using Wsa.Gaas.Werewolf.Domain.Objects;
+﻿using Wsa.Gaas.Werewolf.Domain.Entities;
 
 namespace Wsa.Gaas.Werewolf.Domain.Events
 {

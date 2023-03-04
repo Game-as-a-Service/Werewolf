@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Wsa.Gaas.Werewolf.Domain.Common;
+using Wsa.Gaas.Werewolf.Domain.Events;
 
 namespace Wsa.Gaas.Werewolf.Application.Common
 {

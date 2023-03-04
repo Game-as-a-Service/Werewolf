@@ -1,8 +1,10 @@
 ﻿using System.Collections.Immutable;
+using Wsa.Gaas.Werewolf.Domain.Entities.Rules;
+using Wsa.Gaas.Werewolf.Domain.Enums;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 
-namespace Wsa.Gaas.Werewolf.Domain.Objects
+namespace Wsa.Gaas.Werewolf.Domain.Entities
 {
     public class Game
     {
@@ -75,7 +77,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             var roles = new List<Role>()
                         {
                             new Villager(), new Villager(), new Villager(),
-                            new Werewolf(), new Werewolf(), new Werewolf(),
+                            new Rules.Werewolf(), new Rules.Werewolf(), new Rules.Werewolf(),
                             new Witch(), new Seer(), new Hunter(),
                         };
 
