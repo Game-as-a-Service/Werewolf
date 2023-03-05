@@ -4,8 +4,9 @@ using Wsa.Gaas.Werewolf.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddWebApi();
-builder.Services.AddSwaggerDoc();
+builder.Services
+       .AddWebApi()
+       .AddSwaggerDoc();
 
 var app = builder.Build();
 
@@ -16,7 +17,7 @@ app.UseDefaultExceptionHandler();
 app.UseFastEndpoints();
 
 // SignalR
-app.MapHub<GameEventHub>(WebApiDefaults.SignalrEndpoint);
+app.MapHub<GameEventHub>(WebApiDefaults.SIGNALR_ENDPOINT);
 
 // Swagger
 app.UseOpenApi();

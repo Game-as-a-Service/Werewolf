@@ -8,6 +8,7 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore.TypeConfigurations
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
+            // ReSharper disable once RedundantArgumentDefaultValue
             builder.Property(e => e.Name).HasMaxLength(128).IsUnicode(true);
 
             builder.HasDiscriminator(e => e.Id)

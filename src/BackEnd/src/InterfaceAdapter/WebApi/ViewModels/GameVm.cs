@@ -1,5 +1,4 @@
 ﻿using Wsa.Gaas.Werewolf.Domain.Entities;
-using Wsa.Gaas.Werewolf.Domain.Events;
 
 namespace Wsa.Gaas.Werewolf.WebApi.ViewModels
 {
@@ -7,14 +6,12 @@ namespace Wsa.Gaas.Werewolf.WebApi.ViewModels
     {
         public string Id { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
-        public List<PlayerVm> Players { get; set; } = new List<PlayerVm>();
 
         public static GameVm FromDomain(Game game)
         {
             return new GameVm
             {
                 Id = game.RoomId.ToString(),
-                Players = game.Players.Select(PlayerVm.FromDomain).ToList(),
                 Status = game.Status.ToString(),
             };
         }

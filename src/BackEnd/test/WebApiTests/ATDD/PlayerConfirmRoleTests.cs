@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Net;
 using FastEndpoints;
 using NSubstitute;
@@ -5,7 +6,7 @@ using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Entities;
 using Wsa.Gaas.Werewolf.Domain.Enums;
 using Wsa.Gaas.Werewolf.Domain.Events;
-using Wsa.Gaas.Werewolf.WebApi.Endpoints;
+using Wsa.Gaas.Werewolf.WebApi.Endpoints.Response;
 using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
@@ -19,9 +20,12 @@ public class PlayerConfirmRoleTests : TestsBase
         //Init
         var game = GivenGame(gameStatus: GameStatus.Created);
         var manualDelay = new ManualResetEventSlim();
-        var playerIds = Enumerable.Range(1, 9).Select(o => (long) o);
 
-        _fakeTaskService.Delay(Arg.Any<TimeSpan>())
+        var playerIds = Enumerable.Range(1, 9)
+                                  .Select(o => (long) o)
+                                  .ToImmutableList();
+
+        FakeTaskService.Delay(Arg.Any<TimeSpan>())
                         .Returns(_ =>
                                  {
                                      manualDelay.Wait();
@@ -61,7 +65,7 @@ public class PlayerConfirmRoleTests : TestsBase
 
         await LetBulletFly();
 
-        await _fakeTaskService.Received(1)
+        await FakeTaskService.Received(1)
                               .Delay(TimeSpan.FromSeconds(60));
 
 
@@ -72,7 +76,7 @@ public class PlayerConfirmRoleTests : TestsBase
 
         GetGame(game)!.Status.Should().Be(GameStatus.PlayerRoleConfirmationStopped);
 
-        _fakeAction.Received(1)
+        FakeAction.Received(1)
                    .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
                                             && o.Status == GameStatus.PlayerRoleConfirmationStopped.ToString()));
 
@@ -87,7 +91,7 @@ public class PlayerConfirmRoleTests : TestsBase
 
     private async Task<(HttpResponseMessage? response, ConfirmPlayerRoleResponse? result)> ExecutePlayerConfirmRole(Game game, long playerId = 1)
     {
-        return await _httpClient.GETAsync<ConfirmPlayerRoleRequest, ConfirmPlayerRoleResponse>($"/games/{game.RoomId}/players/{playerId}/Role",
+        return await HttpClient.GETAsync<ConfirmPlayerRoleRequest, ConfirmPlayerRoleResponse>($"/games/{game.RoomId}/players/{playerId}/Role",
                                                                                                new ConfirmPlayerRoleRequest
                                                                                                {
                                                                                                    RoomId = game.RoomId,
@@ -97,14 +101,14 @@ public class PlayerConfirmRoleTests : TestsBase
 
     private Game GivenGame(GameStatus gameStatus)
     {
-        return _gameBuilder.WithRandomRoom()
+        return GameBuilder.WithRandomRoom()
                            .WithGameStatus(gameStatus)
                            .Build();
     }
 
     private async Task ExecuteStartGame(long roomId, IEnumerable<long> players)
     {
-        await _httpClient.POSTAsync<StartGameRequest, StartGameResponse>($"/games/{roomId}/start",
+        await HttpClient.POSTAsync<StartGameRequest, StartGameResponse>($"/games/{roomId}/start",
                                                                          new StartGameRequest
                                                                          {
                                                                              RoomId = roomId,

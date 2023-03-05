@@ -47,7 +47,7 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
             {
                 if (role != null)
                 {
-                    var entry = Entry(role);
+                    Entry(role);
                 }
             }
             SaveChanges();

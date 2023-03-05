@@ -1,12 +1,10 @@
 ﻿using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.WebApi.Common;
+using Wsa.Gaas.Werewolf.WebApi.Endpoints.Response;
 
 namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
 {
-    public record ConfirmPlayerRoleResponse(string GameId, string PlayerId, string Role);
-    
-
     public class ConfirmPlayerRoleEndpoint : WebApiEndpoint<ConfirmPlayerRoleRequest, PlayerRoleConfirmedEvent, ConfirmPlayerRoleResponse>
     {
         /// <summary>
@@ -38,11 +36,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
 
         public override Task PresentAsync(PlayerRoleConfirmedEvent gameEvent, CancellationToken cancellationToken = default)
         {
-            ViewModel = new ConfirmPlayerRoleResponse(
-                gameEvent.Data.RoomId.ToString(),
-                gameEvent.PlayerId.ToString(),
-                gameEvent.Role
-            );
+            ViewModel = new ConfirmPlayerRoleResponse();
 
             return Task.CompletedTask;
         }

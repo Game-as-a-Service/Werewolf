@@ -5,7 +5,7 @@ using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Entities;
 using Wsa.Gaas.Werewolf.Domain.Enums;
 using Wsa.Gaas.Werewolf.Domain.Events;
-using Wsa.Gaas.Werewolf.WebApi.Endpoints;
+using Wsa.Gaas.Werewolf.WebApi.Endpoints.Response;
 using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
@@ -37,13 +37,13 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
             switch (expectedStatusCode)
             {
                 case HttpStatusCode.OK:
-                    _fakeAction.Received(1)
+                    FakeAction.Received(1)
                                .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
                                                         && o.Status == GameStatus.Started.ToString()));
 
                     break;
                 case HttpStatusCode.InternalServerError:
-                    _fakeAction.DidNotReceive()
+                    FakeAction.DidNotReceive()
                                .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
                                                         && o.Status == GameStatus.Started.ToString()));
 
@@ -68,7 +68,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
             //Then
             response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
 
-            _fakeAction.DidNotReceive()
+            FakeAction.DidNotReceive()
                        .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
                                                 && o.Status == GameStatus.Started.ToString()));
         }
@@ -87,14 +87,14 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
             //Then
             response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
 
-            _fakeAction.DidNotReceive()
+            FakeAction.DidNotReceive()
                        .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
                                                 && o.Status == GameStatus.Started.ToString()));
         }
 
         private async Task<(HttpResponseMessage? response, StartGameResponse? result)> ExecuteStartGame(long roomId, params long[] randomDistinctPlayers)
         {
-            return await _httpClient.POSTAsync<StartGameRequest, StartGameResponse>($"/games/{roomId}/start",
+            return await HttpClient.POSTAsync<StartGameRequest, StartGameResponse>($"/games/{roomId}/start",
                                                                                     new StartGameRequest
                                                                                     {
                                                                                         RoomId = roomId,
@@ -104,7 +104,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
 
         private Game GivenGame(GameStatus gameStatus)
         {
-            return _gameBuilder.WithRandomRoom()
+            return GameBuilder.WithRandomRoom()
                                .WithGameStatus(gameStatus)
                                .Build();
         }

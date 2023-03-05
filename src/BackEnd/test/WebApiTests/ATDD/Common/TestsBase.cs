@@ -8,40 +8,43 @@ using Wsa.Gaas.Werewolf.Domain.Entities;
 using Wsa.Gaas.Werewolf.WebApi;
 using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 
+#pragma warning disable CS8618
+//field always be init in SetUp()
+
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
 public class TestsBase
 {
-    protected Action<GameVm> _fakeAction;
-    protected ITaskService _fakeTaskService;
-    protected HttpClient _httpClient;
+    protected Action<GameVm> FakeAction;
+    protected ITaskService FakeTaskService;
+    protected HttpClient HttpClient;
     private HubConnection _hubConnection;
     private IRepository _repository;
     private WebApplicationFactory<Program> _webApplicationFactory;
-    private protected GameBuilder _gameBuilder;
+    private protected GameBuilder GameBuilder;
     private const int NORMAL_PLAYER_COUNT = 9;
 
     [SetUp]
     public async Task SetUp()
     {
-        _fakeAction = Substitute.For<Action<GameVm>>();
-        _fakeTaskService = Substitute.For<ITaskService>();
+        FakeAction = Substitute.For<Action<GameVm>>();
+        FakeTaskService = Substitute.For<ITaskService>();
 
         _webApplicationFactory = new WebApplicationFactory<Program>()
-           .WithWebHostBuilder(builder => { builder.ConfigureTestServices(s => { ServiceCollectionServiceExtensions.AddSingleton(s, _fakeTaskService); }); });
+           .WithWebHostBuilder(builder => { builder.ConfigureTestServices(s => { ServiceCollectionServiceExtensions.AddSingleton(s, FakeTaskService); }); });
 
         _repository = _webApplicationFactory.Services
                                             .GetRequiredService<IRepository>();
 
-        _gameBuilder = new GameBuilder(_repository);
+        GameBuilder = new GameBuilder(_repository);
 
 
-        _httpClient = _webApplicationFactory.CreateClient();
+        HttpClient = _webApplicationFactory.CreateClient();
 
         _hubConnection = new HubConnectionBuilder()
-                        .WithUrl(new UriBuilder(_httpClient.BaseAddress!)
+                        .WithUrl(new UriBuilder(HttpClient.BaseAddress!)
                                  {
-                                     Path = WebApiDefaults.SignalrEndpoint,
+                                     Path = WebApiDefaults.SIGNALR_ENDPOINT,
                                  }.Uri,
                                  opt => opt.HttpMessageHandlerFactory = _ => _webApplicationFactory.Server.CreateHandler())
                         .Build();
@@ -67,7 +70,7 @@ public class TestsBase
         {
             while (result.Count < n)
             {
-                result.Add((long) new Random().Next());
+                result.Add(new Random().Next());
             }
         }
 
@@ -75,7 +78,7 @@ public class TestsBase
     }
 
     protected void HubListenOn<T>() => HubListenOn(typeof(T).Name);
-    protected void HubListenOn(string methodName) => _hubConnection.On(methodName, _fakeAction);
+    protected void HubListenOn(string methodName) => _hubConnection.On(methodName, FakeAction);
 
 
     protected static async Task WaitNetworkTransmission()

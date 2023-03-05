@@ -11,7 +11,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Common
     {
         protected TViewModel? ViewModel { get; set; }
 
-        public required UseCase<TRequest, TGameEvent> UseCase { get; set; }
+        public required UseCase<TRequest, TGameEvent> UseCase { get; init; }
 
         public abstract Task PresentAsync(TGameEvent gameEvent, CancellationToken cancellationToken = default);
 

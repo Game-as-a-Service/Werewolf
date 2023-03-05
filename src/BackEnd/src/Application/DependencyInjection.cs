@@ -7,16 +7,9 @@ namespace Wsa.Gaas.Werewolf.Application
     {
         public static IServiceCollection AddWerewolfApplication(this IServiceCollection services)
         {
-            // Inject Use Cases
-            services.AddUseCases();
-
-            // Inject Policies
-            services.AddPolicies();
-
-            // GameEvenPublisher
-            services.AddScoped<GameEventBus>();
-
-            return services;
+            return services.AddUseCases()
+                    .AddPolicies()
+                    .AddScoped<GameEventBus>();
         }
 
         private static IServiceCollection AddUseCases(this IServiceCollection services)

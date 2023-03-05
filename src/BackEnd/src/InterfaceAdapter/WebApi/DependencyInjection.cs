@@ -9,21 +9,12 @@ namespace Wsa.Gaas.Werewolf.WebApi
     {
         public static IServiceCollection AddWebApi(this IServiceCollection services)
         {
-            // Application
-            services.AddWerewolfApplication();
-
-            // SignalR
-            services.AddSignalR();
-
-            // Web Api
-            services.AddFastEndpoints();
-
-            // 實作 IRepository
-            services.AddEntityFrameworkCoreRepository();
-
-            // 實作 IGameEventHandler
-            services.AddScoped<IGameEventHandler, GameEventHubHandler>();
-            services.AddSingleton<ITaskService, TaskService>();
+            services.AddWerewolfApplication()
+                    .AddFastEndpoints()
+                    .AddRepository()
+                    .AddScoped<IGameEventHandler, GameEventHubHandler>()
+                    .AddSingleton<ITaskService, TaskService>()
+                    .AddSignalR();
 
             return services;
         }

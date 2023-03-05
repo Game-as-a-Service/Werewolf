@@ -13,7 +13,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
 
     public class CreateGameUseCase : UseCase<CreateGameRequest, GameCreatedEvent>
     {
-        private readonly static object _lock = new();
+        private static readonly object Lock = new();
 
         public CreateGameUseCase(IRepository repository, GameEventBus eventPublisher) : base(repository, eventPublisher)
         {
@@ -23,7 +23,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
         {
             Game game;
 
-            lock (_lock)
+            lock (Lock)
             {
                 // Query
                 var anyExistingActiveGame = Repository.FindAll()

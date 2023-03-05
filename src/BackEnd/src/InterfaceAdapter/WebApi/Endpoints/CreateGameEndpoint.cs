@@ -1,13 +1,10 @@
 ﻿using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.WebApi.Common;
+using Wsa.Gaas.Werewolf.WebApi.Endpoints.Response;
 
 namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
 {
-    public record CreateGameResponse(
-        string GameId
-    );
-
     public class CreateGameEndpoint : WebApiEndpoint<CreateGameRequest, GameCreatedEvent, CreateGameResponse>
     {
         public override void Configure()

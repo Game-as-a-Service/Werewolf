@@ -2,8 +2,6 @@
 {
     public static class WebApiDefaults
     {
-        public const string SignalrEndpoint = "/events"
-            , SignalrPublishMethodName = "Publish"
-            ;
+        public const string SIGNALR_ENDPOINT = "/events";
     }
 }

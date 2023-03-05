@@ -4,7 +4,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Entities.Rules;
 
 public abstract class SepcialRole : Role
 {
-    public SepcialRole()
+    protected SepcialRole()
     {
         Name = GetType().Name;
         Faction = Faction.Alliance;

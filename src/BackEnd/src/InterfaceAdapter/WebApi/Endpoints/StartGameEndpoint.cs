@@ -1,16 +1,10 @@
-﻿using Wsa.Gaas.Werewolf.Application.Common;
-using Wsa.Gaas.Werewolf.Application.UseCases;
+﻿using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.WebApi.Common;
-using Wsa.Gaas.Werewolf.WebApi.ViewModels;
+using Wsa.Gaas.Werewolf.WebApi.Endpoints.Response;
 
 namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
 {
-    public record StartGameResponse(
-        string GameId,
-        PlayerVm[] Players
-    );
-
     public class StartGameEndpoint : WebApiEndpoint<StartGameRequest, GameStartedEvent, StartGameResponse>
     {
         public override void Configure()
@@ -33,13 +27,9 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
 
         public override Task PresentAsync(GameStartedEvent gameEvent, CancellationToken cancellationToken = default)
         {
-            ViewModel = new StartGameResponse
-            (
-                gameEvent.Data.RoomId.ToString(),
-                gameEvent.Data.Players.Select(PlayerVm.FromDomain).ToArray()
-            );
+            ViewModel = new StartGameResponse();
+
             return Task.CompletedTask;
         }
     }
-
 }

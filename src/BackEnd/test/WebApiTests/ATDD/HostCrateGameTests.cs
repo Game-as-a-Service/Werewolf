@@ -3,7 +3,7 @@ using FastEndpoints;
 using NSubstitute;
 using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
-using Wsa.Gaas.Werewolf.WebApi.Endpoints;
+using Wsa.Gaas.Werewolf.WebApi.Endpoints.Response;
 using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
@@ -31,7 +31,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
 
             await WaitNetworkTransmission();
 
-            _fakeAction.Received(1)
+            FakeAction.Received(1)
                        .Invoke(Arg.Is<GameVm>(o => o.Id == result.GameId));
 
             GetGame(long.Parse(result.GameId))!
@@ -46,7 +46,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
 
         private void GivenRandomChannelId()
         {
-            _channelId = (long) new Random().Next();
+            _channelId = new Random().Next();
         }
 
         private async Task<(HttpResponseMessage? response, CreateGameResponse? result)> ExecuteCreateGame()
@@ -56,7 +56,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
                           RoomId = _channelId,
                       };
 
-            return await _httpClient.POSTAsync<CreateGameRequest, CreateGameResponse>("/games", req);
+            return await HttpClient.POSTAsync<CreateGameRequest, CreateGameResponse>("/games", req);
         }
     }
 }

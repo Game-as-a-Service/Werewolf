@@ -17,23 +17,22 @@ namespace Wsa.Gaas.Werewolf.Application.Common
         {
             // Run this in sparate Thread
             Task.Run(async () =>
-            {
-                using var scope = _factory.CreateScope();
-                var provider = scope.ServiceProvider;
+                     {
+                         using var scope = _factory.CreateScope();
+                         var provider = scope.ServiceProvider;
 
-                // Trigger Handlers
+                         // Trigger Handlers
 
-                // 1. Game Event Hub Handler
-                var handler = provider.GetRequiredService<IGameEventHandler>();
-                await handler.Handle(gameEvent, cancellationToken);
+                         // 1. Game Event Hub Handler
+                         var handler = provider.GetRequiredService<IGameEventHandler>();
+                         await handler.Handle(gameEvent, cancellationToken);
 
-                // 2. Policies
-                if (provider.GetService<Policy<T>>() is Policy<T> policy)
-                {
-                    await policy.ExecuteAsync(gameEvent, cancellationToken);
-                }
-
-            }, cancellationToken);
+                         // 2. Policies
+                         if (provider.GetService<Policy<T>>() is { } policy)
+                         {
+                             await policy.ExecuteAsync(gameEvent, cancellationToken);
+                         }
+                     }, cancellationToken);
 
             return Task.CompletedTask;
         }

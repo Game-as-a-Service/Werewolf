@@ -5,7 +5,7 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddEntityFrameworkCoreRepository(this IServiceCollection services)
+        public static IServiceCollection AddRepository(this IServiceCollection services)
         {
             //services.AddDbContext<IRepository, EntityFrameworkCoreRepository>(opt =>
             //{
