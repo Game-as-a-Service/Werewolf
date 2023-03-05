@@ -1,3 +1,3 @@
 namespace Wsa.Gaas.Werewolf.WebApi.Endpoints.Response;
 
-public record ConfirmPlayerRoleResponse;
+public record ConfirmPlayerRoleResponse(string Role);

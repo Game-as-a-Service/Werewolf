@@ -9,6 +9,7 @@ using Wsa.Gaas.Werewolf.WebApi;
 using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 
 #pragma warning disable CS8618
+
 //field always be init in SetUp()
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
@@ -84,5 +85,17 @@ public class TestsBase
     protected static async Task WaitNetworkTransmission()
     {
         await Task.Delay(TimeSpan.FromSeconds(1));
+    }
+
+    protected Game GivenStartedGame(IEnumerable<long> playerIds)
+    {
+        var randomRoomId = new Random().Next();
+        var game = new Game(randomRoomId);
+
+        game.StartGame(playerIds.ToArray());
+
+        _repository.Save(game);
+
+        return game;
     }
 }
