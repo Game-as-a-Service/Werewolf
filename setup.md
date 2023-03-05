@@ -17,7 +17,7 @@ https://dotnet.microsoft.com/en-us/download/dotnet/7.0
 (如果 IDE 選擇 Visual Studio 2022, 他安裝自帶 .NET 7 SDK, 就不用再安裝了)
 
 ### 要如何知道 .NET SDK 安裝成功 ?
-在 Terminal 下打 `dontnet --info`
+在 Terminal 下打 `dotnet --info`
 
 你會看到類似以下的訊息, 那就是安裝成功啦
 
