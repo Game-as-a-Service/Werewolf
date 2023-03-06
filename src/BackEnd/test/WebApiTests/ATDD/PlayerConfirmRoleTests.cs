@@ -19,7 +19,7 @@ public class PlayerConfirmRoleTests : TestsBase
     public async Task player_confirm_role()
     {
         //Init
-        var game = GivenGame(gameStatus: GameStatus.Created);
+        var game = GivenCreatedGame();
         var manualStopAction = GivenConfirmRoleDurationByManual();
 
         //Before started
@@ -131,13 +131,6 @@ public class PlayerConfirmRoleTests : TestsBase
                                                                                                   RoomId = game.RoomId,
                                                                                                   PlayerId = playerId
                                                                                               });
-    }
-
-    private Game GivenGame(GameStatus gameStatus)
-    {
-        return GameBuilder.WithRandomRoom()
-                          .WithGameStatus(gameStatus)
-                          .Build();
     }
 
     private async Task ExecuteStartGame(long roomId, IEnumerable<long> players)

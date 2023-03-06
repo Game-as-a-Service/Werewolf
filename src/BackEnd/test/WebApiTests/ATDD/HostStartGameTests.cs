@@ -2,7 +2,6 @@ using System.Net;
 using FastEndpoints;
 using NSubstitute;
 using Wsa.Gaas.Werewolf.Application.UseCases;
-using Wsa.Gaas.Werewolf.Domain.Entities;
 using Wsa.Gaas.Werewolf.Domain.Enums;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.WebApi.Endpoints.Response;
@@ -22,7 +21,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
         public async Task player_count(int playerCount, HttpStatusCode expectedStatusCode)
         {
             //Given
-            var game = GivenGame(gameStatus: GameStatus.Created);
+            var game = GivenCreatedGame();
             HubListenOn(nameof(GameStartedEvent));
 
             //When
@@ -38,14 +37,14 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
             {
                 case HttpStatusCode.OK:
                     FakeAction.Received(1)
-                               .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
-                                                        && o.Status == GameStatus.Started.ToString()));
+                              .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
+                                                       && o.Status == GameStatus.Started.ToString()));
 
                     break;
                 case HttpStatusCode.InternalServerError:
                     FakeAction.DidNotReceive()
-                               .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
-                                                        && o.Status == GameStatus.Started.ToString()));
+                              .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
+                                                       && o.Status == GameStatus.Started.ToString()));
 
                     break;
                 default:
@@ -58,7 +57,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
         public async Task duplicate_player()
         {
             //Given
-            var game = GivenGame(gameStatus: GameStatus.Created);
+            var game = GivenCreatedGame();
             HubListenOn(nameof(GameStartedEvent));
 
             //When
@@ -69,15 +68,15 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
             response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
 
             FakeAction.DidNotReceive()
-                       .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
-                                                && o.Status == GameStatus.Started.ToString()));
+                      .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
+                                               && o.Status == GameStatus.Started.ToString()));
         }
 
         [Test]
         public async Task already_started()
         {
             //Given
-            var game = GivenGame(gameStatus: GameStatus.Created);
+            var game = GivenCreatedGame();
             HubListenOn(nameof(GameStartedEvent));
 
             //When
@@ -88,25 +87,18 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD
             response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
 
             FakeAction.DidNotReceive()
-                       .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
-                                                && o.Status == GameStatus.Started.ToString()));
+                      .Invoke(Arg.Is<GameVm>(o => o.Id == game.RoomId.ToString()
+                                               && o.Status == GameStatus.Started.ToString()));
         }
 
         private async Task<(HttpResponseMessage? response, StartGameResponse? result)> ExecuteStartGame(long roomId, params long[] randomDistinctPlayers)
         {
             return await HttpClient.POSTAsync<StartGameRequest, StartGameResponse>($"/games/{roomId}/start",
-                                                                                    new StartGameRequest
-                                                                                    {
-                                                                                        RoomId = roomId,
-                                                                                        Players = randomDistinctPlayers,
-                                                                                    });
-        }
-
-        private Game GivenGame(GameStatus gameStatus)
-        {
-            return GameBuilder.WithRandomRoom()
-                               .WithGameStatus(gameStatus)
-                               .Build();
+                                                                                   new StartGameRequest
+                                                                                   {
+                                                                                       RoomId = roomId,
+                                                                                       Players = randomDistinctPlayers,
+                                                                                   });
         }
     }
 }

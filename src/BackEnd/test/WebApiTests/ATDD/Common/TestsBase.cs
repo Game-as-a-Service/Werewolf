@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Entities;
+using Wsa.Gaas.Werewolf.Domain.Enums;
 using Wsa.Gaas.Werewolf.WebApi;
 using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 
@@ -22,7 +23,6 @@ public class TestsBase
     private HubConnection _hubConnection;
     private IRepository _repository;
     private WebApplicationFactory<Program> _webApplicationFactory;
-    private protected GameBuilder GameBuilder;
     private const int NORMAL_PLAYER_COUNT = 9;
 
     [SetUp]
@@ -36,9 +36,6 @@ public class TestsBase
 
         _repository = _webApplicationFactory.Services
                                             .GetRequiredService<IRepository>();
-
-        GameBuilder = new GameBuilder(_repository);
-
 
         HttpClient = _webApplicationFactory.CreateClient();
 
@@ -89,11 +86,17 @@ public class TestsBase
 
     protected Game GivenStartedGame(IEnumerable<long> playerIds)
     {
+        var game = GivenCreatedGame();
+        game.StartGame(playerIds.ToArray());
+        _repository.Save(game);
+
+        return game;
+    }
+
+    protected Game GivenCreatedGame()
+    {
         var randomRoomId = new Random().Next();
         var game = new Game(randomRoomId);
-
-        game.StartGame(playerIds.ToArray());
-
         _repository.Save(game);
 
         return game;
