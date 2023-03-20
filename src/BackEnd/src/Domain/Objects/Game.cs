@@ -140,5 +140,10 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
 
             return gameEvent;
         }
+
+        public void EndGame()
+        {
+            Status = GameStatus.Ended;
+        }
     }
 }
