@@ -1,7 +1,7 @@
 ﻿using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
-namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
+namespace Wsa.Gaas.Werewolf.WebApiTests.Common
 {
     internal class GameBuilder
     {
@@ -16,7 +16,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
 
         public GameBuilder WithRandomDiscordVoiceChannel()
         {
-            return WithDiscordVoiceChannel((ulong) new Random().Next());
+            return WithDiscordVoiceChannel((ulong)new Random().Next());
         }
 
         public GameBuilder WithDiscordVoiceChannel(ulong channelId)
@@ -43,7 +43,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
         public GameBuilder WithRandomPlayers(int count)
         {
             _game.AddPlayers(Enumerable.Range(1, count)
-                                       .Select(o => (ulong) o)
+                                       .Select(o => (ulong)o)
                                        .ToArray());
 
             return this;

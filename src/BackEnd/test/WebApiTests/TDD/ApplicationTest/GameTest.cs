@@ -26,7 +26,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest
             var game = new Game(discordVoiceChannelId);
             game.StartGame(playerIds);
             game.StartPlayerRoleConfirmation();
-            var expectedRole = game.Players.First(x => x.Id == playerId).Role!.Name;
+            var expectedRole = game.Players.First(x => x.UserId == playerId).Role!.Name;
 
             // Arrange Repository
             var repository = new Mock<IRepository>();
