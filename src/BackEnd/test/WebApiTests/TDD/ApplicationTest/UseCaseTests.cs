@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
@@ -36,7 +37,9 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest
                 ;
 
             // Arrange Game Event Bus
-            var gameEventBus = new Mock<GameEventBus>();
+            var gameEventBus = new Mock<GameEventBus>(
+                new Mock<IServiceScopeFactory>().Object
+            );
             gameEventBus.Setup(x => x.BroadcastAsync(It.IsAny<PlayerRoleConfirmedEvent>(), It.IsAny<CancellationToken>()));
 
             // Arrange Presenter
@@ -100,7 +103,9 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest
             repository.Setup(r => r.FindByDiscordChannelIdAsync(It.IsAny<ulong>()))
                 .Returns(Task.FromResult(game));
 
-            var gameEventBus = new Mock<GameEventBus>();
+            var gameEventBus = new Mock<GameEventBus>(
+                new Mock<IServiceScopeFactory>().Object
+            );
             gameEventBus.Setup(x => x.BroadcastAsync(It.IsAny<PlayerRoleConfirmedEvent>(), It.IsAny<CancellationToken>()));
 
 
