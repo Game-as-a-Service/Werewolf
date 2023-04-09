@@ -6,14 +6,20 @@ using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
-namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest
+namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases
 {
 
-    public class UseCaseTests
+    public class ConfirmPlayerRoleUseCaseTests
     {
 
         [Test]
-        public async Task UseCaseTest()
+        [Description("""
+            Given: A game started
+            When: The player confirms his role
+            Then: The player role is returned to the player
+                , and the event is broadcasted to all players
+            """)]
+        public async Task ConfirmPlayerRoleTest1()
         {
             // Given
             var random = new Random();
@@ -63,67 +69,47 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest
             await useCase.ExecuteAsync(request, presenter.Object);
 
             // Then
-            gameEventBus.Verify(bus => bus.BroadcastAsync(
-                It.Is<PlayerRoleConfirmedEvent>(gameEvent => gameEvent.PlayerId == playerId),
-                It.IsAny<CancellationToken>()
-            ));
             presenter.Verify(p => p.PresentAsync(
-                It.Is<PlayerRoleConfirmedEvent>(gameEvent => 
-                       gameEvent.PlayerId == playerId 
+                It.Is<PlayerRoleConfirmedEvent>(gameEvent =>
+                       gameEvent.PlayerId == playerId
                     && gameEvent.Role == expectedRole
                 ),
                 It.IsAny<CancellationToken>()
             ));
-
-
-
+            gameEventBus.Verify(bus => bus.BroadcastAsync(
+                It.Is<PlayerRoleConfirmedEvent>(gameEvent => gameEvent.PlayerId == playerId),
+                It.IsAny<CancellationToken>()
+            ));
         }
 
         [Test]
-        public async Task UseCaseTest2()
+        [Description("""
+            Given: A Game with a random Discord Voice Channel Id
+            When: The Game is not found
+            Then: A GameNotFoundException is thrown
+            """)]
+        public void ConfirmPlayerRoleTest2()
         {
             // Arrange or Given
-            ulong discordVoiceChannelId = 3;
-            ulong playerId = 2;
-            var request = new ConfirmPlayerRoleRequest
-            {
-                DiscordVoiceChannelId = discordVoiceChannelId,
-                PlayerId = playerId,
-            };
+            var request = new ConfirmPlayerRoleRequest();
             var presenter = new Mock<IPresenter<PlayerRoleConfirmedEvent>>();
-            presenter.Setup(p => p.PresentAsync(It.IsAny<PlayerRoleConfirmedEvent>(), default))
-                .Returns(Task.CompletedTask);
-                ;
+            var gameEventBus = new Mock<GameEventBus>(new Mock<IServiceScopeFactory>().Object);
 
-            var cancellationToken = new CancellationToken();
-            
-            Game? game = null;
-
+            // Arrange Repository so that it returns null
             var repository = new Mock<IRepository>();
             repository.Setup(r => r.FindByDiscordChannelIdAsync(It.IsAny<ulong>()))
-                .Returns(Task.FromResult(game));
-
-            var gameEventBus = new Mock<GameEventBus>(
-                new Mock<IServiceScopeFactory>().Object
-            );
-            gameEventBus.Setup(x => x.BroadcastAsync(It.IsAny<PlayerRoleConfirmedEvent>(), It.IsAny<CancellationToken>()));
-
+                .Returns(Task.FromResult<Game?>(null));
 
             var useCase = new ConfirmPlayerRoleUseCase(
-                repository.Object, 
+                repository.Object,
                 gameEventBus.Object
             );
 
             // Act or When
-            //await useCase.ExecuteAsync(request, presenter.Object, cancellationToken);
-            
-
             // Assert or Then
-
-            // ONLY For Exception
             Assert.ThrowsAsync(
                 typeof(GameNotFoundException),
-                async () => await useCase.ExecuteAsync(request, presenter.Object, cancellationToken)
+                async () => await useCase.ExecuteAsync(request, presenter.Object, CancellationToken.None)
             );
 
         }
