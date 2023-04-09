@@ -8,7 +8,7 @@ using Wsa.Gaas.Werewolf.Domain.Objects;
 namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest
 {
 
-    public class GameTest
+    public class UseCaseTests
     {
 
         [Test]
