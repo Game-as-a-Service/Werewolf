@@ -2,7 +2,8 @@
 {
     public class GameNotFoundException : Exception
     {
-        public GameNotFoundException(ulong discordChannelId) : base($"No active Game found in voice channel #{discordChannelId}.")
+        public GameNotFoundException(ulong discordChannelId) 
+            : base($"No active Game found in voice channel #{discordChannelId}.")
         {
         }
     }

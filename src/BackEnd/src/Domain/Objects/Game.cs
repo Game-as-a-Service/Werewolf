@@ -23,7 +23,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             Status = GameStatus.Created;
         }
 
-        public void StartGame(ulong[] playerIds)
+        public GameStartedEvent StartGame(ulong[] playerIds)
         {
             if (Status != GameStatus.Created)
             {
@@ -33,11 +33,20 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             AddPlayers(playerIds);
 
             Status = GameStatus.Started;
+
+            return new GameStartedEvent(this);
         }
 
-        public void StartPlayerRoleConfirmation()
+        public PlayerRoleConfirmationStartedEvent StartPlayerRoleConfirmation()
         {
+            if (Status != GameStatus.Started)
+            {
+                throw new GameStatusException(GameStatus.Started, Status);
+            }
+
             Status = GameStatus.PlayerRoleConfirmationStarted;
+
+            return new PlayerRoleConfirmationStartedEvent(this);
         }
 
         internal void AddPlayers(ulong[] playerIds)
@@ -69,9 +78,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             }       
         }
 
-        
-
-        private List<Role> GetRoles(int n)
+        internal static List<Role> GetRoles(int n)
         {
             var roles = new List<Role>()
             {
@@ -108,13 +115,9 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
 
         public PlayerRoleConfirmedEvent ConfirmPlayerRole(ulong playerId)
         {
-            var player = Players.FirstOrDefault(x => x.UserId == playerId);
-
-            if (player == null)
-            {
-                throw new PlayerNotFoundException(DiscordVoiceChannelId, playerId);
-            }
-
+            var player = Players.FirstOrDefault(x => x.UserId == playerId) 
+                ?? throw new PlayerNotFoundException(DiscordVoiceChannelId, playerId);
+            
             if (player.Role == null)
             {
                 throw new PlayerRoleNotAssignedException(playerId);

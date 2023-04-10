@@ -12,7 +12,7 @@ namespace Wsa.Gaas.Werewolf.Application.Common
             _factory = facotry;
         }
 
-        public Task BroadcastAsync<T>(T gameEvent, CancellationToken cancellationToken = default)
+        public virtual Task BroadcastAsync<T>(T gameEvent, CancellationToken cancellationToken = default)
             where T : GameEvent
         {
             // Run this in sparate Thread

@@ -6,6 +6,7 @@ using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Common;
 using Wsa.Gaas.Werewolf.WebApi;
 using Wsa.Gaas.Werewolf.WebApi.ViewModels;
+using Wsa.Gaas.Werewolf.WebApiTests.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
 {

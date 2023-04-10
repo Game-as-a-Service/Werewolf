@@ -26,6 +26,10 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
         /// <returns></returns>
         public async override Task<ConfirmPlayerRoleResponse> ExecuteAsync(ConfirmPlayerRoleRequest req, CancellationToken ct)
         {
+            // MVP
+            // Restful API Presenter => JSON
+            // CLI Presenter         => Text
+            
             await UseCase.ExecuteAsync(req, this, ct);
 
             if (ViewModel == null)
