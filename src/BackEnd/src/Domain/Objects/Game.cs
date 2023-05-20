@@ -13,7 +13,13 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
 
         private readonly List<Player> _players = new();
         public ImmutableList<Player> Players => _players.ToImmutableList();
-        public Player? CurrentSpeakingPlayer { get; internal set; }   
+        public Player? CurrentSpeakingPlayer { get; internal set; }
+        
+        // 玩家的夜晚得票數
+        internal Dictionary<Player, int> nightVotes = new Dictionary<Player, int>();
+
+        // 夜晚被殺的玩家
+        internal ulong? nightKilledPlayerId = null;
 
         internal Game() { }
 
@@ -147,6 +153,45 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
         public void EndGame()
         {
             Status = GameStatus.Ended;
+        }
+
+        internal void CalculateNightVotes()
+        {
+            // 平安夜
+            if (nightVotes.Values.Sum() == 0)
+            {
+                nightKilledPlayerId = null;
+            } 
+            else
+            {
+                // 最高票的玩家出局
+                var maxVotes = nightVotes.Values.Max();
+                var maxVotePlayers = nightVotes
+                    .Where(x => x.Value == maxVotes)
+                    .Select(kv => kv.Key);
+                var isTie = maxVotePlayers.Count() > 1;
+
+
+                // 有平票 random
+                if(isTie)
+                {
+                    // 隨機從最高票的玩家中選一個出局 方法1
+                    nightKilledPlayerId = maxVotePlayers
+                        .OrderBy(_ => Guid.NewGuid())
+                        .First().UserId;
+
+                    // 隨機從最高票的玩家中選一個出局 方法2
+                    var random = new Random();
+                    nightKilledPlayerId = maxVotePlayers
+                        .ElementAt(random.Next(0, maxVotePlayers.Count()-1))
+                        .UserId;
+                }
+                else // 沒有平票
+                {
+                    nightKilledPlayerId = nightVotes
+                        .FirstOrDefault(x => x.Value == maxVotes).Key.UserId;
+                }
+            }
         }
     }
 }
