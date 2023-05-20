@@ -28,7 +28,8 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
                 throw new Exception("View Model is null");
             }
 
-            return ViewModel;
+            // HTTP JSON Response
+            return ViewModel; // <= 把 ViewModel 轉 JSON
         }
 
         public override Task PresentAsync(GameStartedEvent gameEvent, CancellationToken cancellationToken = default)

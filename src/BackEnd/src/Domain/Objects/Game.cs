@@ -6,20 +6,22 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
 {
     public class Game
     {
+        // private set => 自己才可以改
+        // protected set => 繼承的 class 才可以改
+        // internal set => 同一個 assembly 才可以改
+        // public set => 所有人都可以改
+
+        // assemlby => .Net Project 編譯出來的 dll 或 exe
+
         public Guid Id { get; internal set; }
         public ulong DiscordVoiceChannelId { get; internal set; }
         public GameStatus Status { get; internal set; }
         public Guid? CurrentSpeakingPlayerId { get; internal set; }
 
         private readonly List<Player> _players = new();
+        private readonly VoteManager _voteManager = new();
         public ImmutableList<Player> Players => _players.ToImmutableList();
         public Player? CurrentSpeakingPlayer { get; internal set; }
-        
-        // 玩家的夜晚得票數
-        internal Dictionary<Player, int> nightVotes = new Dictionary<Player, int>();
-
-        // 夜晚被殺的玩家
-        internal ulong? nightKilledPlayerId = null;
 
         internal Game() { }
 
@@ -155,43 +157,29 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             Status = GameStatus.Ended;
         }
 
-        internal void CalculateNightVotes()
+        public WerewolfVotedEvent WerewolfVote(ulong callerId, ulong targetId)
         {
-            // 平安夜
-            if (nightVotes.Values.Sum() == 0)
+            // caller 真的在這場遊戲嗎?
+            var caller = Players.FirstOrDefault(x => x.UserId == callerId);
+
+            if (caller == null)
             {
-                nightKilledPlayerId = null;
-            } 
-            else
-            {
-                // 最高票的玩家出局
-                var maxVotes = nightVotes.Values.Max();
-                var maxVotePlayers = nightVotes
-                    .Where(x => x.Value == maxVotes)
-                    .Select(kv => kv.Key);
-                var isTie = maxVotePlayers.Count() > 1;
-
-
-                // 有平票 random
-                if(isTie)
-                {
-                    // 隨機從最高票的玩家中選一個出局 方法1
-                    nightKilledPlayerId = maxVotePlayers
-                        .OrderBy(_ => Guid.NewGuid())
-                        .First().UserId;
-
-                    // 隨機從最高票的玩家中選一個出局 方法2
-                    var random = new Random();
-                    nightKilledPlayerId = maxVotePlayers
-                        .ElementAt(random.Next(0, maxVotePlayers.Count()-1))
-                        .UserId;
-                }
-                else // 沒有平票
-                {
-                    nightKilledPlayerId = nightVotes
-                        .FirstOrDefault(x => x.Value == maxVotes).Key.UserId;
-                }
+                throw new PlayerNotFoundException(DiscordVoiceChannelId, callerId);
             }
+
+            // caller 真的是狼人嗎?
+            var isWerewolf = caller.IsWerewolf();
+
+            if (isWerewolf == false)
+            {
+                throw new PlayerNotWerewolfException("Caller is not a werewolf");
+            }
+
+            // 真的投票
+            _voteManager.Vote(callerId, targetId);
+
+            return new WerewolfVotedEvent(this);
+
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Wsa.Gaas.Werewolf.Domain.Objects
+﻿using Wsa.Gaas.Werewolf.Domain.Objects.Roles;
+
+namespace Wsa.Gaas.Werewolf.Domain.Objects
 {
     public class Player
     {
@@ -18,6 +20,11 @@
             UserId = userId;
             PlayerNumber = playerNumber;
             Role = role;
+        }
+
+        public bool IsWerewolf()
+        {
+            return Role is Roles.Werewolf or AlphaWerewolf;
         }
     }
 

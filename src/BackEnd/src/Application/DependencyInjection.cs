@@ -29,6 +29,7 @@ namespace Wsa.Gaas.Werewolf.Application
             {
                 if (type.BaseType?.IsGenericType == true && type.BaseType?.GetGenericTypeDefinition() == useCaseType)
                 {
+                    // services.AddScoped<UseCase<TRequest, TResponse>, ImplementType>();
                     services.AddScoped(type.BaseType, type);
                 }
             }
