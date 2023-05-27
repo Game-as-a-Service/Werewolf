@@ -19,7 +19,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
         public Guid? CurrentSpeakingPlayerId { get; internal set; }
 
         private readonly List<Player> _players = new();
-        private readonly VoteManager _voteManager = new();
+        internal readonly VoteManager VoteManager = new();
         public ImmutableList<Player> Players => _players.ToImmutableList();
         public Player? CurrentSpeakingPlayer { get; internal set; }
 
@@ -176,7 +176,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             }
 
             // 真的投票
-            _voteManager.Vote(callerId, targetId);
+            VoteManager.Vote(callerId, targetId);
 
             return new WerewolfVotedEvent(this);
 

@@ -2,8 +2,12 @@
 {
     public class VoteManager
     {
-        private readonly Dictionary<ulong, ulong> votes = new ();
+        // Dic<投票的玩家, 被投的玩家>
+        private readonly Dictionary<ulong, ulong> votes = new();
+        // Dic<被投的玩家, 票數>
+        public readonly Dictionary<ulong, int> voteResult = new();
 
+        // 計票
         public void Vote(ulong voterId, ulong voteeId)
         {
             // 投過票了嗎?
@@ -12,28 +16,37 @@
                 throw new Exception("Voted");
             }
 
-            // store vote
+            // 紀錄投票
             votes[voterId] = voteeId;
+
+            // 統計得票數
+            if (voteResult.ContainsKey(voteeId) == false)
+            {
+                voteResult[voteeId] = 0;
+            }
+            voteResult[voteeId]++;
         }
 
+        // 回傳最高票數的玩家 Id
         public ulong? GetHighestVotedPlayerId()
         {
-            var nightVotes = new Dictionary<ulong, int>();
-
-            foreach (var kv in votes)
-            {
-                if(nightVotes.ContainsKey(kv.Key) == false)
-                {
-                    nightVotes[kv.Key] = 0;
-                }
-                nightVotes[kv.Key]++;
-            }
-
-            return CalculateNightVotes(nightVotes);
-
+            return GetPlayerIdToBeKilled(voteResult);
         }
 
-        internal ulong? CalculateNightVotes(Dictionary<ulong, int> nightVotes)
+        // 回傳最高票數
+        public int GetHighestVote()
+        {
+            return voteResult.Any() ? voteResult.Values.Max() : 0;
+        }
+
+        // 回傳玩家的得票數
+        public int GetPlayerVote(ulong playerId)
+        {
+            return voteResult.ContainsKey(playerId) ? voteResult[playerId] : 0;
+        }
+
+        // nightVotes : UserId => 得票數
+        internal ulong? GetPlayerIdToBeKilled(Dictionary<ulong, int> nightVotes)
         {
             // 平安夜
             if (nightVotes.Values.Sum() == 0)
@@ -42,7 +55,7 @@
             }
             else
             {
-                // 最高票的玩家出局
+                // 最高票的玩家出局                
                 var maxVotes = nightVotes.Values.Max();
                 var maxVotePlayers = nightVotes
                     .Where(x => x.Value == maxVotes)
