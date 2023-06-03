@@ -34,7 +34,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
             await Repository.SaveAsync(game);
 
             // 推 => SignalR
-            await GameEventBus.BroadcastAsync(events, cancellationToken);
+            //await GameEventBus.BroadcastAsync(events, cancellationToken);
             
             // 推 => Restful API
             await presenter.PresentAsync(events, cancellationToken);

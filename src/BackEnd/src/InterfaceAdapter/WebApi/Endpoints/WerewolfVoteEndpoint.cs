@@ -18,7 +18,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
     {
         public override void Configure()
         {
-            Post("/games/{gameId}/werewolf/vote");
+            Post("/games/{DiscordChannelId}/werewolf/vote");
             AllowAnonymous();
         }
 

@@ -74,17 +74,17 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             /* Act & Assert */
             // too less players, expect error
             (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
-                .response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+                .Response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
 
             // too many players, expect error
             request.Players = RandomDistinctPlayers(20);
             (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
-                .response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+                .Response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
 
             // duplicate players, expect error
             request.Players = RandomDuplicatePlayers(9);
             (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
-                .response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+                .Response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
 
             // 12 players
             request.Players = RandomDistinctPlayers(12);
@@ -114,11 +114,11 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
 
             // game already started, expect error
             (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
-                .response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+                .Response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
 
             request.DiscordVoiceChannelId = gameCreated2.DiscordVoiceChannelId;
             (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
-                .response!.StatusCode.Should().Be(HttpStatusCode.OK);
+                .Response!.StatusCode.Should().Be(HttpStatusCode.OK);
                 ;
         }
 
