@@ -157,7 +157,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             Status = GameStatus.Ended;
         }
 
-        public WerewolfVotedEvent WerewolfVote(ulong callerId, ulong targetId)
+        public virtual WerewolfVotedEvent WerewolfVote(ulong callerId, ulong targetId)
         {
             // caller 真的在這場遊戲嗎?
             var caller = Players.FirstOrDefault(x => x.UserId == callerId);
