@@ -27,10 +27,11 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
             lock (_lock)
             {
                 // 查
-                game = Repository.FindAll()
-                    .Where(x => x.DiscordVoiceChannelId == request.DiscordVoiceChannelId)
-                    .Where(x => x.Status != GameStatus.Ended)
-                    .FirstOrDefault();
+                game = Repository
+                    .FindByDiscordChannelIdAsync(request.DiscordVoiceChannelId)
+                    .GetAwaiter()
+                    .GetResult()
+                    ;
 
                 if (game == null)
                 {

@@ -27,24 +27,39 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases
         {
             // 目標: 驗證 Use Case 有做到【查改存推】
 
-            // 1. Give / Arrange
+            // 1. Given / Arrange
             var faker = new Faker();
+
+            // HTTP Request
             var request = new WerewolfVoteRequest
             {
                 DiscordChannelId = faker.Random.ULong(),
                 TargetId = faker.Random.ULong(),
                 CallerId = faker.Random.ULong(),
             };
+
+            // Mock Game
             var mockGame = new Mock<Game>(request.DiscordChannelId);
+
+            // Mock Game Event
             var gameEvent = new WerewolfVotedEvent(mockGame.Object);
+
+            // 設置 mockGame 行為的條件
             mockGame
                 .Setup(x => x.WerewolfVote(
+                    // 當 callerId 等於 request.CallerId
                     It.Is<ulong>(x => x == request.CallerId),
+
+                    // 當 targetId 等於 request.TargetId
                     It.Is<ulong>(x => x == request.TargetId)
                 ))
                 .Returns(gameEvent)
                 ;
 
+            // game.WerewolfVote(1, 3); => gameEvent
+            // game.WerewolfVote(2, 4); => exception
+
+            // Mock Repository
             var mockRepository = new Mock<IRepository>();
             mockRepository
                 .Setup(x => x.FindByDiscordChannelIdAsync(It.Is<ulong>(x => x == request.DiscordChannelId)))
