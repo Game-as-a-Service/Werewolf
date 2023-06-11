@@ -13,17 +13,32 @@
         1.0.0 > 1.0.0-uat.213 > 1.0.0-dev.92839
     -->
     <BuildSuffix>0</BuildSuffix>
-    <EnvSuffix>local</EnvSuffix>
     <FileVersion>$(VersionPrefix).$(BuildSuffix)</FileVersion>
   </PropertyGroup>
 
-  <Target Name="GitHash" BeforeTargets="PrepareForBuild" Condition=" '$(EnvSuffix)'!='' ">
+  <Target Name="GitHash" BeforeTargets="PrepareForBuild">
     <Exec Command="git describe --long --always --exclude='*' --abbrev=8" ConsoleToMSBuild="True" IgnoreExitCode="False">
       <Output PropertyName="HashSuffix" TaskParameter="ConsoleOutput" />
     </Exec>
-    <PropertyGroup>
+
+    <Exec Command="git rev-parse --abbrev-ref HEAD" ConsoleToMSBuild="True" IgnoreExitCode="False">
+      <Output PropertyName="BranchName" TaskParameter="ConsoleOutput" />
+    </Exec>
+
+    <PropertyGroup Condition="'$(BranchName)' != 'develop' AND '$(BranchName)' != 'main'">
+      <EnvSuffix>local</EnvSuffix>
       <VersionSuffix>$(EnvSuffix).$(BuildSuffix).$(HashSuffix)</VersionSuffix>
       <Version>$(VersionPrefix)-$(VersionSuffix)</Version>
+    </PropertyGroup>
+    
+    <PropertyGroup Condition="'$(BranchName)' == 'develop'">
+      <EnvSuffix>dev</EnvSuffix>
+      <VersionSuffix>$(EnvSuffix).$(BuildSuffix).$(HashSuffix)</VersionSuffix>
+      <Version>$(VersionPrefix)-$(VersionSuffix)</Version>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(BranchName)' == 'main'">
+      <VersionSuffix></VersionSuffix>
     </PropertyGroup>
   </Target>
 </Project>

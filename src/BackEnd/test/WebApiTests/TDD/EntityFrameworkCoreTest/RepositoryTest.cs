@@ -8,7 +8,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.EntityFrameworkCoreTests
 {
     internal class RepositoryTest
     {
-        internal ServiceProvider Provider { get; } = new ServiceCollection()
+        private readonly ServiceProvider _provider = new ServiceCollection()
                 .AddEntityFrameworkCoreRepository()
                 .BuildServiceProvider();
 
@@ -21,7 +21,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.EntityFrameworkCoreTests
 
         private IRepository GetRepository()
         {
-            return Provider.CreateScope().ServiceProvider.GetRequiredService<IRepository>();
+            return _provider.CreateScope().ServiceProvider.GetRequiredService<IRepository>();
         }
 
 
@@ -44,7 +44,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.EntityFrameworkCoreTests
 
         private async Task AssertGame(Game actual)
         {
-            var repository = Provider.CreateScope().ServiceProvider.GetRequiredService<IRepository>();
+            var repository = _provider.CreateScope().ServiceProvider.GetRequiredService<IRepository>();
             var expected = await repository.FindByDiscordChannelIdAsync(actual.DiscordVoiceChannelId);
 
             actual.Id.Should().Be(expected!.Id);

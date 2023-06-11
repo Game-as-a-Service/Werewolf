@@ -1,0 +1,95 @@
+name: Frontend - Build and Deploy
+
+on:
+  push:
+    paths:
+      - src/DiscordBot/**
+      - .github/workflows/build-and-deploy-frontend.yml
+
+env:
+  DOTNET_VERSION: '7.0.x'
+  DOTNET_APP_SOURCE_PATH: './src/'
+  DOTNET_APP_FRONTEND_SOLUTION: 'Wsa.Gaas.Werewolf.DiscordBot.sln'
+  DOTNET_APP_FRONTEND_PROJECT_PATH: './src/DiscordBot/src/InterfaceAdapter/DiscordBot'
+
+jobs:
+  build:
+    name: Build, Test and Publish Artifact
+    runs-on: ubuntu-latest
+    steps:
+    # Checkout the repo
+    - name: git checkout
+      uses: actions/checkout@v3
+    
+    # Setup .NET SDK
+    - name: Setup .NET SDK ${{ env.DOTNET_VERSION }}
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+  
+    # Run dotnet build and test
+    - name: Frontend - dotnet restore, build and test
+      working-directory: ${{ env.DOTNET_APP_SOURCE_PATH }}
+      run: |
+        dotnet restore ${{ env.DOTNET_APP_FRONTEND_SOLUTION }}
+        dotnet build ${{ env.DOTNET_APP_FRONTEND_SOLUTION }} -c Release --no-restore
+        dotnet test ${{ env.DOTNET_APP_FRONTEND_SOLUTION }} -c Release --no-build --verbosity normal
+
+    # Run dotnet publish
+    - name: Frontend - dotnet publish
+      #if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'master')
+      run: |
+        dotnet publish ${{ env.DOTNET_APP_FRONTEND_PROJECT_PATH }} \
+          -c Release \
+          -r linux-x64 \
+          --no-self-contained \
+          -o publish/frontend \
+          /p:DebugType=None \
+          /p:DebugSymbols=false \
+          /p:BuildSuffix=${{ github.run_number }}
+
+    # Upload Artifact
+    - name: Frontend - Upload Artifact
+      #if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'master')
+      uses: actions/upload-artifact@v3
+      with:
+        name: frontend-app
+        path: publish/frontend
+
+    # Dump GitHub Context
+    - name: Dump GitHub Context
+      run: |
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        echo '${{ toJSON(env) }}' >> $GITHUB_STEP_SUMMARY
+        echo '${{ toJSON(github) }}' >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+
+  deploy-frontend-dev:
+    name: Deploy Front End Dev
+    #if: github.ref_name == 'develop' && github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+    environment: dev
+    env:
+      AZURE_FRONTEND_WEBAPP_NAME: 'werewolf-bot'
+    steps:
+
+    # Download All Artifacts
+    - name: Download All Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: frontend-app
+
+    # Display file structures
+    - name: Display structure of downloaded files
+      run: ls -R
+  
+    # Deploy to Azure App Service
+    - name: Deploy to Frontend Azure App Service
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_FRONTEND_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_FRONTEND_WEBAPP_PUBLISH_PROFILE }}
+        package: .
+
+
