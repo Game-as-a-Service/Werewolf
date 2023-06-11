@@ -31,7 +31,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             Status = GameStatus.Created;
         }
 
-        public GameStartedEvent StartGame(ulong[] playerIds)
+        public virtual GameStartedEvent StartGame(ulong[] playerIds)
         {
             if (Status != GameStatus.Created)
             {

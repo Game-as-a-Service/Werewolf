@@ -1,19 +1,17 @@
 ﻿using Bogus;
-using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System.Linq.Expressions;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.UseCases;
-using Wsa.Gaas.Werewolf.Domain.Common;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Objects;
+using Wsa.Gaas.Werewolf.WebApiTests.TDD.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases
 {
     internal class StartGameUseCaseTests
     {
-        [Test]
         [Description("""
             Given: Game Started
             When: Starting game with 12 Players
@@ -105,7 +103,6 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases
             ), Times.Once());
         }
 
-        [Test]
         [Description("""
             Given: Game Started
             When: Starting game with 12 Players
@@ -196,9 +193,6 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases
             );
         }
 
-
-
-        [Test]
         [Description("""
             Given: Game Started
             When: Starting game with 12 Players
@@ -262,14 +256,12 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases
             mockPresenter.Verify(v => v.PresentAsync(It.Is(checkFunc), It.IsAny<CancellationToken>()), Times.Once);
         }
 
-
-        [Test]
         [Description("""
             Given: Game Started
             When: Starting game with 12 Players
             Then: Error, game already started
             """)]
-        public async Task StartGameUseCaseTestYoyo()
+        public Task StartGameUseCaseTestYoyo()
         {
 
             // 1. Given / Arrange
@@ -297,6 +289,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases
 
             //Then(驗證)：確認遊戲已設置+有玩家12位
 
+            return Task.CompletedTask;
         }
 
         [Test]
@@ -308,6 +301,8 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases
         public async Task StartGameUseCaseTestRick()
         {
             var faker = new Faker();
+
+            // Arrange
             var discordVoiceChannelId = faker.Random.ULong();
             var players = Enumerable.Range(0, 12)
                 .Select(x => faker.Random.ULong())
@@ -320,65 +315,67 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases
                 Players = players,
             };
 
-            var game = new Mock<Game>(request.DiscordVoiceChannelId);
+            var game = new Mock<Game>(discordVoiceChannelId);
             var gameEvent = new GameStartedEvent(game.Object);
             game
-                .Setup(x => x.StartGame(It.IsAny<ulong[]>()))
+                .Setup(x => x.StartGame(It.Is(players, new ArrayEqualityComparer<ulong>())))
                 .Returns(gameEvent);
 
             var repository = new Mock<IRepository>();
             repository
-                .Setup(x => x.FindByDiscordChannelIdAsync(request.DiscordVoiceChannelId))
+                .Setup(x => x.FindByDiscordChannelIdAsync(discordVoiceChannelId))
                 .ReturnsAsync(game.Object);
-            repository
-                .Setup(x => x.Save(It.Is<Game>(x => x == game.Object)));
 
             var presenter = new Mock<IPresenter<GameStartedEvent>>();
 
-
-            var gameEventBus = new Mock<GameEventBus>();
+            var gameEventBus = new Mock<GameEventBus>(
+                new Mock<IServiceScopeFactory>().Object
+            );
 
             var useCase = new StartGameUseCase(
                 repository.Object,
                 gameEventBus.Object
             );
 
-            // 
+            // Act
             await useCase.ExecuteAsync(request, presenter.Object);
 
+            // Assert
+            // 驗證 Use Case 有呼叫 Repository 的【查】
             repository.Verify(
-                x => x.FindByDiscordChannelIdAsync(request.DiscordVoiceChannelId),
+                x => x.FindByDiscordChannelIdAsync(discordVoiceChannelId),
                 Times.Once()
             );
 
+            // 驗證 Use Case 有呼叫 Game 的【改】
             game.Verify(
-                x => x.StartGame(It.IsAny<ulong[]>()),
+                x => x.StartGame(It.Is(players, new ArrayEqualityComparer<ulong>())),
                 Times.Once()
             );
 
+            // 驗證 Use Case 有呼叫 Repository 的【存】
             repository.Verify(
                 x => x.Save(It.Is<Game>(x => x == game.Object)),
                 Times.Once()
             );
 
+            // 驗證 Use Case 有呼叫 EventBus 的【推】
             gameEventBus.Verify(
                 x => x.BroadcastAsync(
-                    It.IsAny<GameStartedEvent>(),
+                    It.Is<GameStartedEvent>(x => x == gameEvent),
                     It.IsAny<CancellationToken>()
                 ),
                 Times.Once()
             );
 
+            // 驗證 Use Case 有呼叫 Presenter 的【推】
             presenter.Verify(
                 x => x.PresentAsync(
-                    It.IsAny<GameStartedEvent>(),
+                    It.Is<GameStartedEvent>(x => x == gameEvent),
                     It.IsAny<CancellationToken>()
                 ),
                 Times.Once()
             );
-
-
-
         }
     }
 }

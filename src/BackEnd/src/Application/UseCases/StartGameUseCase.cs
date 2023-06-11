@@ -23,6 +23,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
         public override async Task ExecuteAsync(StartGameRequest request, IPresenter<GameStartedEvent> presenter, CancellationToken cancellationToken = default)
         {
             Game? game;
+            GameStartedEvent? gameEvent;
 
             lock (_lock)
             {
@@ -39,14 +40,11 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
                 }
 
                 // 改
-                game.StartGame(request.Players);
+                gameEvent = game.StartGame(request.Players);
 
                 // 存
                 Repository.Save(game);
             }
-
-            // 推
-            var gameEvent = new GameStartedEvent(game);
 
             // SignalR
             await GameEventBus.BroadcastAsync(gameEvent, cancellationToken);
