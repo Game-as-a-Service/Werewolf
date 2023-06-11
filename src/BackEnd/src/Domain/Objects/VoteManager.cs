@@ -7,6 +7,10 @@
         // Dic<被投的玩家, 票數>
         public readonly Dictionary<ulong, int> voteResult = new();
 
+        public void Clear()
+        {
+        }
+
         // 計票
         public void Vote(ulong voterId, ulong voteeId)
         {

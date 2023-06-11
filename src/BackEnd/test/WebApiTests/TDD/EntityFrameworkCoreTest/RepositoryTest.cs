@@ -4,7 +4,7 @@ using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 using Wsa.Gaas.Werewolf.EntityFrameworkCore;
 
-namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.EntityFrameworkCoreTests
+namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.EntityFrameworkCoreTest
 {
     internal class RepositoryTest
     {
