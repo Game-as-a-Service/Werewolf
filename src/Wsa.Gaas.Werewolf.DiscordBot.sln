@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4D8D8742-6B6D-4ECF-91F5-FEAFFFF64DD9}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{CEADB1EE-E48B-4901-BF41-6B5B2C726222}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InterfaceAdapter", "InterfaceAdapter", "{9E1552B7-9638-4565-91EE-51424BC2E847}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{119A39F5-23F2-4357-ABB1-40DB1AAA7E00}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{C0D84535-71AC-48B9-A0D7-DEC31962FC50}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wsa.Gaas.Werewolf.DiscordBot.Domain", "DiscordBot\src\Domain\Wsa.Gaas.Werewolf.DiscordBot.Domain.csproj", "{40279641-C3E4-48AC-AD8A-EBD594523898}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wsa.Gaas.Werewolf.DiscordBot.Application", "DiscordBot\src\Application\Wsa.Gaas.Werewolf.DiscordBot.Application.csproj", "{6C44C2DF-FDEF-4577-9C0A-6B8BE1F419C7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wsa.Gaas.Werewolf.DiscordBot", "DiscordBot\src\InterfaceAdapter\DiscordBot\Wsa.Gaas.Werewolf.DiscordBot.csproj", "{BD6D91A1-507A-457C-AE6C-FE11FF9E7EBE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40279641-C3E4-48AC-AD8A-EBD594523898}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40279641-C3E4-48AC-AD8A-EBD594523898}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40279641-C3E4-48AC-AD8A-EBD594523898}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40279641-C3E4-48AC-AD8A-EBD594523898}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C44C2DF-FDEF-4577-9C0A-6B8BE1F419C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C44C2DF-FDEF-4577-9C0A-6B8BE1F419C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C44C2DF-FDEF-4577-9C0A-6B8BE1F419C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C44C2DF-FDEF-4577-9C0A-6B8BE1F419C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD6D91A1-507A-457C-AE6C-FE11FF9E7EBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD6D91A1-507A-457C-AE6C-FE11FF9E7EBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD6D91A1-507A-457C-AE6C-FE11FF9E7EBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD6D91A1-507A-457C-AE6C-FE11FF9E7EBE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9E1552B7-9638-4565-91EE-51424BC2E847} = {4D8D8742-6B6D-4ECF-91F5-FEAFFFF64DD9}
+		{119A39F5-23F2-4357-ABB1-40DB1AAA7E00} = {4D8D8742-6B6D-4ECF-91F5-FEAFFFF64DD9}
+		{C0D84535-71AC-48B9-A0D7-DEC31962FC50} = {4D8D8742-6B6D-4ECF-91F5-FEAFFFF64DD9}
+		{40279641-C3E4-48AC-AD8A-EBD594523898} = {C0D84535-71AC-48B9-A0D7-DEC31962FC50}
+		{6C44C2DF-FDEF-4577-9C0A-6B8BE1F419C7} = {119A39F5-23F2-4357-ABB1-40DB1AAA7E00}
+		{BD6D91A1-507A-457C-AE6C-FE11FF9E7EBE} = {9E1552B7-9638-4565-91EE-51424BC2E847}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A5F60804-F11B-41A1-A17C-9A7D090A4C75}
+	EndGlobalSection
+EndGlobal
