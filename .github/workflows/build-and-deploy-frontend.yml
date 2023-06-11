@@ -37,7 +37,7 @@ jobs:
 
     # Run dotnet publish
     - name: Frontend - dotnet publish
-      #if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'master')
+      if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'master')
       run: |
         dotnet publish ${{ env.DOTNET_APP_FRONTEND_PROJECT_PATH }} \
           -c Release \
@@ -50,7 +50,7 @@ jobs:
 
     # Upload Artifact
     - name: Frontend - Upload Artifact
-      #if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'master')
+      if: github.event_name == 'push' && (github.ref_name == 'develop' || github.ref_name == 'master')
       uses: actions/upload-artifact@v3
       with:
         name: frontend-app
@@ -65,13 +65,13 @@ jobs:
         echo '```' >> $GITHUB_STEP_SUMMARY
 
   deploy-frontend-dev:
-    name: Deploy Front End Dev
-    #if: github.ref_name == 'develop' && github.event_name == 'push'
+    name: Deploy Front End (Dev)
+    if: github.ref_name == 'develop' && github.event_name == 'push'
     needs: build
     runs-on: ubuntu-latest
     environment: dev
     env:
-      AZURE_FRONTEND_WEBAPP_NAME: 'werewolf-bot'
+      AZURE_FRONTEND_WEBAPP_NAME: 'werewolf-bot-dev'
     steps:
 
     # Download All Artifacts
