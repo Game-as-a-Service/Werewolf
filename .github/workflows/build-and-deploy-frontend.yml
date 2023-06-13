@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - src/DiscordBot/**
+      - src/Directory.Build.props
       - .github/workflows/build-and-deploy-frontend.yml
 
 env:
