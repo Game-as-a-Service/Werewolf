@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <!-- Bump version here -->
-    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionPrefix>1.0.1</VersionPrefix>
 
     <!-- 
         Below are used by DevOps to determine project version 
