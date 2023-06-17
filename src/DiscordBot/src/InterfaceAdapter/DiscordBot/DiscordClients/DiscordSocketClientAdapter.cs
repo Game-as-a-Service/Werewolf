@@ -86,6 +86,15 @@ namespace Wsa.Gaas.Werewolf.DiscordBot.DiscordClients
                         .WithType(ApplicationCommandOptionType.SubCommand)
                     )
                     .AddOption(new SlashCommandOptionBuilder()
+                        .WithName("create")
+                        .WithDescription("Create new game")
+                        .WithDescriptionLocalizations(new Dictionary<string, string>
+                        {
+                            { "zh-TW", "新增遊戲" },
+                        })
+                        .WithType(ApplicationCommandOptionType.SubCommand)
+                    )
+                    .AddOption(new SlashCommandOptionBuilder()
                         .WithName("version")
                         .WithDescription("Show current Game version")
                         .WithDescriptionLocalizations(new Dictionary<string, string>
@@ -93,7 +102,9 @@ namespace Wsa.Gaas.Werewolf.DiscordBot.DiscordClients
                             { "zh-TW", "顯示目前遊戲版本" },
                         })
                         .WithType(ApplicationCommandOptionType.SubCommand)
-                    ).Build(),
+                    )
+                    
+                    .Build(),
             };
 
             await _client.BulkOverwriteGlobalApplicationCommandsAsync(commands);
@@ -148,6 +159,26 @@ namespace Wsa.Gaas.Werewolf.DiscordBot.DiscordClients
                         text,
                         ephemeral: true
                     );
+                }
+            }
+            else if (subCommand == "create")
+            {
+                if (command.Channel is SocketVoiceChannel channel)
+                {
+                    // 呼叫 後端 Creat Game API 
+                    var backendApi = new BackendApi();
+                    
+                    // Data Transfer Object
+                    var gameDto = await backendApi.CreateGame(channel.Id);
+
+                    if(gameDto == null)
+                    {
+                        await command.RespondAsync($"無法新增，遊戲已新增");
+                    }
+                    else
+                    {
+                        await command.RespondAsync($"遊戲開始了! Id 為: {gameDto.GameId}");
+                    }
                 }
             }
             else
