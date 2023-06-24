@@ -3,7 +3,8 @@ name: Backend - Build and Deploy
 on:
   push:
     paths:
-      - src/Backend/**
+      - src/BackEnd/**
+      - src/Directory.Build.props
       - .github/workflows/build-and-deploy-backend.yml
 
 env:
