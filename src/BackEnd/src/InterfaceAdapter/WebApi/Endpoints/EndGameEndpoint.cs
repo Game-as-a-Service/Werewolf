@@ -1,7 +1,6 @@
 ﻿using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.WebApi.Common;
-using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 
 namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
 {
