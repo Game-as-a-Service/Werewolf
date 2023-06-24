@@ -1,7 +1,6 @@
-﻿namespace Wsa.Gaas.Werewolf.ChatBot.Application.Common
+﻿namespace Wsa.Gaas.Werewolf.ChatBot.Application.Common;
+
+public interface IDiscordBotClient
 {
-    public interface IDiscordBotClient
-    {
-        Task StartAsync();
-    }
+    Task StartAsync();
 }

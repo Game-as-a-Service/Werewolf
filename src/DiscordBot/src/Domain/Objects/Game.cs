@@ -1,6 +1,5 @@
-﻿namespace Wsa.Gaas.Werewolf.ChatBot.Domain.Objects
+﻿namespace Wsa.Gaas.Werewolf.ChatBot.Domain.Objects;
+
+public class Game
 {
-    public class Game
-    {
-    }
 }

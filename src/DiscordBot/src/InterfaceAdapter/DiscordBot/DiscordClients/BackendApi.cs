@@ -1,39 +1,68 @@
-﻿using System.Net;
+﻿using System.Linq.Expressions;
+using System.Net;
+using Wsa.Gaas.Werewolf.DiscordBot.Dtos;
 
-namespace Wsa.Gaas.Werewolf.DiscordBot.DiscordClients
+namespace Wsa.Gaas.Werewolf.DiscordBot.DiscordClients;
+
+
+internal class BackendApi
 {
-    public class GameDto
+    private readonly HttpClient _httpClient;
+    public BackendApi()
     {
-        public string GameId { get; set; }
+        _httpClient = new HttpClient
+        {
+            BaseAddress = new Uri("https://werewolf-api-dev.azurewebsites.net")
+        };
     }
 
-    internal class BackendApi
+    public async Task<GameDto?> CreateGame(ulong discordVoiceChannelId)
     {
-        public BackendApi()
+        // 呼叫後端 API
+        var path = "/games";
+
+        var response = await _httpClient.PostAsJsonAsync(path, new
         {
+            DiscordVoiceChannelId = discordVoiceChannelId,
+        });
+
+        if (response.StatusCode == HttpStatusCode.InternalServerError)
+        {
+            return null;
         }
+        
+        var gameDto = await response.Content.ReadFromJsonAsync<GameDto>();
 
-        public async Task<GameDto?> CreateGame(ulong discordVoiceChannelId)
+        return gameDto!;
+    }
+
+    public async Task<string> GetGame(ulong discordVoiceChannelId)
+    {
+        try
         {
-            // 呼叫後端 API
-            var httpClient = new HttpClient();
-            var url = "https://werewolf-api-dev.azurewebsites.net/games";
+            var path = $"/games/{discordVoiceChannelId}";
 
-            var response = await httpClient.PostAsJsonAsync(url, new
-            {
-                DiscordVoiceChannelId = discordVoiceChannelId,
-            });
+            var response = await _httpClient.GetAsync(path);
 
-            if (response.StatusCode == HttpStatusCode.InternalServerError)
-            {
-                var content = await response.Content.ReadAsStringAsync();
+            var request = response.RequestMessage!;
 
-                return null;
-            }
-            
-            var gameDto = await response.Content.ReadFromJsonAsync<GameDto>();
+            var rawResponse = 
+                $"""
+                {request.Method} {request.RequestUri!.PathAndQuery} HTTP/{request.Version}
+                {string.Join("\n", request.Headers.Select(x => $"{x.Key}: {string.Join(" ", x.Value)}"))}
 
-            return gameDto!;
+                HTTP/{response.Version} {(int)response.StatusCode} {response.ReasonPhrase}
+                {string.Join("\n", response.Headers.Select(x => $"{x.Key}: {string.Join(" ", x.Value)}"))}
+                {string.Join("\n", response.Content.Headers.Select(x => $"{x.Key}: {string.Join(" ", x.Value)}"))}
+
+                {await response.Content.ReadAsStringAsync()}
+                """;
+
+            return rawResponse;
+        }
+        catch (Exception ex)
+        {
+            return ex.Message;
         }
     }
 }
