@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using System.Net;
+﻿using System.Net;
 using Wsa.Gaas.Werewolf.DiscordBot.Dtos;
 
 namespace Wsa.Gaas.Werewolf.DiscordBot.DiscordClients;
@@ -36,33 +35,12 @@ internal class BackendApi
         return gameDto!;
     }
 
-    public async Task<string> GetGame(ulong discordVoiceChannelId)
+    public async Task<GameDto?> GetGame(ulong discordVoiceChannelId)
     {
-        try
-        {
-            var path = $"/games/{discordVoiceChannelId}";
+        var path = $"/games/{discordVoiceChannelId}";
 
-            var response = await _httpClient.GetAsync(path);
+        var gameDto = await _httpClient.GetFromJsonAsync<GameDto>(path);
 
-            var request = response.RequestMessage!;
-
-            var rawResponse = 
-                $"""
-                {request.Method} {request.RequestUri!.PathAndQuery} HTTP/{request.Version}
-                {string.Join("\n", request.Headers.Select(x => $"{x.Key}: {string.Join(" ", x.Value)}"))}
-
-                HTTP/{response.Version} {(int)response.StatusCode} {response.ReasonPhrase}
-                {string.Join("\n", response.Headers.Select(x => $"{x.Key}: {string.Join(" ", x.Value)}"))}
-                {string.Join("\n", response.Content.Headers.Select(x => $"{x.Key}: {string.Join(" ", x.Value)}"))}
-
-                {await response.Content.ReadAsStringAsync()}
-                """;
-
-            return rawResponse;
-        }
-        catch (Exception ex)
-        {
-            return ex.Message;
-        }
+        return gameDto;
     }
 }
