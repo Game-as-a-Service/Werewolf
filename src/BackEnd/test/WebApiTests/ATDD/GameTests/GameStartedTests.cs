@@ -104,7 +104,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             // Assert event received
             var gameVm = await _server.EventBuffer.ReceiveAsync();
             gameVm.Should().BeOfType<GameVm>();
-            gameVm.Status.Should().Be(GameStatus.Started.ToString());
+            gameVm.Status.Should().Be(GameStatus.PlayerRoleConfirmationStarted.ToString());
             gameVm.Players.Should().HaveSameCount(request.Players);
 
 

@@ -23,8 +23,14 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
 
         public Task<Game?> FindByDiscordChannelIdAsync(ulong discordVoiceChannelId)
         {
-            return FindAll().FirstOrDefaultAsync(x => x.DiscordVoiceChannelId == discordVoiceChannelId && x.Status != GameStatus.Ended);
+            return Task.FromResult(FindByDiscordChannelId(discordVoiceChannelId));
         }
+
+        public Game? FindByDiscordChannelId(ulong discordVoiceChannelId)
+        {
+            return FindAll().FirstOrDefault(x => x.DiscordVoiceChannelId == discordVoiceChannelId && x.Status != GameStatus.Ended);
+        }
+
 
         public Task SaveAsync(Game game)
         {
@@ -48,16 +54,11 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
 
             foreach (var player in game.Players)
             {
-                var playerEntry = Entry(player);
-
                 var role = player.Role;
 
                 if (role != null)
                 {
                     Attach(role);
-
-                    var entry = Entry(role);
-
                 }
             }
 
@@ -82,5 +83,7 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
                 Database.Migrate();
             }
         }
+
+        
     }
 }

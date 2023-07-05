@@ -31,9 +31,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
 
             // Save
 
-
             // Push
-            await GameEventBus.BroadcastAsync(gameEvent, cancellationToken);
             await presenter.PresentAsync(gameEvent, cancellationToken);
         }
     }

@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
@@ -33,7 +34,6 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCaseTests
             // Arrange Game
             var game = new Game(discordVoiceChannelId);
             game.StartGame(playerIds);
-            game.StartPlayerRoleConfirmation();
 
             // Arrange Repository
             var repository = new Mock<IRepository>();
@@ -43,8 +43,9 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCaseTests
                 ;
 
             // Arrange Game Event Bus
-            var gameEventBus = new Mock<GameEventBus>();
-            gameEventBus.Setup(x => x.BroadcastAsync(It.IsAny<PlayerRoleConfirmedEvent>(), It.IsAny<CancellationToken>()));
+            var gameEventBus = new Mock<GameEventBus>(
+                new Mock<IServiceScopeFactory>().Object
+            );
 
             // Arrange Presenter
             var presenter = new Mock<IPresenter<PlayerRoleConfirmedEvent>>();
@@ -71,11 +72,6 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCaseTests
                 await useCase.ExecuteAsync(request, presenter.Object);
 
                 // Then
-                gameEventBus.Verify(bus => bus.BroadcastAsync(
-                    It.Is<PlayerRoleConfirmedEvent>(gameEvent => gameEvent.PlayerId == playerId),
-                    It.IsAny<CancellationToken>()
-                ));
-
                 presenter.Verify(p => p.PresentAsync(
                     It.Is<PlayerRoleConfirmedEvent>(gameEvent =>
                            gameEvent.PlayerId == playerId
@@ -112,7 +108,9 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCaseTests
             repository.Setup(r => r.FindByDiscordChannelIdAsync(It.IsAny<ulong>()))
                 .Returns(Task.FromResult(game));
 
-            var gameEventBus = new Mock<GameEventBus>();
+            var gameEventBus = new Mock<GameEventBus>(
+                new Mock<IServiceScopeFactory>().Object
+            );
             gameEventBus.Setup(x => x.BroadcastAsync(It.IsAny<PlayerRoleConfirmedEvent>(), It.IsAny<CancellationToken>()));
 
 

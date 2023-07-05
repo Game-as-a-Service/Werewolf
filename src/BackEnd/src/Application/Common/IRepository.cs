@@ -7,6 +7,7 @@ namespace Wsa.Gaas.Werewolf.Application.Common
         // 讀
         Task<Game?> FindByIdAsync(Guid id);
         Task<Game?> FindByDiscordChannelIdAsync(ulong discordChannelId);
+        Game? FindByDiscordChannelId(ulong discordChannelId);
         IQueryable<Game> FindAll();
 
         // 存

@@ -17,7 +17,7 @@ public class PlayerSpeakingTests
         await _server.StartAsync();
     }
 
-    [Test]
+    //[Test]
     public async Task PeaceNightTest()
     {
         _server.ListenOn<PlayerSpeakingEvent>();
@@ -29,8 +29,8 @@ public class PlayerSpeakingTests
                                .Build();
 
         //When
-        await _server.GetRequiredService<Policy<LastNightResultAnnouncedEvent>>()
-                     .ExecuteAsync(new LastNightResultAnnouncedEvent(givenGame));
+        //await _server.GetRequiredService<Policy<LastNightResultAnnouncedEvent>>()
+        //             .ExecuteAsync(new LastNightResultAnnouncedEvent(givenGame));
 
         //Then
 

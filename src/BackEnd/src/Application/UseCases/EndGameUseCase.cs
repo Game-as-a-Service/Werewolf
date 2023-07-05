@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Wsa.Gaas.Werewolf.Application.Common;
-using Wsa.Gaas.Werewolf.Domain.Common;
+﻿using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 using Wsa.Gaas.Werewolf.Domain.Objects;
@@ -28,21 +22,13 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
         {
             Game? game;
             lock (_lock)
-            { 
+            {
                 // 查
-                game = Repository.FindAll()
-                    .Where(x => x.DiscordVoiceChannelId == request.DiscordVoiceChannelId)
-                    //.Where(x => x.Status != GameStatus.Ended)
-                    .FirstOrDefault();
+                game = Repository.FindByDiscordChannelId(request.DiscordVoiceChannelId);
 
                 if (game == null)
                 {
                     throw new GameNotFoundException(request.DiscordVoiceChannelId);
-                }
-
-                if (game.Status == GameStatus.Ended)
-                {
-                    throw new GameAlreadyEndedException(request.DiscordVoiceChannelId);
                 }
 
                 game.EndGame();

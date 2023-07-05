@@ -17,12 +17,17 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
 
         public Task<Game?> FindByDiscordChannelIdAsync(ulong discordChannelId)
         {
+            return Task.FromResult(FindByDiscordChannelId(discordChannelId));
+        }
+
+        public Game? FindByDiscordChannelId(ulong discordChannelId)
+        {
             _discordIdMemory.TryGetValue(discordChannelId, out var game);
 
-            return Task.FromResult(game?.Status == GameStatus.Ended
+            return game?.Status == GameStatus.Ended
                 ? null
                 : game
-            );
+                ;
         }
 
         public Task<Game?> FindByIdAsync(Guid id)

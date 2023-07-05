@@ -4,6 +4,7 @@ using Moq;
 using System.Linq.Expressions;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.UseCases;
+using Wsa.Gaas.Werewolf.Domain.Common;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 using Wsa.Gaas.Werewolf.WebApiTests.TDD.Common;
@@ -316,15 +317,19 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases
             };
 
             var game = new Mock<Game>(discordVoiceChannelId);
-            var gameEvent = new GameStartedEvent(game.Object);
+            var events = new GameEvent[]
+            {
+                new GameStartedEvent(game.Object),
+                new PlayerRoleConfirmationStartedEvent(game.Object)
+            };
             game
                 .Setup(x => x.StartGame(It.Is(players, new ArrayEqualityComparer<ulong>())))
-                .Returns(gameEvent);
+                .Returns(events);
 
             var repository = new Mock<IRepository>();
             repository
-                .Setup(x => x.FindByDiscordChannelIdAsync(discordVoiceChannelId))
-                .ReturnsAsync(game.Object);
+                .Setup(x => x.FindByDiscordChannelId(discordVoiceChannelId))
+                .Returns(game.Object);
 
             var presenter = new Mock<IPresenter<GameStartedEvent>>();
 
@@ -343,7 +348,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases
             // Assert
             // 驗證 Use Case 有呼叫 Repository 的【查】
             repository.Verify(
-                x => x.FindByDiscordChannelIdAsync(discordVoiceChannelId),
+                x => x.FindByDiscordChannelId(discordVoiceChannelId),
                 Times.Once()
             );
 
@@ -362,7 +367,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases
             // 驗證 Use Case 有呼叫 EventBus 的【推】
             gameEventBus.Verify(
                 x => x.BroadcastAsync(
-                    It.Is<GameStartedEvent>(x => x == gameEvent),
+                    It.Is<IEnumerable<GameEvent>>(x => x == events),
                     It.IsAny<CancellationToken>()
                 ),
                 Times.Once()
@@ -371,7 +376,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases
             // 驗證 Use Case 有呼叫 Presenter 的【推】
             presenter.Verify(
                 x => x.PresentAsync(
-                    It.Is<GameStartedEvent>(x => x == gameEvent),
+                    It.Is<GameStartedEvent>(x => x == events[0]),
                     It.IsAny<CancellationToken>()
                 ),
                 Times.Once()

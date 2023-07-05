@@ -49,13 +49,9 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
                 .ToArray();
 
             game.StartGame(players);
-            game.StartPlayerRoleConfirmation();
 
             var repository = _server.GetRequiredService<IRepository>();
             repository.Save(game);
-
-            _server.ListenOn<PlayerRoleConfirmedEvent>();
-
 
             foreach (var player in game.Players)
             {
@@ -76,17 +72,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
                 response!.Should().BeSuccessful();
                 result!.PlayerId.Should().Be(playerId.ToString());
                 result.Role.Should().Be(expectedRole);
-
-                // Assert SignalR
-                var gameVm = await _server.EventBuffer.ReceiveAsync();
-                foreach (var playerVm in gameVm.Players)
-                {
-                    // Player's role should be null
-                    playerVm.Role.Should().BeNull();
-                }
             }
-
-
         }
     }
 }

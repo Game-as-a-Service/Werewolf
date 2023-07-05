@@ -1,4 +1,5 @@
 ﻿using Wsa.Gaas.Werewolf.Application.Common;
+using Wsa.Gaas.Werewolf.Domain.Common;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 using Wsa.Gaas.Werewolf.Domain.Objects;
@@ -23,16 +24,12 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
         public override async Task ExecuteAsync(StartGameRequest request, IPresenter<GameStartedEvent> presenter, CancellationToken cancellationToken = default)
         {
             Game? game;
-            GameStartedEvent? gameEvent;
+            IEnumerable<GameEvent> events;
 
             lock (_lock)
             {
                 // 查
-                game = Repository
-                    .FindByDiscordChannelIdAsync(request.DiscordVoiceChannelId)
-                    .GetAwaiter()
-                    .GetResult()
-                    ;
+                game = Repository.FindByDiscordChannelId(request.DiscordVoiceChannelId);
 
                 if (game == null)
                 {
@@ -40,17 +37,20 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
                 }
 
                 // 改
-                gameEvent = game.StartGame(request.Players);
+                events = game.StartGame(request.Players);
 
                 // 存
                 Repository.Save(game);
             }
 
             // SignalR
-            await GameEventBus.BroadcastAsync(gameEvent, cancellationToken);
+            await GameEventBus.BroadcastAsync(events, cancellationToken);
 
             // Restful API
-            await presenter.PresentAsync(gameEvent, cancellationToken);
+            await presenter.PresentAsync(
+                (GameStartedEvent)events.First(x => x is GameStartedEvent), 
+                cancellationToken
+            );
         }
     }
 
