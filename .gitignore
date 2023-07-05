@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 src/.idea/.idea.Wsa.Gaas.Werewolf.BackEnd/.idea/
+/src/DiscordBot/src/InterfaceAdapter/DiscordBot/appsettings.local.json
