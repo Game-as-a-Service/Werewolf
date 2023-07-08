@@ -1,6 +1,6 @@
 ﻿namespace Wsa.Gaas.Werewolf.Domain.Exceptions
 {
-    internal class GameAlreadyStartedException : Exception
+    internal class GameAlreadyStartedException : GameException
     {
         public GameAlreadyStartedException() : base("Game already started")
         {

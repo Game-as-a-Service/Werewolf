@@ -62,8 +62,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             // Check Database
             var repository = _server.GetRequiredService<IRepository>();
             var game = await repository.FindByDiscordChannelIdAsync(ulong.Parse(createGameResponse.GameId));
-            game.Should().NotBeNull();
-            game!.Status.Should().Be(GameStatus.Ended);
+            game.Should().BeNull();
 
             // Check 2nd Call Response
             response.Should().NotBeNull();

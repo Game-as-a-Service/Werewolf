@@ -1,8 +1,6 @@
-﻿using System.Runtime.Serialization;
-
-namespace Wsa.Gaas.Werewolf.Domain.Exceptions
+﻿namespace Wsa.Gaas.Werewolf.Domain.Exceptions
 {
-    internal class GameNotStartedException : Exception
+    internal class GameNotStartedException : GameException
     {
         public GameNotStartedException(ulong discordVoiceChannelId)
             : base($"Game #{discordVoiceChannelId} not started")

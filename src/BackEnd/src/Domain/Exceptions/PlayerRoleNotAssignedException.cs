@@ -1,6 +1,6 @@
 ﻿namespace Wsa.Gaas.Werewolf.Domain.Exceptions
 {
-    public class PlayerRoleNotAssignedException : Exception
+    public class PlayerRoleNotAssignedException : GameException
     {
         public PlayerRoleNotAssignedException(ulong playerId)
             : base($"Player #{playerId} role not assigned")

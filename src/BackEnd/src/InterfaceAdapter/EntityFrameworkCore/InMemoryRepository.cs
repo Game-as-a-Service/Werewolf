@@ -19,7 +19,10 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
         {
             _discordIdMemory.TryGetValue(discordChannelId, out var game);
 
-            return Task.FromResult(game);
+            return Task.FromResult(game?.Status == GameStatus.Ended
+                ? null
+                : game
+            );
         }
 
         public Task<Game?> FindByIdAsync(Guid id)
