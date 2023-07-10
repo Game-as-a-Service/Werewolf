@@ -7,7 +7,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
     public class WerewolfVoteRequest
     {
         public ulong DiscordChannelId { get; set; }
-        public ulong CallerId { get; set; } 
+        public ulong CallerId { get; set; }
         public ulong TargetId { get; set; }
     }
 
@@ -35,7 +35,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
 
             // 推 => SignalR
             //await GameEventBus.BroadcastAsync(events, cancellationToken);
-            
+
             // 推 => Restful API
             await presenter.PresentAsync(events, cancellationToken);
 

@@ -18,7 +18,7 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore.TypeConfigurations
                 .HasForeignKey(e => e.CurrentSpeakingPlayerId);
 
             builder.Navigation("_players").AutoInclude();
-                
+
         }
     }
 }

@@ -16,6 +16,6 @@ namespace Wsa.Gaas.Werewolf.WebApi.Common
         public abstract Task PresentAsync(TGameEvent gameEvent, CancellationToken cancellationToken = default);
 
         public abstract override Task<TViewModel> ExecuteAsync(TRequest req, CancellationToken ct);
-        
+
     }
 }

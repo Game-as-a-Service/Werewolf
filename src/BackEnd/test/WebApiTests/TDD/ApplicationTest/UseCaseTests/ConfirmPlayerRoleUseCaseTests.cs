@@ -5,7 +5,6 @@ using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 using Wsa.Gaas.Werewolf.Domain.Objects;
-using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCaseTests
 {
@@ -81,7 +80,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCaseTests
                 ));
             }
 
-            
+
         }
 
         [Test]

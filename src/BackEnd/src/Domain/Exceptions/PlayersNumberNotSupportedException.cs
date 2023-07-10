@@ -3,7 +3,7 @@
 
     internal class PlayersNumberNotSupportedException : GameException
     {
-        public PlayersNumberNotSupportedException() 
+        public PlayersNumberNotSupportedException()
             : base("Number of players must be between 9 and 12")
         {
         }

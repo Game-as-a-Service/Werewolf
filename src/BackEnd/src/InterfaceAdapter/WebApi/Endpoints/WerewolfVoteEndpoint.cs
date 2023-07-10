@@ -31,7 +31,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
                 throw new Exception("View Model is null");
             }
 
-            return ViewModel; 
+            return ViewModel;
         }
 
         public override Task PresentAsync(WerewolfVotedEvent gameEvent, CancellationToken cancellationToken = default)
@@ -45,5 +45,5 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
         }
     }
 
-    
+
 }

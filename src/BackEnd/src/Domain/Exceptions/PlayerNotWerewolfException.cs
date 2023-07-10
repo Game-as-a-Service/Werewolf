@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace Wsa.Gaas.Werewolf.Domain.Exceptions
+﻿namespace Wsa.Gaas.Werewolf.Domain.Exceptions
 {
     public class PlayerNotWerewolfException : GameException
     {

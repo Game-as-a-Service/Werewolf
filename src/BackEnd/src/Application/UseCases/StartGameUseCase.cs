@@ -48,7 +48,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
 
             // Restful API
             await presenter.PresentAsync(
-                (GameStartedEvent)events.First(x => x is GameStartedEvent), 
+                (GameStartedEvent)events.First(x => x is GameStartedEvent),
                 cancellationToken
             );
         }

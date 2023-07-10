@@ -1,5 +1,4 @@
 ﻿using Wsa.Gaas.Werewolf.Application.UseCases;
-using Wsa.Gaas.Werewolf.Domain.Common;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.WebApi.Common;
 
@@ -27,19 +26,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
 
         public override Task PresentAsync(GameCreatedEvent gameEvent, CancellationToken cancellationToken = default)
         {
-            var players = gameEvent.Data.Players.Select(p => new PlayerDto
-            {
-                UserId = p.UserId,
-                Role = p.Role.Name,
-                PlayerNumber = p.PlayerNumber
-            }).ToList();
-
-            ViewModel = new GetGameResponse
-            {
-                Id = gameEvent.Data.DiscordVoiceChannelId,
-                Players = players,
-                Status = gameEvent.Data.Status,
-            };
+            ViewModel = new GetGameResponse(gameEvent);
 
             return Task.CompletedTask;
         }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Numerics;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
@@ -47,7 +46,7 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
             {
                 Add(game);
             }
-            else if(gameEntry.State == EntityState.Detached)
+            else if (gameEntry.State == EntityState.Detached)
             {
                 Attach(game);
             }
@@ -78,12 +77,12 @@ namespace Wsa.Gaas.Werewolf.EntityFrameworkCore
             {
                 Database.EnsureCreated();
             }
-            else if(Database.IsSqlServer())
+            else if (Database.IsSqlServer())
             {
                 Database.Migrate();
             }
         }
 
-        
+
     }
 }

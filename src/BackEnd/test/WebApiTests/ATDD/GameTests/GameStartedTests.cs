@@ -13,8 +13,8 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
 {
     public class GameStartedTests
     {
-        WebApiTestServer _server = new();
-        Random _random = new();
+        readonly WebApiTestServer _server = new();
+        readonly Random _random = new();
 
         [OneTimeSetUp]
         public async Task OneTimeSetup()
@@ -73,32 +73,32 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
 
             /* Act & Assert */
             // too less players, expect error
-            (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
+            (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, GetGameResponse>(request))
                 .Response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             // too many players, expect error
             request.Players = RandomDistinctPlayers(20);
-            (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
+            (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, GetGameResponse>(request))
                 .Response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             // duplicate players, expect error
             request.Players = RandomDuplicatePlayers(9);
-            (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
+            (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, GetGameResponse>(request))
                 .Response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             // 12 players
             request.Players = RandomDistinctPlayers(12);
-            var (_, result) = await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request);
+            var (_, result) = await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, GetGameResponse>(request);
 
             // Assert API response
-            result!.GameId.Should().Be(request.DiscordVoiceChannelId.ToString());
+            result!.Id.Should().Be(request.DiscordVoiceChannelId);
             result.Players.Should().HaveSameCount(request.Players);
 
             // Assert database
             var repository = _server.GetRequiredService<IRepository>();
-            var game = await repository.FindByDiscordChannelIdAsync(ulong.Parse(result.GameId));
+            var game = await repository.FindByDiscordChannelIdAsync(result.Id);
             game.Should().NotBeNull();
-            game!.DiscordVoiceChannelId.ToString().Should().Be(result.GameId);
+            game!.DiscordVoiceChannelId.Should().Be(result.Id);
             game.Players.Should().HaveSameCount(request.Players);
 
             // Assert event received
@@ -113,13 +113,13 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             gameVm.Status.Should().Be(GameStatus.PlayerRoleConfirmationStarted.ToString());
 
             // game already started, expect error
-            (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
+            (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, GetGameResponse>(request))
                 .Response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             request.DiscordVoiceChannelId = gameCreated2.DiscordVoiceChannelId;
-            (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
+            (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, GetGameResponse>(request))
                 .Response!.StatusCode.Should().Be(HttpStatusCode.OK);
-                ;
+            ;
         }
 
         private ulong[] RandomDuplicatePlayers(int n)

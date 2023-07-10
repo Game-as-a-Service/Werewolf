@@ -5,7 +5,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.Common
 {
     internal class GameFaker : Faker<Game>
     {
-        public GameFaker() 
+        public GameFaker()
         {
             RuleSet(nameof(CreateGame), ruleSet =>
             {

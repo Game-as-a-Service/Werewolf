@@ -18,7 +18,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
         public override async Task<DiscoverPlayerRoleResponse> ExecuteAsync(DiscoverPlayerRoleRequest req, CancellationToken ct)
         {
             await UseCase.ExecuteAsync(req, this, ct);
-            
+
             if (ViewModel == null)
             {
                 throw new Exception("View Model is null");

@@ -11,13 +11,13 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.Common
                 return false;
             }
 
-            for (var i = 0; i < x.Length ; i++)
+            for (var i = 0; i < x.Length; i++)
             {
                 var isEqual = x[i] is T a
                     && y[i] is T b
                     && a.Equals(b)
                     ;
-                    
+
                 if (isEqual == false)
                     return false;
             }

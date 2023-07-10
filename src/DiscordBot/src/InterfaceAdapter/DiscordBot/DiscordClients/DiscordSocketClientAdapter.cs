@@ -3,7 +3,6 @@ using Discord.Net;
 using Discord.WebSocket;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Wsa.Gaas.Werewolf.ChatBot.Application.Common;
 using Wsa.Gaas.Werewolf.DiscordBot.Application.UseCases;
 using Wsa.Gaas.Werewolf.DiscordBot.Dtos;
@@ -28,8 +27,8 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
     {
         _client = new DiscordSocketClient(new DiscordSocketConfig
         {
-            GatewayIntents = GatewayIntents.MessageContent 
-                | GatewayIntents.AllUnprivileged 
+            GatewayIntents = GatewayIntents.MessageContent
+                | GatewayIntents.AllUnprivileged
                 | GatewayIntents.GuildMembers,
             AlwaysDownloadUsers = true,
         });
@@ -86,24 +85,23 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
                 // 呼叫 後端 Creat Game API 
                 try
                 {
-                    var options = new JsonSerializerOptions
+                    var gameDto = await _backendApi.GetGame(channel.Id);
+
+                    if (gameDto == null)
                     {
-                        WriteIndented = true,
-                    };
-                    options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, false));
+                        await command.RespondAsync(
+                            "沒有遊戲正在進行中。",
+                            components: BuildButtons(channel, gameDto)
+                        );
+                    }
+                    else
+                    {
+                        await command.RespondAsync(
+                            embed: BuildGameEmbed(channel, gameDto),
+                            components: BuildButtons(channel, gameDto)
+                        );
+                    }
 
-                    var jsonString = JsonSerializer.Serialize(
-                        await _backendApi.GetGame(channel.Id),
-                        options
-                    );
-
-                    await command.RespondAsync(
-                        $"""
-                    ```
-                    {jsonString}
-                    ```
-                    """
-                    );
                 }
                 catch (Exception ex)
                 {
@@ -138,13 +136,13 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
                 {
                     RandomGame(channel.Id, (int)n, users);
                 }
-
+                var gameDto = new GameDto { Id = channel.Id };
                 await command.RespondAsync(
                     embeds: new[]
                     {
-                        BuildGameEmbed(channel)
+                        BuildGameEmbed(channel, gameDto)
                     },
-                    components: BuildButtons(channel)
+                    components: BuildButtons(channel, gameDto)
                 );
             }
         }
@@ -152,26 +150,14 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
         {
             if (command.Channel is SocketVoiceChannel channel)
             {
-                // 呼叫 後端 Creat Game API 
-
-                // Data Transfer Object
-                var gameDto = await _backendApi.CreateGame(channel.Id)
-                    ?? await _backendApi.GetGame(channel.Id);
-
-                if (_allJoinedPlayers.ContainsKey(gameDto!.Id) == false)
-                {
-                    _allJoinedPlayers[gameDto.Id] = new List<ulong>
-                    {
-                        command.User.Id,
-                    };
-                }
+                var gameDto = await CreateGame(channel, command.User);
 
                 await command.RespondAsync(
                     embeds: new[]
                     {
-                        BuildGameEmbed(channel),
+                        BuildGameEmbed(channel, gameDto),
                     },
-                    components: BuildButtons(channel)
+                    components: BuildButtons(channel, gameDto)
                 );
             }
         }
@@ -183,38 +169,79 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
         }
     }
 
+    private async Task<GameDto> CreateGame(SocketVoiceChannel channel, IUser user)
+    {
+        // Data Transfer Object
+        var gameDto = await _backendApi.CreateGame(channel.Id)
+            ?? await _backendApi.GetGame(channel.Id);
+
+        if (_allJoinedPlayers.ContainsKey(gameDto!.Id) == false)
+        {
+            _allJoinedPlayers[gameDto.Id] = new List<ulong>
+            {
+                user.Id,
+            };
+        }
+
+        return gameDto;
+    }
+
     private async Task OnButtonExecuted(SocketMessageComponent arg)
     {
+        var channel = (SocketVoiceChannel)arg.Channel;
         var channelId = arg.Channel.Id;
         var userId = arg.User.Id;
+        string? message = null;
 
         if (arg.Data.CustomId == "btn-join-game")
         {
+            message = $"{arg.User.Mention}已加入";
             UpdateGamePlayer(channelId, userId, true);
         }
         else if (arg.Data.CustomId == "btn-leave-game")
         {
+            message = $"{arg.User.Mention}已離開";
             UpdateGamePlayer(channelId, userId, false);
+        }
+        else if (arg.Data.CustomId == "btn-create-game")
+        {
+            message = "遊戲已新增";
+            await CreateGame(channel, arg.User);
         }
         else if (arg.Data.CustomId == "btn-start-game")
         {
-            var gameDto = await StartGame(channelId);
-            
+            message = "遊戲開始囉!\n請確認角色身分!";
+            await StartGame(channelId);
+        }
+        else if (arg.Data.CustomId == "btn-confirm-player-role")
+        {
+            await ConfirmPlayerRole(arg);
         }
 
-        
-
-        var channel = (SocketVoiceChannel)arg.Channel;
+        var gameDto = await _backendApi.GetGame(channelId);
 
         await arg.UpdateAsync(prop =>
         {
+            prop.Content = message;
             prop.Embeds = new[]
             {
-                BuildGameEmbed(channel),
+                BuildGameEmbed(channel, gameDto),
             };
 
-            prop.Components = BuildButtons(channel);
+            prop.Components = BuildButtons(channel, gameDto);
         });
+    }
+
+    private async Task ConfirmPlayerRole(SocketMessageComponent arg)
+    {
+        var channelId = arg.ChannelId;
+        var userId = arg.User.Id;
+
+        var role = await _backendApi.ConfirmPlayerRole(channelId, userId);
+
+        await arg.RespondAsync(
+            $"# 你是 ... **{role}**", ephemeral: true
+        );
     }
 
     private async Task<GameDto> StartGame(ulong channelId)
@@ -285,7 +312,7 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
         catch (HttpException exception)
         {
             // If our command was invalid, we should catch an ApplicationCommandException. This exception contains the path of the error as well as the error message. You can serialize the Error field in the exception to get a visual of where your error is.
-            var json = JsonSerializer.Serialize(exception.Errors,new JsonSerializerOptions
+            var json = JsonSerializer.Serialize(exception.Errors, new JsonSerializerOptions
             {
                 WriteIndented = true,
             });
@@ -338,7 +365,7 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
                         .WithRequired(true)
                     )
                 )
-                
+
                 .AddOption(new SlashCommandOptionBuilder()
                     .WithName("create")
                     .WithDescription("Create new game")
@@ -357,7 +384,7 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
                     })
                     .WithType(ApplicationCommandOptionType.SubCommand)
                 )
-                
+
                 .Build(),
         };
         // _interactionService.RegisterCommandsToGuildAsync(1030466547325607936);
@@ -374,14 +401,17 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
         return Task.CompletedTask;
     }
 
-    private Embed BuildGameEmbed(SocketVoiceChannel channel)
+    private Embed BuildGameEmbed(SocketVoiceChannel channel, GameDto gameDto)
     {
-        var joinedPlayers = _allJoinedPlayers[channel.Id];
-        var players = ".";
+        var joinedPlayers = gameDto.Status == GameStatus.PlayerRoleConfirmationStarted
+            ? gameDto.Players.Select(x => x.UserId)
+            : _allJoinedPlayers[channel.Id];
+
+        var players = "";
         for (var i = 0; i < 12; i++)
         {
             var user = channel.Guild.Users.FirstOrDefault(x => x.Id == joinedPlayers.ElementAtOrDefault(i));
-            players += user?.Mention + Environment.NewLine;
+            players += $"[{user?.Mention ?? " "}]\n";
         }
 
         return new EmbedBuilder()
@@ -401,12 +431,32 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
             .Build();
     }
 
-    private MessageComponent BuildButtons(SocketVoiceChannel channel)
+    private MessageComponent BuildButtons(SocketVoiceChannel channel, GameDto? gameDto)
     {
-        var canStart = _allJoinedPlayers[channel.Id].Count >= 9;
-        
-        return new ComponentBuilder()
-                .WithButton(
+
+
+        var builder = new ComponentBuilder();
+
+        if (gameDto == null)
+        {
+            builder = builder.WithButton(
+                "開新遊戲",
+                "btn-create-game",
+                ButtonStyle.Primary
+            );
+        }
+        else if (gameDto.Status == GameStatus.PlayerRoleConfirmationStarted)
+        {
+            builder = builder.WithButton(
+                "確認我的角色身分",
+                "btn-confirm-player-role",
+                ButtonStyle.Primary
+            );
+        }
+        else
+        {
+            var canStart = _allJoinedPlayers[channel.Id].Count >= 9;
+            builder = builder.WithButton(
                     "加入遊戲",
                     "btn-join-game",
                     ButtonStyle.Primary
@@ -421,7 +471,9 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
                     "btn-start-game",
                     canStart ? ButtonStyle.Success : ButtonStyle.Secondary,
                     disabled: !canStart
-                )
-                .Build();
+                );
+        }
+
+        return builder.Build();
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using Wsa.Gaas.Werewolf.Domain.Objects;
-using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
+﻿using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.DomainTest
 {
