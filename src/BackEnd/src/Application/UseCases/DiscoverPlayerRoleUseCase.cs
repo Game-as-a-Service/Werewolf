@@ -1,7 +1,6 @@
 ﻿using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
-using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.Application.UseCases
 {
@@ -28,20 +27,8 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
                 throw new GameNotFoundException(request.DiscordVoiceChannelId);
             }
 
-            var discoverPlayer = Repository.FindAll().Where(x => x.DiscordVoiceChannelId == request.DiscordVoiceChannelId)
-                .Where(x => x.Status == GameStatus.SeerRoundStarted)
-                .SelectMany(y => y.Players)
-                .Where(y => y.IsDead == false)
-                .Where(y => y.PlayerNumber == request.DiscoverPlayerNumber)
-                .FirstOrDefault();
-
-            if (discoverPlayer == null)
-            {
-                throw new PlayerNotSurvivedException(request.DiscoverPlayerNumber);
-            }
-
             // Update
-            var seerDiscoveredEvent = game.DiscoverPlayerRole(request.PlayerId, discoverPlayer);
+            var seerDiscoveredEvent = game.DiscoverPlayerRole(request.PlayerId, request.DiscoverPlayerNumber);
 
             // Save
 

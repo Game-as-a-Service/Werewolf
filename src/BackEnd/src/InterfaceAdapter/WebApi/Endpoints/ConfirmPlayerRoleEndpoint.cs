@@ -5,7 +5,7 @@ using Wsa.Gaas.Werewolf.WebApi.Common;
 namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
 {
     public record ConfirmPlayerRoleResponse(string GameId, string PlayerId, string Role);
-    
+
 
     public class ConfirmPlayerRoleEndpoint : WebApiEndpoint<ConfirmPlayerRoleRequest, PlayerRoleConfirmedEvent, ConfirmPlayerRoleResponse>
     {
@@ -29,7 +29,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
             // MVP
             // Restful API Presenter => JSON
             // CLI Presenter         => Text
-            
+
             await UseCase.ExecuteAsync(req, this, ct);
 
             if (ViewModel == null)

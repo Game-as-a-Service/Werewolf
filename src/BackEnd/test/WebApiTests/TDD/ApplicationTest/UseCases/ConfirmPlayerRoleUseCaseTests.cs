@@ -32,7 +32,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases
             // Arrange Game
             var game = new Game(discordVoiceChannelId);
             game.StartGame(playerIds);
-            game.StartPlayerRoleConfirmation();
+
             var expectedRole = game.Players.First(x => x.UserId == playerId).Role!.Name;
 
             // Arrange Repository
@@ -74,10 +74,6 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases
                        gameEvent.PlayerId == playerId
                     && gameEvent.Role == expectedRole
                 ),
-                It.IsAny<CancellationToken>()
-            ));
-            gameEventBus.Verify(bus => bus.BroadcastAsync(
-                It.Is<PlayerRoleConfirmedEvent>(gameEvent => gameEvent.PlayerId == playerId),
                 It.IsAny<CancellationToken>()
             ));
         }

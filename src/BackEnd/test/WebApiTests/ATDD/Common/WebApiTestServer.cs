@@ -40,7 +40,10 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
             where T : GameEvent
         {
             // Store received GameVm to EventBuffer
-            Connection.On<GameVm>(typeof(T).Name, e => EventBuffer.Post(e));
+            Connection.On<GameVm>(typeof(T).Name, e =>
+            {
+                EventBuffer.Post(e);
+            });
         }
 
         // Resolve Dependency Injection, Get Required Service

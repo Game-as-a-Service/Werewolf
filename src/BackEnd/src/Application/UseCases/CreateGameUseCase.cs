@@ -20,17 +20,14 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
 
         public override async Task ExecuteAsync(CreateGameRequest request, IPresenter<GameCreatedEvent> presenter, CancellationToken cancellationToken = default)
         {
-            Game game;
+            Game? game;
 
             lock (_lock)
             {
                 // Query
-                var anyExistingActiveGame = Repository.FindAll()
-                    .Where(x => x.DiscordVoiceChannelId == request.DiscordVoiceChannelId)
-                    .Where(x => x.Status != GameStatus.Ended)
-                    .Any();
+                game = Repository.FindByDiscordChannelId(request.DiscordVoiceChannelId);
 
-                if (anyExistingActiveGame)
+                if (game != null)
                 {
                     throw new GameChannelException();
                 }
@@ -46,7 +43,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
             var gameEvent = new GameCreatedEvent(game);
 
             // SignalR
-            await GameEventBus.BroadcastAsync(gameEvent, cancellationToken);
+            await GameEventBus.BroadcastAsync(new[] { gameEvent }, cancellationToken);
 
             // Restful API
             await presenter.PresentAsync(gameEvent, cancellationToken);

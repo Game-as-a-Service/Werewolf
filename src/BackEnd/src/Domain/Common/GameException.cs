@@ -4,7 +4,7 @@
     {
         public GameException(string msg) : base(msg)
         {
-            
+
         }
     }
 }

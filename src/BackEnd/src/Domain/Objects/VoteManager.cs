@@ -15,7 +15,7 @@
         public void Vote(ulong voterId, ulong voteeId)
         {
             // 投過票了嗎?
-            if(votes.ContainsKey(voterId))
+            if (votes.ContainsKey(voterId))
             {
                 throw new Exception("Voted");
             }

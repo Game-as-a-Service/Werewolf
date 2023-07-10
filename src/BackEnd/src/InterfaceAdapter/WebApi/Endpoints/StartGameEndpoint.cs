@@ -1,16 +1,10 @@
 ﻿using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.WebApi.Common;
-using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 
 namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
 {
-    public record StartGameResponse(
-        string GameId,
-        PlayerVm[] Players
-    );
-
-    public class StartGameEndpoint : WebApiEndpoint<StartGameRequest, GameStartedEvent, StartGameResponse>
+    public class StartGameEndpoint : WebApiEndpoint<StartGameRequest, GameStartedEvent, GetGameResponse>
     {
         public override void Configure()
         {
@@ -18,7 +12,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
             AllowAnonymous();
         }
 
-        public override async Task<StartGameResponse> ExecuteAsync(StartGameRequest req, CancellationToken ct)
+        public override async Task<GetGameResponse> ExecuteAsync(StartGameRequest req, CancellationToken ct)
         {
             await UseCase.ExecuteAsync(req, this, ct);
 
@@ -33,11 +27,8 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
 
         public override Task PresentAsync(GameStartedEvent gameEvent, CancellationToken cancellationToken = default)
         {
-            ViewModel = new StartGameResponse
-            (
-                gameEvent.Data.DiscordVoiceChannelId.ToString(),
-                gameEvent.Data.Players.Select(PlayerVm.FromDomain).ToArray()
-            );
+            ViewModel = new GetGameResponse(gameEvent);
+
             return Task.CompletedTask;
         }
     }

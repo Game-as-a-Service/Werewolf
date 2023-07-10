@@ -35,28 +35,6 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.DomainTest
             game.StartGame(playerIds);
 
             // Assert
-            game.Status.Should().Be(GameStatus.Started);
-            game.DiscordVoiceChannelId.Should().Be(discordChannelId);
-            AssertPlayers(game, playerIds);
-        }
-
-        [Test]
-        public void StartPlayerRoleConfirmationTest()
-        {
-            // Arrange
-            var faker = new Faker();
-            var discordChannelId = faker.Random.ULong(1);
-            var numberOfPlayers = faker.PickRandom(Enumerable.Range(9, 4));
-            var playerIds = Enumerable.Range(0, numberOfPlayers)
-                .Select(_ => faker.Random.ULong(1))
-                .ToArray();
-            var game = new Game(discordChannelId);
-            game.StartGame(playerIds);
-
-            // Act
-            game.StartPlayerRoleConfirmation();
-
-            // Assert
             game.Status.Should().Be(GameStatus.PlayerRoleConfirmationStarted);
             game.DiscordVoiceChannelId.Should().Be(discordChannelId);
             AssertPlayers(game, playerIds);

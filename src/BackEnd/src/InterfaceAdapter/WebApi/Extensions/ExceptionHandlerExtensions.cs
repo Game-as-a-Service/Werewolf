@@ -7,7 +7,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Extensions
 {
     public static class ExceptionHandlerExtensions
     {
-        public static IApplicationBuilder UseJsonExceptionHandler(this IApplicationBuilder app)
+        public static IApplicationBuilder UseJsonExceptionHandler(this IApplicationBuilder app, ILogger? logger = null, bool logStructuredException = false)
         {
             return app.UseExceptionHandler(errApp =>
             {

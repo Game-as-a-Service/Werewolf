@@ -10,9 +10,6 @@ namespace Wsa.Gaas.Werewolf.Application
             // Inject Use Cases
             services.AddUseCases();
 
-            // Inject Policies
-            services.AddPolicies();
-
             // GameEvenPublisher
             services.AddScoped<GameEventBus>();
 
@@ -30,23 +27,6 @@ namespace Wsa.Gaas.Werewolf.Application
                 if (type.BaseType?.IsGenericType == true && type.BaseType?.GetGenericTypeDefinition() == useCaseType)
                 {
                     // services.AddScoped<UseCase<TRequest, TResponse>, ImplementType>();
-                    services.AddScoped(type.BaseType, type);
-                }
-            }
-
-            return services;
-        }
-
-        private static IServiceCollection AddPolicies(this IServiceCollection services)
-        {
-            var assembly = typeof(DependencyInjection).Assembly;
-            var types = assembly.GetTypes();
-            var policyType = typeof(Policy<>);
-
-            foreach (var type in types)
-            {
-                if (type.BaseType?.IsGenericType == true && type.BaseType?.GetGenericTypeDefinition() == policyType)
-                {
                     services.AddScoped(type.BaseType, type);
                 }
             }
