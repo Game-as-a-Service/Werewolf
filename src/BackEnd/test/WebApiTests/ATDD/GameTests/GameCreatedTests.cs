@@ -11,7 +11,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
 {
     public class GameCreatedTests
     {
-        WebApiTestServer _server = new();
+        readonly WebApiTestServer _server = new();
 
         [OneTimeSetUp]
         public async Task OneTimeSetup()
@@ -42,26 +42,26 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             };
 
             /* Act */
-            var (_, result) = await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, CreateGameResponse>(request);
+            var (_, result) = await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, GetGameResponse>(request);
 
             // 2nd Call should get 400 error
-            var (response, _) = await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, CreateGameResponse>(request);
+            var (response, _) = await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, GetGameResponse>(request);
 
             /* Assert */
             // Check Rest API Result
             result.Should().NotBeNull();
-            result!.GameId.Should().Be(request.DiscordVoiceChannelId.ToString());
+            result!.Id.Should().Be(request.DiscordVoiceChannelId);
 
             // Check SignalR Response
             var gameEvent = await _server.EventBuffer.ReceiveAsync();
             gameEvent.Should().NotBeNull();
-            gameEvent!.Id.Should().Be(result.GameId);
+            gameEvent!.Id.Should().Be(result.Id.ToString());
 
             // Check Database
             var repository = _server.GetRequiredService<IRepository>();
-            var game = await repository.FindByDiscordChannelIdAsync(ulong.Parse(result.GameId));
+            var game = await repository.FindByDiscordChannelIdAsync(result.Id);
             game.Should().NotBeNull();
-            game!.DiscordVoiceChannelId.ToString().Should().Be(result.GameId);
+            game!.DiscordVoiceChannelId.Should().Be(result.Id);
 
             // Check 2nd Call Response
             response.Should().NotBeNull();

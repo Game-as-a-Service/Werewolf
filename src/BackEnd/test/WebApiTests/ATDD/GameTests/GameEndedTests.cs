@@ -3,7 +3,6 @@ using System.Net;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
-using Wsa.Gaas.Werewolf.Domain.Objects;
 using Wsa.Gaas.Werewolf.WebApi.Endpoints;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
@@ -11,7 +10,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
 {
     public class GameEndedTests
     {
-        WebApiTestServer _server = new();
+        readonly WebApiTestServer _server = new();
 
         [OneTimeSetUp]
         public async Task OneTimeSetup()
@@ -43,11 +42,11 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             };
 
             //Create game
-            var (_, createGameResponse) = await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, CreateGameResponse>(createGameRq);
+            var (_, createGameResponse) = await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, GetGameResponse>(createGameRq);
 
             var request = new EndGameRequest()
             {
-                DiscordVoiceChannelId = ulong.Parse(createGameResponse!.GameId)
+                DiscordVoiceChannelId = createGameResponse!.Id
             };
 
             var (_, result) = await _server.Client.POSTAsync<EndGameEndpoint, EndGameRequest, EndGameResponse>(request);
@@ -61,7 +60,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
 
             // Check Database
             var repository = _server.GetRequiredService<IRepository>();
-            var game = await repository.FindByDiscordChannelIdAsync(ulong.Parse(createGameResponse.GameId));
+            var game = await repository.FindByDiscordChannelIdAsync(createGameResponse.Id);
             game.Should().BeNull();
 
             // Check 2nd Call Response
