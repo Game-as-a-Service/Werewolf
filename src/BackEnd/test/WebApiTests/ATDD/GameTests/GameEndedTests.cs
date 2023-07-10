@@ -66,7 +66,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
 
             // Check 2nd Call Response
             response.Should().NotBeNull();
-            response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
 }

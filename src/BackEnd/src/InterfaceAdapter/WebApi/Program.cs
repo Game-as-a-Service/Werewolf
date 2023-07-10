@@ -2,6 +2,7 @@ using FastEndpoints;
 using FastEndpoints.Swagger;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.WebApi;
+using Wsa.Gaas.Werewolf.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,7 @@ var app = builder.Build();
 app.Services.CreateScope().ServiceProvider.GetRequiredService<IRepository>().Initialize();
 
 // Error Handling
-app.UseDefaultExceptionHandler();
+app.UseJsonExceptionHandler();
 
 // Web API
 app.UseFastEndpoints();

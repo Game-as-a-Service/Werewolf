@@ -1,5 +1,4 @@
-﻿using FastEndpoints;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using System.Net;
 using Wsa.Gaas.Werewolf.Domain.Common;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
@@ -8,7 +7,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Extensions
 {
     public static class ExceptionHandlerExtensions
     {
-        public static IApplicationBuilder UseExceptionHandler(this IApplicationBuilder app, ILogger? logger = null, bool logStructuredException = false)
+        public static IApplicationBuilder UseJsonExceptionHandler(this IApplicationBuilder app)
         {
             return app.UseExceptionHandler(errApp =>
             {

@@ -44,7 +44,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             /* Act */
             var (_, result) = await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, CreateGameResponse>(request);
 
-            // 2nd Call should get 500 error
+            // 2nd Call should get 400 error
             var (response, _) = await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, CreateGameResponse>(request);
 
             /* Assert */
@@ -65,7 +65,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
 
             // Check 2nd Call Response
             response.Should().NotBeNull();
-            response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
     }

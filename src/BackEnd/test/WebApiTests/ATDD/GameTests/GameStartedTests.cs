@@ -74,17 +74,17 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             /* Act & Assert */
             // too less players, expect error
             (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
-                .Response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+                .Response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             // too many players, expect error
             request.Players = RandomDistinctPlayers(20);
             (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
-                .Response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+                .Response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             // duplicate players, expect error
             request.Players = RandomDuplicatePlayers(9);
             (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
-                .Response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+                .Response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             // 12 players
             request.Players = RandomDistinctPlayers(12);
@@ -114,7 +114,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
 
             // game already started, expect error
             (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
-                .Response!.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+                .Response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
             request.DiscordVoiceChannelId = gameCreated2.DiscordVoiceChannelId;
             (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))

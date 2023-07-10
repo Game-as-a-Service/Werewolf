@@ -79,7 +79,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             var (response, _) = await _server.Client.POSTAsync<DiscoverPlayerRoleEndpoint, DiscoverPlayerRoleRequest, DiscoverPlayerRoleResponse>(request);
 
             // Assert response hava server error
-            response.Should().HaveServerError();
+            response.Should().HaveClientError();
         }
 
         [Test]

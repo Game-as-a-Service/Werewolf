@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using Bogus;
+using System.Net.Http.Json;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Objects;
@@ -55,6 +56,21 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             // 驗證 SignalR message
             // 但這個測試不需要
 
+        }
+
+        [Test]
+        public async Task GetNonExistGame_ShouldReturn404()
+        {
+            var faker = new Faker();
+
+            // Arrange
+            var voiceChannelId = faker.Random.ULong();
+
+            // Act
+            var response = await _server.Client.GetAsync($"/games/{voiceChannelId}");
+
+            // Assert
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
         }
     }
 }
