@@ -42,10 +42,10 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             };
 
             /* Act */
-            var (_, result) = await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, GetGameResponse>(request);
+            var (r1, result) = await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, GetGameResponse>(request);
 
             // 2nd Call should get 400 error
-            var (response, _) = await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, GetGameResponse>(request);
+            var (response, r2) = await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, GetGameResponse>(request);
 
             /* Assert */
             // Check Rest API Result
@@ -64,7 +64,6 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             game!.DiscordVoiceChannelId.Should().Be(result.Id);
 
             // Check 2nd Call Response
-            response.Should().NotBeNull();
             response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 

@@ -22,6 +22,11 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
         """)]
     public class GetGameResponse
     {
+        public GetGameResponse()
+        {
+
+        }
+
         public GetGameResponse(GameEvent gameEvent)
         {
             Id = gameEvent.Data.DiscordVoiceChannelId;
@@ -33,6 +38,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
             }).ToList();
             Status = gameEvent.Data.Status;
         }
+        
         public ulong Id { get; set; }
         public List<PlayerDto> Players { get; set; } = new List<PlayerDto>();
         public GameStatus Status { get; set; }
