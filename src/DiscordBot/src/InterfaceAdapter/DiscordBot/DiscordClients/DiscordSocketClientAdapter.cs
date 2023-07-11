@@ -218,7 +218,7 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
             await ConfirmPlayerRole(arg);
         }
 
-        var gameDto = await _backendApi.GetGame(channelId);
+        var gameDto = await _backendApi.GetGame(channelId) ?? new GameDto();
 
         await arg.UpdateAsync(prop =>
         {
