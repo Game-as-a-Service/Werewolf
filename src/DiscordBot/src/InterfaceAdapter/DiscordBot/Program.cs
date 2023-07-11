@@ -15,6 +15,7 @@ builder.Services
     .AddControllers()
     .Services
     .Configure<DiscordBotOptions>(opt => config.Bind(nameof(DiscordBotOptions), opt))
+    .Configure<BackendApiEndpointOptions>(opt => config.Bind(nameof(BackendApiEndpointOptions), opt))
     .AddSingleton<IDiscordBotClient, DiscordSocketClientAdapter>()
     .AddSingleton<BackendApi>()
     .AddHostedService<DiscordBotHostedService>()

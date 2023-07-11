@@ -1,29 +1,31 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.Extensions.Options;
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Wsa.Gaas.Werewolf.DiscordBot.Dtos;
+using Wsa.Gaas.Werewolf.DiscordBot.Options;
 
 namespace Wsa.Gaas.Werewolf.DiscordBot.DiscordClients;
 
 public class BackendApi
 {
     private readonly HttpClient _httpClient;
-    private readonly JsonSerializerOptions _options;
+    private readonly JsonSerializerOptions _jsonOptions;
+    private readonly BackendApiEndpointOptions _apiOptions;
 
-    public BackendApi()
+    public BackendApi(IOptions<BackendApiEndpointOptions> options)
     {
+        _apiOptions = options.Value;
         _httpClient = new HttpClient
         {
-            //BaseAddress = new Uri("https://werewolf-api-dev.azurewebsites.net")
-            BaseAddress = new Uri("https://localhost:7009")
+            BaseAddress = new Uri(_apiOptions.Endpoint),
         };
-        
-        _options = new JsonSerializerOptions
+
+        _jsonOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
         };
-        _options.Converters.Add(new JsonStringEnumConverter());
+        _jsonOptions.Converters.Add(new JsonStringEnumConverter());
     }
 
     public async Task<GameDto?> CreateGame(ulong discordVoiceChannelId)
@@ -41,7 +43,7 @@ public class BackendApi
             return null;
         }
 
-        var gameDto = await response.Content.ReadFromJsonAsync<GameDto>(_options);
+        var gameDto = await response.Content.ReadFromJsonAsync<GameDto>(_jsonOptions);
 
         return gameDto!;
     }
@@ -51,7 +53,7 @@ public class BackendApi
         var path = $"/games/{discordVoiceChannelId}";
         try
         {
-            return await _httpClient.GetFromJsonAsync<GameDto>(path, _options);
+            return await _httpClient.GetFromJsonAsync<GameDto>(path, _jsonOptions);
         }
         catch
         {
@@ -70,7 +72,7 @@ public class BackendApi
 
         responseMessage.EnsureSuccessStatusCode();
 
-        var gameDto = await responseMessage.Content.ReadFromJsonAsync<GameDto>(_options);
+        var gameDto = await responseMessage.Content.ReadFromJsonAsync<GameDto>(_jsonOptions);
 
         return gameDto!;
     }
@@ -81,11 +83,11 @@ public class BackendApi
 
         try
         {
-            var roleResponse = await _httpClient.GetFromJsonAsync<GetRoleResponse>(path, _options);
+            var roleResponse = await _httpClient.GetFromJsonAsync<GetRoleResponse>(path, _jsonOptions);
 
             return roleResponse?.Role ?? string.Empty;
         }
-        catch (Exception ex) 
+        catch (Exception ex)
         {
             return $"Error: {ex.Message}";
         }
