@@ -1,28 +1,34 @@
 ﻿using Discord;
 using Discord.Net;
 using Discord.WebSocket;
+using Microsoft.AspNetCore.Builder.Extensions;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 using Wsa.Gaas.Werewolf.ChatBot.Application.Common;
 using Wsa.Gaas.Werewolf.DiscordBot.Application.UseCases;
 using Wsa.Gaas.Werewolf.DiscordBot.Dtos;
 using Wsa.Gaas.Werewolf.DiscordBot.Options;
+using Wsa.Gaas.Werewolf.DiscordBot.ViewModels;
 
 namespace Wsa.Gaas.Werewolf.DiscordBot.DiscordClients;
 
 public class DiscordSocketClientAdapter : IDiscordBotClient
 {
     private readonly DiscordSocketClient _client;
-    private readonly DiscordBotOptions _options;
+    private readonly DiscordBotOptions _botOptions;
+    private readonly BackendApiEndpointOptions _apiOptions;
     private readonly ILogger _logger;
     private readonly BackendApi _backendApi;
     private readonly Dictionary<ulong, List<ulong>> _allJoinedPlayers = new();
     private readonly Random _random = new();
+    private readonly HubConnection _hubConnection;
 
     public DiscordSocketClientAdapter(
         ILogger<DiscordSocketClientAdapter> logger,
-        IOptions<DiscordBotOptions> options,
-        BackendApi backendApi
+        IOptions<DiscordBotOptions> botOptions,
+        BackendApi backendApi,
+        IOptions<BackendApiEndpointOptions> apiOptions
     )
     {
         _client = new DiscordSocketClient(new DiscordSocketConfig
@@ -55,7 +61,35 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
 
         _logger = logger;
         _backendApi = backendApi;
-        _options = options.Value;
+        _botOptions = botOptions.Value;
+        _apiOptions = apiOptions.Value;
+
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl(new UriBuilder(_apiOptions.Endpoint)
+            {
+                Path = "/events"
+            }.Uri)
+            .Build();
+
+        var eventNames = new[]
+        {
+            "GameCreatedEvent",
+            "GameStartedEvent"
+        };
+
+        foreach (var eventName in eventNames)
+        {
+            _hubConnection.On<GameVm>(
+                eventName, 
+                gameVm => OnReceive(eventName, gameVm)
+            );
+        }
+    }
+
+    private Task OnReceive(string eventName, GameVm obj)
+    {
+        _logger.LogInformation("{eventName} {@obj}", eventName, obj);
+        return Task.CompletedTask;
     }
 
     private async Task OnSlashCommandHandler(SocketSlashCommand command)
@@ -297,8 +331,9 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
 
     public async Task StartAsync()
     {
-        await _client.LoginAsync(TokenType.Bot, _options.Token);
+        await _client.LoginAsync(TokenType.Bot, _botOptions.Token);
         await _client.StartAsync();
+        await _hubConnection.StartAsync();
     }
 
     private async Task OnReadyHandler()
