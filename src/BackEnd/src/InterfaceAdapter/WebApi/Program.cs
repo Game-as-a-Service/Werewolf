@@ -2,12 +2,16 @@ using FastEndpoints;
 using FastEndpoints.Swagger;
 using System.Text.Json.Serialization;
 using Wsa.Gaas.Werewolf.Application.Common;
+using Wsa.Gaas.Werewolf.Application.Options;
 using Wsa.Gaas.Werewolf.WebApi;
 using Wsa.Gaas.Werewolf.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddWebApi();
+builder.Services.Configure<GameSettingOptions>(
+    opt => builder.Configuration.Bind(nameof(GameSettingOptions), opt)
+);
 builder.Services.SwaggerDocument(opt =>
 {
 

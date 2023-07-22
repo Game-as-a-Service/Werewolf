@@ -41,14 +41,6 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             };
         }
 
-        public void StartPlayerSpeaking()
-        {
-            Status = GameStatus.PlayerSpeaking;
-
-            CurrentSpeakingPlayer = Players.OrderBy(_ => Guid.NewGuid())
-                                           .First();
-        }
-
         public PlayerRoleConfirmedEvent ConfirmPlayerRole(ulong playerId)
         {
             var player = Players.FirstOrDefault(x => x.UserId == playerId)
@@ -66,6 +58,14 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             };
 
             return gameEvent;
+        }
+
+        public void StartPlayerSpeaking()
+        {
+            Status = GameStatus.PlayerSpeaking;
+
+            CurrentSpeakingPlayer = Players.OrderBy(_ => Guid.NewGuid())
+                                           .First();
         }
 
         public SeerDiscoveredEvent DiscoverPlayerRole(ulong userId, int playerNumber)

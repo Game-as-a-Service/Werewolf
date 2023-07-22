@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks.Dataflow;
 using Wsa.Gaas.Werewolf.Application.Common;
+using Wsa.Gaas.Werewolf.Application.Options;
 using Wsa.Gaas.Werewolf.Domain.Common;
 using Wsa.Gaas.Werewolf.WebApi;
 using Wsa.Gaas.Werewolf.WebApi.ViewModels;
@@ -30,6 +33,17 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
             Connection = CreateHubConnection();
         }
 
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
+        {
+            builder.ConfigureTestServices(services =>
+            {
+                services.PostConfigure<GameSettingOptions>(opt =>
+                {
+                    opt.PlayerRoleConfirmation = TimeSpan.Zero;
+                });
+            });
+        }
+
         public Task StartAsync()
         {
             return Connection.StartAsync();
@@ -39,9 +53,11 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common
         public void ListenOn<T>()
             where T : GameEvent
         {
+            var eventName = typeof(T).Name;
             // Store received GameVm to EventBuffer
-            Connection.On<GameVm>(typeof(T).Name, e =>
+            Connection.On<GameVm>(eventName, e =>
             {
+                var s = eventName;
                 EventBuffer.Post(e);
             });
         }

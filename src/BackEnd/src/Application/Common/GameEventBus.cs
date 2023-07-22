@@ -29,7 +29,23 @@ namespace Wsa.Gaas.Werewolf.Application.Common
                 foreach (var gameEvent in gameEvents)
                 {
                     await handler.Handle(gameEvent, cancellationToken);
+
+                    var policyType = typeof(Policy<>).MakeGenericType(gameEvent.GetType());
+
+                    var policy = provider.GetService(policyType);
+                    
+                    if(policy != null)
+                    {
+                        var method = policy.GetType().GetMethod("Handle");
+
+                        method?.Invoke(policy, new object[] { gameEvent, cancellationToken });
+                    }
                 }
+
+
+                
+
+
             }, cancellationToken);
 
             return Task.CompletedTask;
