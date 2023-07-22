@@ -10,6 +10,7 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
         public Role Role { get; internal set; }
         public BuffStatus BuffStatus { get; internal set; }
         public bool IsDead { get; internal set; }
+        public bool IsAntidoteUsed { get; internal set; }
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         private Player() { }

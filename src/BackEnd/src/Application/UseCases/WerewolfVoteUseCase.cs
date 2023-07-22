@@ -20,12 +20,7 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
         public override async Task ExecuteAsync(WerewolfVoteRequest request, IPresenter<WerewolfVotedEvent> presenter, CancellationToken cancellationToken = default)
         {
             // 查
-            var game = await Repository.FindByDiscordChannelIdAsync(request.DiscordChannelId);
-
-            if (game == null)
-            {
-                throw new GameNotFoundException(request.DiscordChannelId);
-            }
+            var game = await Repository.FindByDiscordChannelIdAsync(request.DiscordChannelId) ?? throw new GameNotFoundException(request.DiscordChannelId);
 
             // 改 => Vote
             var events = game.WerewolfVote(request.CallerId, request.TargetId);

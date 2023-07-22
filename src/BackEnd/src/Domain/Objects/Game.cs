@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
+using Wsa.Gaas.Werewolf.Domain.Objects.Roles;
 
 namespace Wsa.Gaas.Werewolf.Domain.Objects
 {
@@ -171,6 +172,44 @@ namespace Wsa.Gaas.Werewolf.Domain.Objects
             }
 
             return roles;
+        }
+
+        public WitchUseAntidoteEvent WitchUseAntidote(ulong witchUserId)
+        {
+            var witch = Players.FirstOrDefault(x => x.UserId == witchUserId);
+
+            if (witch is null)
+            {
+                throw new PlayerNotFoundException(DiscordVoiceChannelId, witchUserId);
+            }
+
+            if (witch.Role is not Witch)
+            {
+                throw new PlayerNotWitchException("Player not witch");
+            }
+
+            if (witch.IsAntidoteUsed)
+            {
+                throw new GameException("Witch antidote is used");
+            }
+
+            // 找出被狼殺的玩家
+            var playerKilledByWerewolf = Players.FirstOrDefault(x =>
+                (x.BuffStatus & BuffStatus.KilledByWerewolf) == BuffStatus.KilledByWerewolf
+            );
+
+            if (playerKilledByWerewolf == null)
+            {
+                throw new GameException("No one was killed by werewolf");
+            }
+
+            // 標記被女巫救
+            playerKilledByWerewolf.BuffStatus |= BuffStatus.SavedByWitch;
+
+            // 標記解藥已使用
+            witch.IsAntidoteUsed = true;
+
+            return new WitchUseAntidoteEvent(this);
         }
     }
 }

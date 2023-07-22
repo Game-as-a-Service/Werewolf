@@ -9,5 +9,6 @@
         PlayerSpeaking,
         SeerRoundStarted,
         Ended,
+        WitchRoundStarted
     }
 }
