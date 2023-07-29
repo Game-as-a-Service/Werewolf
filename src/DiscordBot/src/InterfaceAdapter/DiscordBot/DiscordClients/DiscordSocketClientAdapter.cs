@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.Net;
 using Discord.WebSocket;
-using Microsoft.AspNetCore.Builder.Extensions;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
@@ -74,7 +73,9 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
         var eventNames = new[]
         {
             "GameCreatedEvent",
-            "GameStartedEvent"
+            "GameStartedEvent",
+            "PlayerRoleConfirmationStartedEvent",
+            "PlayerRoleConfirmationEndedEvent",
         };
 
         foreach (var eventName in eventNames)
@@ -86,10 +87,37 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
         }
     }
 
-    private Task OnReceive(string eventName, GameVm obj)
+    private async Task OnReceive(string eventName, GameVm game)
     {
-        _logger.LogInformation("{eventName} {@obj}", eventName, obj);
-        return Task.CompletedTask;
+        _logger.LogInformation("{eventName} {@game}", eventName, game);
+
+        if (eventName == "PlayerRoleConfirmationEndedEvent")
+        {
+            // get channel
+
+            if (await _client.GetChannelAsync(ulong.Parse(game.Id)) is SocketVoiceChannel channel)
+            {
+                var gameDto = new GameDto()
+                {
+                    Id = ulong.Parse(game.Id),
+                    Players = game.Players.Select(x => new PlayerDto
+                    {
+                        UserId = ulong.Parse(x.Id),
+                        PlayerNumber = x.PlayerNumber,
+                        Role = x.Role ?? string.Empty
+                    }).ToList(),
+                    Status = Enum.Parse<GameStatus>(game.Status),
+                };
+
+                await channel.SendMessageAsync(
+                    text: "# 確認角色身分已結束\n現在天黑請閉眼\n狼人請睜眼。",
+                    embeds: new[]
+                    {
+                        BuildGameEmbed(channel, gameDto),
+                    }
+                );
+            }
+        }
     }
 
     private async Task OnSlashCommandHandler(SocketSlashCommand command)
@@ -108,8 +136,13 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
                 .WithDescription(version)
                 ;
 
+            
             await command.RespondAsync(
-                embeds: new[] { builder.Build() }
+                embeds: new[] 
+                {
+                    builder.Build(),
+
+                }
             );
         }
         else if (subCommand == "status")
@@ -244,7 +277,7 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
         }
         else if (arg.Data.CustomId == "btn-start-game")
         {
-            message = "遊戲開始囉!\n請確認角色身分!";
+            message = "# 遊戲開始囉!\n請確認角色身分!";
             await StartGame(channelId);
         }
         else if (arg.Data.CustomId == "btn-confirm-player-role")
@@ -253,7 +286,7 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
         }
 
         var gameDto = await _backendApi.GetGame(channelId) ?? new GameDto();
-
+        
         await arg.UpdateAsync(prop =>
         {
             prop.Content = message;

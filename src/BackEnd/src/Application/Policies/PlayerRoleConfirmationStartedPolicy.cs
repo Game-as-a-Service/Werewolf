@@ -3,6 +3,7 @@ using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.Options;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
+using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.Application.Policies;
 
