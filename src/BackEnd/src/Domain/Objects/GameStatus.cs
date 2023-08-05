@@ -1,14 +1,14 @@
-﻿namespace Wsa.Gaas.Werewolf.Domain.Objects
+﻿namespace Wsa.Gaas.Werewolf.Domain.Objects;
+
+public enum GameStatus
 {
-    public enum GameStatus
-    {
-        Created,
-        Started,
-        PlayerRoleConfirmationStarted,
-        LastNightResultAnnounced,
-        PlayerSpeaking,
-        SeerRoundStarted,
-        Ended,
-        WitchRoundStarted
-    }
+    Created,
+    Started,
+    PlayerRoleConfirmationStarted,
+    LastNightResultAnnounced,
+    PlayerSpeaking,
+    SeerRoundStarted,
+    Ended,
+    WitchRoundStarted,
+    NightEnded,
 }

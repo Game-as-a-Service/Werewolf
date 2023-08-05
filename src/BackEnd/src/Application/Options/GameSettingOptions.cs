@@ -1,7 +1,6 @@
-﻿namespace Wsa.Gaas.Werewolf.Application.Options
+﻿namespace Wsa.Gaas.Werewolf.Application.Options;
+
+public class GameSettingOptions
 {
-    public class GameSettingOptions
-    {
-        public TimeSpan PlayerRoleConfirmation { get; set; }
-    }
+    public TimeSpan PlayerRoleConfirmation { get; set; }
 }

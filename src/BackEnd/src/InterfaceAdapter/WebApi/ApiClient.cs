@@ -13,619 +13,617 @@
 #pragma warning disable 3016 // Disable "CS3016 Arrays as attribute arguments is not CLS-compliant"
 #pragma warning disable 8603 // Disable "CS8603 Possible null reference return"
 
-namespace FastEndpoints
+namespace FastEndpoints;
+
+using System = global::System;
+
+[System.CodeDom.Compiler.GeneratedCode("NSwag", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class ApiClient 
 {
-    using System = global::System;
+    private string _baseUrl = "";
+    private System.Net.Http.HttpClient _httpClient;
+    private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ApiClient 
+    public ApiClient(string baseUrl, System.Net.Http.HttpClient httpClient)
     {
-        private string _baseUrl = "";
-        private System.Net.Http.HttpClient _httpClient;
-        private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
+        BaseUrl = baseUrl;
+        _httpClient = httpClient;
+        _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
+    }
 
-        public ApiClient(string baseUrl, System.Net.Http.HttpClient httpClient)
+    private Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()
+    {
+        var settings = new Newtonsoft.Json.JsonSerializerSettings();
+        UpdateJsonSerializerSettings(settings);
+        return settings;
+    }
+
+    public string BaseUrl
+    {
+        get { return _baseUrl; }
+        set { _baseUrl = value; }
+    }
+
+    protected Newtonsoft.Json.JsonSerializerSettings JsonSerializerSettings { get { return _settings.Value; } }
+
+    partial void UpdateJsonSerializerSettings(Newtonsoft.Json.JsonSerializerSettings settings);
+
+    partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, string url);
+    partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
+    partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
+
+    /// <returns>Success</returns>
+    /// <exception cref="ApiException">A server side error occurred.</exception>
+    public virtual System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsConfirmPlayerRoleResponse> WsaGaasWerewolfWebApiEndpointsConfirmPlayerRoleEndpointAsync(long discordVoiceChannelId, long playerId)
+    {
+        return WsaGaasWerewolfWebApiEndpointsConfirmPlayerRoleEndpointAsync(discordVoiceChannelId, playerId, System.Threading.CancellationToken.None);
+    }
+
+    /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+    /// <returns>Success</returns>
+    /// <exception cref="ApiException">A server side error occurred.</exception>
+    public virtual async System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsConfirmPlayerRoleResponse> WsaGaasWerewolfWebApiEndpointsConfirmPlayerRoleEndpointAsync(long discordVoiceChannelId, long playerId, System.Threading.CancellationToken cancellationToken)
+    {
+        if (discordVoiceChannelId == null)
+            throw new System.ArgumentNullException("discordVoiceChannelId");
+
+        if (playerId == null)
+            throw new System.ArgumentNullException("playerId");
+
+        var urlBuilder_ = new System.Text.StringBuilder();
+        urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/games/{DiscordVoiceChannelId}/players/{PlayerId}/Role");
+        urlBuilder_.Replace("{DiscordVoiceChannelId}", System.Uri.EscapeDataString(ConvertToString(discordVoiceChannelId, System.Globalization.CultureInfo.InvariantCulture)));
+        urlBuilder_.Replace("{PlayerId}", System.Uri.EscapeDataString(ConvertToString(playerId, System.Globalization.CultureInfo.InvariantCulture)));
+
+        var client_ = _httpClient;
+        var disposeClient_ = false;
+        try
         {
-            BaseUrl = baseUrl;
-            _httpClient = httpClient;
-            _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
-        }
-
-        private Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()
-        {
-            var settings = new Newtonsoft.Json.JsonSerializerSettings();
-            UpdateJsonSerializerSettings(settings);
-            return settings;
-        }
-
-        public string BaseUrl
-        {
-            get { return _baseUrl; }
-            set { _baseUrl = value; }
-        }
-
-        protected Newtonsoft.Json.JsonSerializerSettings JsonSerializerSettings { get { return _settings.Value; } }
-
-        partial void UpdateJsonSerializerSettings(Newtonsoft.Json.JsonSerializerSettings settings);
-
-        partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, string url);
-        partial void PrepareRequest(System.Net.Http.HttpClient client, System.Net.Http.HttpRequestMessage request, System.Text.StringBuilder urlBuilder);
-        partial void ProcessResponse(System.Net.Http.HttpClient client, System.Net.Http.HttpResponseMessage response);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsConfirmPlayerRoleResponse> WsaGaasWerewolfWebApiEndpointsConfirmPlayerRoleEndpointAsync(long discordVoiceChannelId, long playerId)
-        {
-            return WsaGaasWerewolfWebApiEndpointsConfirmPlayerRoleEndpointAsync(discordVoiceChannelId, playerId, System.Threading.CancellationToken.None);
-        }
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsConfirmPlayerRoleResponse> WsaGaasWerewolfWebApiEndpointsConfirmPlayerRoleEndpointAsync(long discordVoiceChannelId, long playerId, System.Threading.CancellationToken cancellationToken)
-        {
-            if (discordVoiceChannelId == null)
-                throw new System.ArgumentNullException("discordVoiceChannelId");
-
-            if (playerId == null)
-                throw new System.ArgumentNullException("playerId");
-
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/games/{DiscordVoiceChannelId}/players/{PlayerId}/Role");
-            urlBuilder_.Replace("{DiscordVoiceChannelId}", System.Uri.EscapeDataString(ConvertToString(discordVoiceChannelId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder_.Replace("{PlayerId}", System.Uri.EscapeDataString(ConvertToString(playerId, System.Globalization.CultureInfo.InvariantCulture)));
-
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
+            using (var request_ = new System.Net.Http.HttpRequestMessage())
             {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+                request_.Method = new System.Net.Http.HttpMethod("GET");
+                request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
-                    PrepareRequest(client_, request_, urlBuilder_);
+                PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+                var url_ = urlBuilder_.ToString();
+                request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client_, request_, url_);
+                PrepareRequest(client_, request_, url_);
 
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-
-                        ProcessResponse(client_, response_);
-
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<WsaGaasWerewolfWebApiEndpointsConfirmPlayerRoleResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsCreateGameResponse> WsaGaasWerewolfWebApiEndpointsCreateGameEndpointAsync(WsaGaasWerewolfApplicationUseCasesCreateGameRequest createGameRequest)
-        {
-            return WsaGaasWerewolfWebApiEndpointsCreateGameEndpointAsync(createGameRequest, System.Threading.CancellationToken.None);
-        }
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsCreateGameResponse> WsaGaasWerewolfWebApiEndpointsCreateGameEndpointAsync(WsaGaasWerewolfApplicationUseCasesCreateGameRequest createGameRequest, System.Threading.CancellationToken cancellationToken)
-        {
-            if (createGameRequest == null)
-                throw new System.ArgumentNullException("createGameRequest");
-
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/games");
-
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(createGameRequest, _settings.Value);
-                    var content_ = new System.Net.Http.StringContent(json_);
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-                    PrepareRequest(client_, request_, urlBuilder_);
-
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-                    PrepareRequest(client_, request_, url_);
-
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-
-                        ProcessResponse(client_, response_);
-
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<WsaGaasWerewolfWebApiEndpointsCreateGameResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsDiscoverPlayerRoleResponse> WsaGaasWerewolfWebApiEndpointsDiscoverPlayerRoleEndpointAsync(WsaGaasWerewolfApplicationUseCasesDiscoverPlayerRoleRequest discoverPlayerRoleRequest, long discordVoiceChannelId, long playerId)
-        {
-            return WsaGaasWerewolfWebApiEndpointsDiscoverPlayerRoleEndpointAsync(discoverPlayerRoleRequest, discordVoiceChannelId, playerId, System.Threading.CancellationToken.None);
-        }
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsDiscoverPlayerRoleResponse> WsaGaasWerewolfWebApiEndpointsDiscoverPlayerRoleEndpointAsync(WsaGaasWerewolfApplicationUseCasesDiscoverPlayerRoleRequest discoverPlayerRoleRequest, long discordVoiceChannelId, long playerId, System.Threading.CancellationToken cancellationToken)
-        {
-            if (discordVoiceChannelId == null)
-                throw new System.ArgumentNullException("discordVoiceChannelId");
-
-            if (playerId == null)
-                throw new System.ArgumentNullException("playerId");
-
-            if (discoverPlayerRoleRequest == null)
-                throw new System.ArgumentNullException("discoverPlayerRoleRequest");
-
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/games/{DiscordVoiceChannelId}/players/{PlayerId}/DiscoverRole");
-            urlBuilder_.Replace("{DiscordVoiceChannelId}", System.Uri.EscapeDataString(ConvertToString(discordVoiceChannelId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder_.Replace("{PlayerId}", System.Uri.EscapeDataString(ConvertToString(playerId, System.Globalization.CultureInfo.InvariantCulture)));
-
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(discoverPlayerRoleRequest, _settings.Value);
-                    var content_ = new System.Net.Http.StringContent(json_);
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-                    PrepareRequest(client_, request_, urlBuilder_);
-
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-                    PrepareRequest(client_, request_, url_);
-
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-
-                        ProcessResponse(client_, response_);
-
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<WsaGaasWerewolfWebApiEndpointsDiscoverPlayerRoleResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsStartGameResponse> WsaGaasWerewolfWebApiEndpointsStartGameEndpointAsync(WsaGaasWerewolfApplicationUseCasesStartGameRequest startGameRequest, long discordVoiceChannelId)
-        {
-            return WsaGaasWerewolfWebApiEndpointsStartGameEndpointAsync(startGameRequest, discordVoiceChannelId, System.Threading.CancellationToken.None);
-        }
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsStartGameResponse> WsaGaasWerewolfWebApiEndpointsStartGameEndpointAsync(WsaGaasWerewolfApplicationUseCasesStartGameRequest startGameRequest, long discordVoiceChannelId, System.Threading.CancellationToken cancellationToken)
-        {
-            if (discordVoiceChannelId == null)
-                throw new System.ArgumentNullException("discordVoiceChannelId");
-
-            if (startGameRequest == null)
-                throw new System.ArgumentNullException("startGameRequest");
-
-            var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/games/{DiscordVoiceChannelId}/start");
-            urlBuilder_.Replace("{DiscordVoiceChannelId}", System.Uri.EscapeDataString(ConvertToString(discordVoiceChannelId, System.Globalization.CultureInfo.InvariantCulture)));
-
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(startGameRequest, _settings.Value);
-                    var content_ = new System.Net.Http.StringContent(json_);
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
-
-                    PrepareRequest(client_, request_, urlBuilder_);
-
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-                    PrepareRequest(client_, request_, url_);
-
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-
-                        ProcessResponse(client_, response_);
-
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<WsaGaasWerewolfWebApiEndpointsStartGameResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-
-        protected struct ObjectResponseResult<T>
-        {
-            public ObjectResponseResult(T responseObject, string responseText)
-            {
-                this.Object = responseObject;
-                this.Text = responseText;
-            }
-
-            public T Object { get; }
-
-            public string Text { get; }
-        }
-
-        public bool ReadResponseAsString { get; set; }
-
-        protected virtual async System.Threading.Tasks.Task<ObjectResponseResult<T>> ReadObjectResponseAsync<T>(System.Net.Http.HttpResponseMessage response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Threading.CancellationToken cancellationToken)
-        {
-            if (response == null || response.Content == null)
-            {
-                return new ObjectResponseResult<T>(default(T), string.Empty);
-            }
-
-            if (ReadResponseAsString)
-            {
-                var responseText = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                var disposeResponse_ = true;
                 try
                 {
-                    var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
-                    return new ObjectResponseResult<T>(typedBody, responseText);
+                    var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                    if (response_.Content != null && response_.Content.Headers != null)
+                    {
+                        foreach (var item_ in response_.Content.Headers)
+                            headers_[item_.Key] = item_.Value;
+                    }
+
+                    ProcessResponse(client_, response_);
+
+                    var status_ = (int)response_.StatusCode;
+                    if (status_ == 200)
+                    {
+                        var objectResponse_ = await ReadObjectResponseAsync<WsaGaasWerewolfWebApiEndpointsConfirmPlayerRoleResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        if (objectResponse_.Object == null)
+                        {
+                            throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                        }
+                        return objectResponse_.Object;
+                    }
+                    else
+                    {
+                        var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                    }
                 }
-                catch (Newtonsoft.Json.JsonException exception)
+                finally
                 {
-                    var message = "Could not deserialize the response body string as " + typeof(T).FullName + ".";
-                    throw new ApiException(message, (int)response.StatusCode, responseText, headers, exception);
+                    if (disposeResponse_)
+                        response_.Dispose();
                 }
             }
-            else
+        }
+        finally
+        {
+            if (disposeClient_)
+                client_.Dispose();
+        }
+    }
+
+    /// <returns>Success</returns>
+    /// <exception cref="ApiException">A server side error occurred.</exception>
+    public virtual System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsCreateGameResponse> WsaGaasWerewolfWebApiEndpointsCreateGameEndpointAsync(WsaGaasWerewolfApplicationUseCasesCreateGameRequest createGameRequest)
+    {
+        return WsaGaasWerewolfWebApiEndpointsCreateGameEndpointAsync(createGameRequest, System.Threading.CancellationToken.None);
+    }
+
+    /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+    /// <returns>Success</returns>
+    /// <exception cref="ApiException">A server side error occurred.</exception>
+    public virtual async System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsCreateGameResponse> WsaGaasWerewolfWebApiEndpointsCreateGameEndpointAsync(WsaGaasWerewolfApplicationUseCasesCreateGameRequest createGameRequest, System.Threading.CancellationToken cancellationToken)
+    {
+        if (createGameRequest == null)
+            throw new System.ArgumentNullException("createGameRequest");
+
+        var urlBuilder_ = new System.Text.StringBuilder();
+        urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/games");
+
+        var client_ = _httpClient;
+        var disposeClient_ = false;
+        try
+        {
+            using (var request_ = new System.Net.Http.HttpRequestMessage())
             {
+                var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(createGameRequest, _settings.Value);
+                var content_ = new System.Net.Http.StringContent(json_);
+                content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                request_.Content = content_;
+                request_.Method = new System.Net.Http.HttpMethod("POST");
+                request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                PrepareRequest(client_, request_, urlBuilder_);
+
+                var url_ = urlBuilder_.ToString();
+                request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                PrepareRequest(client_, request_, url_);
+
+                var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                var disposeResponse_ = true;
                 try
                 {
-                    using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
-                    using (var streamReader = new System.IO.StreamReader(responseStream))
-                    using (var jsonTextReader = new Newtonsoft.Json.JsonTextReader(streamReader))
+                    var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                    if (response_.Content != null && response_.Content.Headers != null)
                     {
-                        var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
-                        var typedBody = serializer.Deserialize<T>(jsonTextReader);
-                        return new ObjectResponseResult<T>(typedBody, string.Empty);
+                        foreach (var item_ in response_.Content.Headers)
+                            headers_[item_.Key] = item_.Value;
                     }
-                }
-                catch (Newtonsoft.Json.JsonException exception)
-                {
-                    var message = "Could not deserialize the response body stream as " + typeof(T).FullName + ".";
-                    throw new ApiException(message, (int)response.StatusCode, string.Empty, headers, exception);
-                }
-            }
-        }
 
-        private string ConvertToString(object value, System.Globalization.CultureInfo cultureInfo)
-        {
-            if (value == null)
-            {
-                return "";
-            }
+                    ProcessResponse(client_, response_);
 
-            if (value is System.Enum)
-            {
-                var name = System.Enum.GetName(value.GetType(), value);
-                if (name != null)
-                {
-                    var field = System.Reflection.IntrospectionExtensions.GetTypeInfo(value.GetType()).GetDeclaredField(name);
-                    if (field != null)
+                    var status_ = (int)response_.StatusCode;
+                    if (status_ == 200)
                     {
-                        var attribute = System.Reflection.CustomAttributeExtensions.GetCustomAttribute(field, typeof(System.Runtime.Serialization.EnumMemberAttribute)) 
-                            as System.Runtime.Serialization.EnumMemberAttribute;
-                        if (attribute != null)
+                        var objectResponse_ = await ReadObjectResponseAsync<WsaGaasWerewolfWebApiEndpointsCreateGameResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        if (objectResponse_.Object == null)
                         {
-                            return attribute.Value != null ? attribute.Value : name;
+                            throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                         }
+                        return objectResponse_.Object;
                     }
-
-                    var converted = System.Convert.ToString(System.Convert.ChangeType(value, System.Enum.GetUnderlyingType(value.GetType()), cultureInfo));
-                    return converted == null ? string.Empty : converted;
+                    else
+                    {
+                        var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                    }
+                }
+                finally
+                {
+                    if (disposeResponse_)
+                        response_.Dispose();
                 }
             }
-            else if (value is bool) 
-            {
-                return System.Convert.ToString((bool)value, cultureInfo).ToLowerInvariant();
-            }
-            else if (value is byte[])
-            {
-                return System.Convert.ToBase64String((byte[]) value);
-            }
-            else if (value.GetType().IsArray)
-            {
-                var array = System.Linq.Enumerable.OfType<object>((System.Array) value);
-                return string.Join(",", System.Linq.Enumerable.Select(array, o => ConvertToString(o, cultureInfo)));
-            }
-
-            var result = System.Convert.ToString(value, cultureInfo);
-            return result == null ? "" : result;
         }
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class WsaGaasWerewolfWebApiEndpointsConfirmPlayerRoleResponse
-    {
-        [Newtonsoft.Json.JsonProperty("gameId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string GameId { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("playerId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string PlayerId { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("role", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Role { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class WsaGaasWerewolfApplicationUseCasesConfirmPlayerRoleRequest
-    {
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class WsaGaasWerewolfWebApiEndpointsCreateGameResponse
-    {
-        [Newtonsoft.Json.JsonProperty("gameId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string GameId { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class WsaGaasWerewolfApplicationUseCasesCreateGameRequest
-    {
-        [Newtonsoft.Json.JsonProperty("discordVoiceChannelId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public long DiscordVoiceChannelId { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class WsaGaasWerewolfWebApiEndpointsDiscoverPlayerRoleResponse
-    {
-        [Newtonsoft.Json.JsonProperty("gameId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string GameId { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("playerId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string PlayerId { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("discoveredPlayerNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int DiscoveredPlayerNumber { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("discoveredRoleFaction", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string DiscoveredRoleFaction { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class WsaGaasWerewolfApplicationUseCasesDiscoverPlayerRoleRequest
-    {
-        [Newtonsoft.Json.JsonProperty("discoverPlayerNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int DiscoverPlayerNumber { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class WsaGaasWerewolfWebApiEndpointsStartGameResponse
-    {
-        [Newtonsoft.Json.JsonProperty("gameId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string GameId { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("players", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<WsaGaasWerewolfWebApiViewModelsPlayerVm> Players { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class WsaGaasWerewolfWebApiViewModelsPlayerVm
-    {
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Id { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("playerNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int PlayerNumber { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("isDead", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsDead { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("role", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Role { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class WsaGaasWerewolfApplicationUseCasesStartGameRequest
-    {
-        [Newtonsoft.Json.JsonProperty("players", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<long> Players { get; set; }
-
-    }
-
-
-
-    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ApiException : System.Exception
-    {
-        public int StatusCode { get; private set; }
-
-        public string Response { get; private set; }
-
-        public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
-
-        public ApiException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception innerException)
-            : base(message + "\n\nStatus: " + statusCode + "\nResponse: \n" + ((response == null) ? "(null)" : response.Substring(0, response.Length >= 512 ? 512 : response.Length)), innerException)
+        finally
         {
-            StatusCode = statusCode;
-            Response = response;
-            Headers = headers;
-        }
-
-        public override string ToString()
-        {
-            return string.Format("HTTP Response: \n\n{0}\n\n{1}", Response, base.ToString());
+            if (disposeClient_)
+                client_.Dispose();
         }
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ApiException<TResult> : ApiException
+    /// <returns>Success</returns>
+    /// <exception cref="ApiException">A server side error occurred.</exception>
+    public virtual System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsDiscoverPlayerRoleResponse> WsaGaasWerewolfWebApiEndpointsDiscoverPlayerRoleEndpointAsync(WsaGaasWerewolfApplicationUseCasesDiscoverPlayerRoleRequest discoverPlayerRoleRequest, long discordVoiceChannelId, long playerId)
     {
-        public TResult Result { get; private set; }
+        return WsaGaasWerewolfWebApiEndpointsDiscoverPlayerRoleEndpointAsync(discoverPlayerRoleRequest, discordVoiceChannelId, playerId, System.Threading.CancellationToken.None);
+    }
 
-        public ApiException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception innerException)
-            : base(message, statusCode, response, headers, innerException)
+    /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+    /// <returns>Success</returns>
+    /// <exception cref="ApiException">A server side error occurred.</exception>
+    public virtual async System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsDiscoverPlayerRoleResponse> WsaGaasWerewolfWebApiEndpointsDiscoverPlayerRoleEndpointAsync(WsaGaasWerewolfApplicationUseCasesDiscoverPlayerRoleRequest discoverPlayerRoleRequest, long discordVoiceChannelId, long playerId, System.Threading.CancellationToken cancellationToken)
+    {
+        if (discordVoiceChannelId == null)
+            throw new System.ArgumentNullException("discordVoiceChannelId");
+
+        if (playerId == null)
+            throw new System.ArgumentNullException("playerId");
+
+        if (discoverPlayerRoleRequest == null)
+            throw new System.ArgumentNullException("discoverPlayerRoleRequest");
+
+        var urlBuilder_ = new System.Text.StringBuilder();
+        urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/games/{DiscordVoiceChannelId}/players/{PlayerId}/DiscoverRole");
+        urlBuilder_.Replace("{DiscordVoiceChannelId}", System.Uri.EscapeDataString(ConvertToString(discordVoiceChannelId, System.Globalization.CultureInfo.InvariantCulture)));
+        urlBuilder_.Replace("{PlayerId}", System.Uri.EscapeDataString(ConvertToString(playerId, System.Globalization.CultureInfo.InvariantCulture)));
+
+        var client_ = _httpClient;
+        var disposeClient_ = false;
+        try
         {
-            Result = result;
+            using (var request_ = new System.Net.Http.HttpRequestMessage())
+            {
+                var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(discoverPlayerRoleRequest, _settings.Value);
+                var content_ = new System.Net.Http.StringContent(json_);
+                content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                request_.Content = content_;
+                request_.Method = new System.Net.Http.HttpMethod("POST");
+                request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                PrepareRequest(client_, request_, urlBuilder_);
+
+                var url_ = urlBuilder_.ToString();
+                request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                PrepareRequest(client_, request_, url_);
+
+                var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                var disposeResponse_ = true;
+                try
+                {
+                    var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                    if (response_.Content != null && response_.Content.Headers != null)
+                    {
+                        foreach (var item_ in response_.Content.Headers)
+                            headers_[item_.Key] = item_.Value;
+                    }
+
+                    ProcessResponse(client_, response_);
+
+                    var status_ = (int)response_.StatusCode;
+                    if (status_ == 200)
+                    {
+                        var objectResponse_ = await ReadObjectResponseAsync<WsaGaasWerewolfWebApiEndpointsDiscoverPlayerRoleResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        if (objectResponse_.Object == null)
+                        {
+                            throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                        }
+                        return objectResponse_.Object;
+                    }
+                    else
+                    {
+                        var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                    }
+                }
+                finally
+                {
+                    if (disposeResponse_)
+                        response_.Dispose();
+                }
+            }
+        }
+        finally
+        {
+            if (disposeClient_)
+                client_.Dispose();
         }
     }
 
+    /// <returns>Success</returns>
+    /// <exception cref="ApiException">A server side error occurred.</exception>
+    public virtual System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsStartGameResponse> WsaGaasWerewolfWebApiEndpointsStartGameEndpointAsync(WsaGaasWerewolfApplicationUseCasesStartGameRequest startGameRequest, long discordVoiceChannelId)
+    {
+        return WsaGaasWerewolfWebApiEndpointsStartGameEndpointAsync(startGameRequest, discordVoiceChannelId, System.Threading.CancellationToken.None);
+    }
+
+    /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+    /// <returns>Success</returns>
+    /// <exception cref="ApiException">A server side error occurred.</exception>
+    public virtual async System.Threading.Tasks.Task<WsaGaasWerewolfWebApiEndpointsStartGameResponse> WsaGaasWerewolfWebApiEndpointsStartGameEndpointAsync(WsaGaasWerewolfApplicationUseCasesStartGameRequest startGameRequest, long discordVoiceChannelId, System.Threading.CancellationToken cancellationToken)
+    {
+        if (discordVoiceChannelId == null)
+            throw new System.ArgumentNullException("discordVoiceChannelId");
+
+        if (startGameRequest == null)
+            throw new System.ArgumentNullException("startGameRequest");
+
+        var urlBuilder_ = new System.Text.StringBuilder();
+        urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/games/{DiscordVoiceChannelId}/start");
+        urlBuilder_.Replace("{DiscordVoiceChannelId}", System.Uri.EscapeDataString(ConvertToString(discordVoiceChannelId, System.Globalization.CultureInfo.InvariantCulture)));
+
+        var client_ = _httpClient;
+        var disposeClient_ = false;
+        try
+        {
+            using (var request_ = new System.Net.Http.HttpRequestMessage())
+            {
+                var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(startGameRequest, _settings.Value);
+                var content_ = new System.Net.Http.StringContent(json_);
+                content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                request_.Content = content_;
+                request_.Method = new System.Net.Http.HttpMethod("POST");
+                request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                PrepareRequest(client_, request_, urlBuilder_);
+
+                var url_ = urlBuilder_.ToString();
+                request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                PrepareRequest(client_, request_, url_);
+
+                var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                var disposeResponse_ = true;
+                try
+                {
+                    var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                    if (response_.Content != null && response_.Content.Headers != null)
+                    {
+                        foreach (var item_ in response_.Content.Headers)
+                            headers_[item_.Key] = item_.Value;
+                    }
+
+                    ProcessResponse(client_, response_);
+
+                    var status_ = (int)response_.StatusCode;
+                    if (status_ == 200)
+                    {
+                        var objectResponse_ = await ReadObjectResponseAsync<WsaGaasWerewolfWebApiEndpointsStartGameResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        if (objectResponse_.Object == null)
+                        {
+                            throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                        }
+                        return objectResponse_.Object;
+                    }
+                    else
+                    {
+                        var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                    }
+                }
+                finally
+                {
+                    if (disposeResponse_)
+                        response_.Dispose();
+                }
+            }
+        }
+        finally
+        {
+            if (disposeClient_)
+                client_.Dispose();
+        }
+    }
+
+    protected struct ObjectResponseResult<T>
+    {
+        public ObjectResponseResult(T responseObject, string responseText)
+        {
+            this.Object = responseObject;
+            this.Text = responseText;
+        }
+
+        public T Object { get; }
+
+        public string Text { get; }
+    }
+
+    public bool ReadResponseAsString { get; set; }
+
+    protected virtual async System.Threading.Tasks.Task<ObjectResponseResult<T>> ReadObjectResponseAsync<T>(System.Net.Http.HttpResponseMessage response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Threading.CancellationToken cancellationToken)
+    {
+        if (response == null || response.Content == null)
+        {
+            return new ObjectResponseResult<T>(default(T), string.Empty);
+        }
+
+        if (ReadResponseAsString)
+        {
+            var responseText = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            try
+            {
+                var typedBody = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseText, JsonSerializerSettings);
+                return new ObjectResponseResult<T>(typedBody, responseText);
+            }
+            catch (Newtonsoft.Json.JsonException exception)
+            {
+                var message = "Could not deserialize the response body string as " + typeof(T).FullName + ".";
+                throw new ApiException(message, (int)response.StatusCode, responseText, headers, exception);
+            }
+        }
+        else
+        {
+            try
+            {
+                using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                using (var streamReader = new System.IO.StreamReader(responseStream))
+                using (var jsonTextReader = new Newtonsoft.Json.JsonTextReader(streamReader))
+                {
+                    var serializer = Newtonsoft.Json.JsonSerializer.Create(JsonSerializerSettings);
+                    var typedBody = serializer.Deserialize<T>(jsonTextReader);
+                    return new ObjectResponseResult<T>(typedBody, string.Empty);
+                }
+            }
+            catch (Newtonsoft.Json.JsonException exception)
+            {
+                var message = "Could not deserialize the response body stream as " + typeof(T).FullName + ".";
+                throw new ApiException(message, (int)response.StatusCode, string.Empty, headers, exception);
+            }
+        }
+    }
+
+    private string ConvertToString(object value, System.Globalization.CultureInfo cultureInfo)
+    {
+        if (value == null)
+        {
+            return "";
+        }
+
+        if (value is System.Enum)
+        {
+            var name = System.Enum.GetName(value.GetType(), value);
+            if (name != null)
+            {
+                var field = System.Reflection.IntrospectionExtensions.GetTypeInfo(value.GetType()).GetDeclaredField(name);
+                if (field != null)
+                {
+                    var attribute = System.Reflection.CustomAttributeExtensions.GetCustomAttribute(field, typeof(System.Runtime.Serialization.EnumMemberAttribute)) 
+                        as System.Runtime.Serialization.EnumMemberAttribute;
+                    if (attribute != null)
+                    {
+                        return attribute.Value != null ? attribute.Value : name;
+                    }
+                }
+
+                var converted = System.Convert.ToString(System.Convert.ChangeType(value, System.Enum.GetUnderlyingType(value.GetType()), cultureInfo));
+                return converted == null ? string.Empty : converted;
+            }
+        }
+        else if (value is bool) 
+        {
+            return System.Convert.ToString((bool)value, cultureInfo).ToLowerInvariant();
+        }
+        else if (value is byte[])
+        {
+            return System.Convert.ToBase64String((byte[]) value);
+        }
+        else if (value.GetType().IsArray)
+        {
+            var array = System.Linq.Enumerable.OfType<object>((System.Array) value);
+            return string.Join(",", System.Linq.Enumerable.Select(array, o => ConvertToString(o, cultureInfo)));
+        }
+
+        var result = System.Convert.ToString(value, cultureInfo);
+        return result == null ? "" : result;
+    }
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class WsaGaasWerewolfWebApiEndpointsConfirmPlayerRoleResponse
+{
+    [Newtonsoft.Json.JsonProperty("gameId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string GameId { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("playerId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string PlayerId { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("role", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string Role { get; set; }
+
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class WsaGaasWerewolfApplicationUseCasesConfirmPlayerRoleRequest
+{
+
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class WsaGaasWerewolfWebApiEndpointsCreateGameResponse
+{
+    [Newtonsoft.Json.JsonProperty("gameId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string GameId { get; set; }
+
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class WsaGaasWerewolfApplicationUseCasesCreateGameRequest
+{
+    [Newtonsoft.Json.JsonProperty("discordVoiceChannelId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public long DiscordVoiceChannelId { get; set; }
+
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class WsaGaasWerewolfWebApiEndpointsDiscoverPlayerRoleResponse
+{
+    [Newtonsoft.Json.JsonProperty("gameId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string GameId { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("playerId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string PlayerId { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("discoveredPlayerNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public int DiscoveredPlayerNumber { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("discoveredRoleFaction", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string DiscoveredRoleFaction { get; set; }
+
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class WsaGaasWerewolfApplicationUseCasesDiscoverPlayerRoleRequest
+{
+    [Newtonsoft.Json.JsonProperty("discoverPlayerNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public int DiscoverPlayerNumber { get; set; }
+
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class WsaGaasWerewolfWebApiEndpointsStartGameResponse
+{
+    [Newtonsoft.Json.JsonProperty("gameId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string GameId { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("players", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public System.Collections.Generic.ICollection<WsaGaasWerewolfWebApiViewModelsPlayerVm> Players { get; set; }
+
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class WsaGaasWerewolfWebApiViewModelsPlayerVm
+{
+    [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string Id { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("playerNumber", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public int PlayerNumber { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("isDead", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public bool IsDead { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("role", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string Role { get; set; }
+
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class WsaGaasWerewolfApplicationUseCasesStartGameRequest
+{
+    [Newtonsoft.Json.JsonProperty("players", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public System.Collections.Generic.ICollection<long> Players { get; set; }
+
+}
+
+
+
+[System.CodeDom.Compiler.GeneratedCode("NSwag", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class ApiException : System.Exception
+{
+    public int StatusCode { get; private set; }
+
+    public string Response { get; private set; }
+
+    public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
+
+    public ApiException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, System.Exception innerException)
+        : base(message + "\n\nStatus: " + statusCode + "\nResponse: \n" + ((response == null) ? "(null)" : response.Substring(0, response.Length >= 512 ? 512 : response.Length)), innerException)
+    {
+        StatusCode = statusCode;
+        Response = response;
+        Headers = headers;
+    }
+
+    public override string ToString()
+    {
+        return string.Format("HTTP Response: \n\n{0}\n\n{1}", Response, base.ToString());
+    }
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NSwag", "13.18.2.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class ApiException<TResult> : ApiException
+{
+    public TResult Result { get; private set; }
+
+    public ApiException(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception innerException)
+        : base(message, statusCode, response, headers, innerException)
+    {
+        Result = result;
+    }
 }
 
 #pragma warning restore 1591

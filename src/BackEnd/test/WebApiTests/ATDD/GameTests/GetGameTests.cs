@@ -7,72 +7,71 @@ using Wsa.Gaas.Werewolf.Domain.Objects;
 using Wsa.Gaas.Werewolf.WebApi.Endpoints;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
-namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
+namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests;
+
+internal class GetGameTests
 {
-    internal class GetGameTests
+    readonly WebApiTestServer _server = new();
+
+    [OneTimeSetUp]
+    public async Task OneTimeSetup()
     {
-        readonly WebApiTestServer _server = new();
+        await _server.StartAsync();
+    }
 
-        [OneTimeSetUp]
-        public async Task OneTimeSetup()
+    [Test]
+    public async Task GetGameTest()
+    {
+        // Arrange
+        var playerCount = new Random().Next(9, 13);
+        var game = _server.CreateGameBuilder()
+           .WithRandomDiscordVoiceChannel()
+           .WithGameStatus(GameStatus.Started)
+           .WithRandomPlayers(playerCount)
+           .Build();
+
+        // Act
+        var response = await _server.Client.GetAsync($"/games/{game.DiscordVoiceChannelId}");
+
+        // Assert
+        response.EnsureSuccessStatusCode();
+
+        // 驗證 Restful API 的回應
+        var options = new JsonSerializerOptions
         {
-            await _server.StartAsync();
-        }
+            PropertyNameCaseInsensitive = true
+        };
+        options.Converters.Add(new JsonStringEnumConverter());
 
-        [Test]
-        public async Task GetGameTest()
-        {
-            // Arrange
-            var playerCount = new Random().Next(9, 13);
-            var game = _server.CreateGameBuilder()
-               .WithRandomDiscordVoiceChannel()
-               .WithGameStatus(GameStatus.Started)
-               .WithRandomPlayers(playerCount)
-               .Build();
+        var dto = await response.Content.ReadFromJsonAsync<GetGameResponse>(options);
+        dto!.Id.Should().Be(game.DiscordVoiceChannelId);
+        dto.Status.Should().Be(GameStatus.Started);
+        dto.Players.Should().HaveCount(playerCount);
 
-            // Act
-            var response = await _server.Client.GetAsync($"/games/{game.DiscordVoiceChannelId}");
+        // 驗證資料庫裡的資料
+        var repository = _server.GetRequiredService<IRepository>();
+        var actualGame = await repository.FindByDiscordChannelIdAsync(game.DiscordVoiceChannelId);
+        actualGame!.DiscordVoiceChannelId.Should().Be(game.DiscordVoiceChannelId);
+        actualGame.Status.Should().Be(GameStatus.Started);
+        actualGame.Players.Should().HaveCount(playerCount);
 
-            // Assert
-            response.EnsureSuccessStatusCode();
+        // 驗證 SignalR message
+        // 但這個測試不需要
 
-            // 驗證 Restful API 的回應
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            options.Converters.Add(new JsonStringEnumConverter());
+    }
 
-            var dto = await response.Content.ReadFromJsonAsync<GetGameResponse>(options);
-            dto!.Id.Should().Be(game.DiscordVoiceChannelId);
-            dto.Status.Should().Be(GameStatus.Started);
-            dto.Players.Should().HaveCount(playerCount);
+    [Test]
+    public async Task GetNonExistGame_ShouldReturn404()
+    {
+        var faker = new Faker();
 
-            // 驗證資料庫裡的資料
-            var repository = _server.GetRequiredService<IRepository>();
-            var actualGame = await repository.FindByDiscordChannelIdAsync(game.DiscordVoiceChannelId);
-            actualGame!.DiscordVoiceChannelId.Should().Be(game.DiscordVoiceChannelId);
-            actualGame.Status.Should().Be(GameStatus.Started);
-            actualGame.Players.Should().HaveCount(playerCount);
+        // Arrange
+        var voiceChannelId = faker.Random.ULong();
 
-            // 驗證 SignalR message
-            // 但這個測試不需要
+        // Act
+        var response = await _server.Client.GetAsync($"/games/{voiceChannelId}");
 
-        }
-
-        [Test]
-        public async Task GetNonExistGame_ShouldReturn404()
-        {
-            var faker = new Faker();
-
-            // Arrange
-            var voiceChannelId = faker.Random.ULong();
-
-            // Act
-            var response = await _server.Client.GetAsync($"/games/{voiceChannelId}");
-
-            // Assert
-            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
-        }
+        // Assert
+        response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
 }

@@ -3,28 +3,27 @@ using Wsa.Gaas.Werewolf.Application;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.EntityFrameworkCore;
 
-namespace Wsa.Gaas.Werewolf.WebApi
+namespace Wsa.Gaas.Werewolf.WebApi;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddWebApi(this IServiceCollection services)
     {
-        public static IServiceCollection AddWebApi(this IServiceCollection services)
-        {
-            // Application
-            services.AddWerewolfApplication();
+        // Application
+        services.AddWerewolfApplication();
 
-            // SignalR
-            services.AddSignalR();
+        // SignalR
+        services.AddSignalR();
 
-            // Web Api
-            services.AddFastEndpoints();
+        // Web Api
+        services.AddFastEndpoints();
 
-            // 實作 IRepository
-            services.AddEntityFrameworkCoreRepository();
+        // 實作 IRepository
+        services.AddEntityFrameworkCoreRepository();
 
-            // 實作 IGameEventHandler
-            services.AddScoped<IGameEventHandler, GameEventHubHandler>();
+        // 實作 IGameEventHandler
+        services.AddScoped<IGameEventHandler, GameEventHubHandler>();
 
-            return services;
-        }
+        return services;
     }
 }

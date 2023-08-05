@@ -2,37 +2,36 @@
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 
-namespace Wsa.Gaas.Werewolf.Application.UseCases
+namespace Wsa.Gaas.Werewolf.Application.UseCases;
+
+public class ConfirmPlayerRoleRequest
 {
-    public class ConfirmPlayerRoleRequest
+    public ulong DiscordVoiceChannelId { get; set; }
+    public ulong PlayerId { get; set; }
+}
+
+public class ConfirmPlayerRoleUseCase : UseCase<ConfirmPlayerRoleRequest, PlayerRoleConfirmedEvent>
+{
+    public ConfirmPlayerRoleUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
     {
-        public ulong DiscordVoiceChannelId { get; set; }
-        public ulong PlayerId { get; set; }
     }
 
-    public class ConfirmPlayerRoleUseCase : UseCase<ConfirmPlayerRoleRequest, PlayerRoleConfirmedEvent>
+    public async override Task ExecuteAsync(ConfirmPlayerRoleRequest request, IPresenter<PlayerRoleConfirmedEvent> presenter, CancellationToken cancellationToken = default)
     {
-        public ConfirmPlayerRoleUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
+        // Query
+        var game = await Repository.FindByDiscordChannelIdAsync(request.DiscordVoiceChannelId);
+
+        if (game == null)
         {
+            throw new GameNotFoundException(request.DiscordVoiceChannelId);
         }
 
-        public async override Task ExecuteAsync(ConfirmPlayerRoleRequest request, IPresenter<PlayerRoleConfirmedEvent> presenter, CancellationToken cancellationToken = default)
-        {
-            // Query
-            var game = await Repository.FindByDiscordChannelIdAsync(request.DiscordVoiceChannelId);
+        // Update (Query)
+        var gameEvent = game.ConfirmPlayerRole(request.PlayerId);
 
-            if (game == null)
-            {
-                throw new GameNotFoundException(request.DiscordVoiceChannelId);
-            }
+        // Save
 
-            // Update (Query)
-            var gameEvent = game.ConfirmPlayerRole(request.PlayerId);
-
-            // Save
-
-            // Push
-            await presenter.PresentAsync(gameEvent, cancellationToken);
-        }
+        // Push
+        await presenter.PresentAsync(gameEvent, cancellationToken);
     }
 }

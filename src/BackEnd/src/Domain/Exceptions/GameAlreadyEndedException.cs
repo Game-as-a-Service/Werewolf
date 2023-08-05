@@ -1,9 +1,8 @@
-﻿namespace Wsa.Gaas.Werewolf.Domain.Exceptions
+﻿namespace Wsa.Gaas.Werewolf.Domain.Exceptions;
+
+public class GameAlreadyEndedException : GameException
 {
-    public class GameAlreadyEndedException : GameException
+    public GameAlreadyEndedException(ulong discordChannelId) : base($"Game already Ended #{discordChannelId}")
     {
-        public GameAlreadyEndedException(ulong discordChannelId) : base($"Game already Ended #{discordChannelId}")
-        {
-        }
     }
 }

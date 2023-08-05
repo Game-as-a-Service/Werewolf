@@ -7,20 +7,20 @@ using Wsa.Gaas.Werewolf.Domain.Objects.Roles;
 using Wsa.Gaas.Werewolf.WebApi.Endpoints;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
-namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
+namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests;
+
+public class SeerDiscoverTests
 {
-    public class SeerDiscoverTests
+    readonly WebApiTestServer _server = new();
+
+    [OneTimeSetUp]
+    public async Task OneTimeSetup()
     {
-        readonly WebApiTestServer _server = new();
+        await _server.StartAsync();
+    }
 
-        [OneTimeSetUp]
-        public async Task OneTimeSetup()
-        {
-            await _server.StartAsync();
-        }
-
-        [Test]
-        [Description("""
+    [Test]
+    [Description("""
             Issue #17
             Given:
                 預言家已睜眼
@@ -32,58 +32,58 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
                 回報3號玩家非存活的錯誤
             """)]
 
-        public async Task SeerDiscoverNotSurvivedTest()
+    public async Task SeerDiscoverNotSurvivedTest()
+    {
+        // Init
+        var game = _server.CreateGameBuilder()
+            .WithRandomDiscordVoiceChannel()
+            .WithGameStatus(GameStatus.Created)
+            .Build();
+        var players = Enumerable.Range(0, 10)
+            .Select(x => (ulong)x)
+            .ToArray();
+
+        game.StartGame(players);
+
+        // Arrange
+        List<int> deadNumbers = new() { 1, 3, 7 };
+
+        ulong seerId = int.MaxValue;
+        foreach (var player in game.Players)
         {
-            // Init
-            var game = _server.CreateGameBuilder()
-                .WithRandomDiscordVoiceChannel()
-                .WithGameStatus(GameStatus.Created)
-                .Build();
-            var players = Enumerable.Range(0, 10)
-                .Select(x => (ulong)x)
-                .ToArray();
-
-            game.StartGame(players);
-
-            // Arrange
-            List<int> deadNumbers = new() { 1, 3, 7 };
-
-            ulong seerId = int.MaxValue;
-            foreach (var player in game.Players)
+            if (deadNumbers.Contains(player.PlayerNumber))
             {
-                if (deadNumbers.Contains(player.PlayerNumber))
-                {
-                    player.IsDead = true;
-                }
-                if (player.Role?.GetType() == typeof(Seer))
-                {
-                    seerId = player.UserId;
-                }
+                player.IsDead = true;
             }
-            game.Status = GameStatus.SeerRoundStarted;
-
-            var repository = _server.GetRequiredService<IRepository>();
-            repository.Save(game);
-
-
-            _server.ListenOn<SeerEyesOpenedEvent>();
-
-            // Act
-            var request = new DiscoverPlayerRoleRequest()
+            if (player.Role?.GetType() == typeof(Seer))
             {
-                DiscordVoiceChannelId = game.DiscordVoiceChannelId,
-                PlayerId = seerId,
-                DiscoverPlayerNumber = 3
-            };
-
-            var (response, _) = await _server.Client.POSTAsync<DiscoverPlayerRoleEndpoint, DiscoverPlayerRoleRequest, DiscoverPlayerRoleResponse>(request);
-
-            // Assert response hava server error
-            response.Should().HaveClientError();
+                seerId = player.UserId;
+            }
         }
+        game.Status = GameStatus.SeerRoundStarted;
 
-        [Test]
-        [Description("""
+        var repository = _server.GetRequiredService<IRepository>();
+        repository.Save(game);
+
+
+        _server.ListenOn<SeerEyesOpenedEvent>();
+
+        // Act
+        var request = new DiscoverPlayerRoleRequest()
+        {
+            DiscordVoiceChannelId = game.DiscordVoiceChannelId,
+            PlayerId = seerId,
+            DiscoverPlayerNumber = 3
+        };
+
+        var (response, _) = await _server.Client.POSTAsync<DiscoverPlayerRoleEndpoint, DiscoverPlayerRoleRequest, DiscoverPlayerRoleResponse>(request);
+
+        // Assert response hava server error
+        response.Should().HaveClientError();
+    }
+
+    [Test]
+    [Description("""
             Issue #27
             Given:
                 預言家已睜眼
@@ -95,65 +95,64 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
                 回報4號玩家的陣營
             """)]
 
-        public async Task SeerDiscoverTest()
+    public async Task SeerDiscoverTest()
+    {
+        // Init
+        var game = _server.CreateGameBuilder()
+            .WithRandomDiscordVoiceChannel()
+            .WithGameStatus(GameStatus.Created)
+            .Build();
+        var players = Enumerable.Range(0, 10)
+            .Select(x => (ulong)x)
+            .ToArray();
+
+        game.StartGame(players);
+
+        // Arrange
+        List<int> deadNumbers = new() { 1, 3, 7 };
+
+        ulong seerId = 99;
+        int expectedPlayNumber = 4;
+        Faction expectedRoleFaction = new();
+        foreach (var player in game.Players)
         {
-            // Init
-            var game = _server.CreateGameBuilder()
-                .WithRandomDiscordVoiceChannel()
-                .WithGameStatus(GameStatus.Created)
-                .Build();
-            var players = Enumerable.Range(0, 10)
-                .Select(x => (ulong)x)
-                .ToArray();
-
-            game.StartGame(players);
-
-            // Arrange
-            List<int> deadNumbers = new() { 1, 3, 7 };
-
-            ulong seerId = 99;
-            int expectedPlayNumber = 4;
-            Faction expectedRoleFaction = new();
-            foreach (var player in game.Players)
+            if (deadNumbers.Contains(player.PlayerNumber))
             {
-                if (deadNumbers.Contains(player.PlayerNumber))
-                {
-                    player.IsDead = true;
-                }
-                if (player.Role?.GetType() == typeof(Seer))
-                {
-                    seerId = player.UserId;
-                }
-                if (player.PlayerNumber == expectedPlayNumber)
-                {
-                    expectedRoleFaction = player.Role!.Faction;
-                }
+                player.IsDead = true;
             }
-            game.Status = GameStatus.SeerRoundStarted;
-
-            var repository = _server.GetRequiredService<IRepository>();
-            repository.Save(game);
-
-            _server.ListenOn<SeerEyesOpenedEvent>();
-
-            // Act
-            var request = new DiscoverPlayerRoleRequest()
+            if (player.Role?.GetType() == typeof(Seer))
             {
-                DiscordVoiceChannelId = game.DiscordVoiceChannelId,
-                PlayerId = seerId,
-                DiscoverPlayerNumber = expectedPlayNumber
-            };
-
-            var (response, result) = await _server.Client.POSTAsync<DiscoverPlayerRoleEndpoint, DiscoverPlayerRoleRequest, DiscoverPlayerRoleResponse>(request);
-
-            // Assert response should be success
-            response.Should().BeSuccessful();
-
-            // Assert response should be discovered player number
-            result!.DiscoveredPlayerNumber.Should().Be(expectedPlayNumber);
-
-            // Assert response should be discovered role faction
-            result.DiscoveredRoleFaction.Should().Be(expectedRoleFaction.ToString());
+                seerId = player.UserId;
+            }
+            if (player.PlayerNumber == expectedPlayNumber)
+            {
+                expectedRoleFaction = player.Role!.Faction;
+            }
         }
+        game.Status = GameStatus.SeerRoundStarted;
+
+        var repository = _server.GetRequiredService<IRepository>();
+        repository.Save(game);
+
+        _server.ListenOn<SeerEyesOpenedEvent>();
+
+        // Act
+        var request = new DiscoverPlayerRoleRequest()
+        {
+            DiscordVoiceChannelId = game.DiscordVoiceChannelId,
+            PlayerId = seerId,
+            DiscoverPlayerNumber = expectedPlayNumber
+        };
+
+        var (response, result) = await _server.Client.POSTAsync<DiscoverPlayerRoleEndpoint, DiscoverPlayerRoleRequest, DiscoverPlayerRoleResponse>(request);
+
+        // Assert response should be success
+        response.Should().BeSuccessful();
+
+        // Assert response should be discovered player number
+        result!.DiscoveredPlayerNumber.Should().Be(expectedPlayNumber);
+
+        // Assert response should be discovered role faction
+        result.DiscoveredRoleFaction.Should().Be(expectedRoleFaction.ToString());
     }
 }

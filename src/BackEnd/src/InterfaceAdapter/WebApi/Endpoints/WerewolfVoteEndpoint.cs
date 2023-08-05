@@ -2,48 +2,45 @@
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.WebApi.Common;
 
-namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
+namespace Wsa.Gaas.Werewolf.WebApi.Endpoints;
+
+/// <summary>
+/// Interface Adapter Layer
+/// - Controller
+/// </summary>
+
+public class WerewolfVoteResponse
 {
-    /// <summary>
-    /// Interface Adapter Layer
-    /// - Controller
-    /// </summary>
+    public required string Message { get; set; }
+}
 
-    public class WerewolfVoteResponse
+public class WerewolfVoteEndpoint : WebApiEndpoint<WerewolfVoteRequest, WerewolfVotedEvent, WerewolfVoteResponse>
+{
+    public override void Configure()
     {
-        public required string Message { get; set; }
+        Post("/games/{DiscordChannelId}/werewolf/vote");
+        AllowAnonymous();
     }
 
-    public class WerewolfVoteEndpoint : WebApiEndpoint<WerewolfVoteRequest, WerewolfVotedEvent, WerewolfVoteResponse>
+    public override async Task<WerewolfVoteResponse> ExecuteAsync(WerewolfVoteRequest req, CancellationToken ct)
     {
-        public override void Configure()
+        await UseCase.ExecuteAsync(req, this, ct);
+
+        if (ViewModel == null)
         {
-            Post("/games/{DiscordChannelId}/werewolf/vote");
-            AllowAnonymous();
+            throw new Exception("View Model is null");
         }
 
-        public override async Task<WerewolfVoteResponse> ExecuteAsync(WerewolfVoteRequest req, CancellationToken ct)
-        {
-            await UseCase.ExecuteAsync(req, this, ct);
-
-            if (ViewModel == null)
-            {
-                throw new Exception("View Model is null");
-            }
-
-            return ViewModel;
-        }
-
-        public override Task PresentAsync(WerewolfVotedEvent gameEvent, CancellationToken cancellationToken = default)
-        {
-            ViewModel = new WerewolfVoteResponse
-            {
-                Message = "Ok",
-            };
-
-            return Task.CompletedTask;
-        }
+        return ViewModel;
     }
 
+    public override Task PresentAsync(WerewolfVotedEvent gameEvent, CancellationToken cancellationToken = default)
+    {
+        ViewModel = new WerewolfVoteResponse
+        {
+            Message = "Ok",
+        };
 
+        return Task.CompletedTask;
+    }
 }
