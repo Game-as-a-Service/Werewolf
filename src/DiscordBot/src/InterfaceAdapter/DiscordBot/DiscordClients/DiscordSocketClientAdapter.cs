@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Discord.Interactions;
 using Discord.Net;
 using Discord.WebSocket;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -19,6 +20,8 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
     private readonly BackendApiEndpointOptions _apiOptions;
     private readonly ILogger _logger;
     private readonly BackendApi _backendApi;
+    private readonly InteractionService _interactionService;
+    private readonly InteractionHandler _interactionHandler;
     private readonly Dictionary<ulong, List<ulong>> _allJoinedPlayers = new();
     private readonly Random _random = new();
     private readonly HubConnection _hubConnection;
@@ -27,39 +30,38 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
         ILogger<DiscordSocketClientAdapter> logger,
         IOptions<DiscordBotOptions> botOptions,
         BackendApi backendApi,
-        IOptions<BackendApiEndpointOptions> apiOptions
+        IOptions<BackendApiEndpointOptions> apiOptions,
+        InteractionService interactionService,
+        InteractionHandler interactionHandler,
+        DiscordSocketClient discordSocketClient
     )
     {
-        _client = new DiscordSocketClient(new DiscordSocketConfig
-        {
-            GatewayIntents = GatewayIntents.MessageContent
-                | GatewayIntents.AllUnprivileged
-                | GatewayIntents.GuildMembers,
-            AlwaysDownloadUsers = true,
-        });
+        _client = discordSocketClient;
 
         _client.Ready += OnReadyHandler;
         _client.Log += OnLogHandler;
-        _client.SlashCommandExecuted += async command =>
-        {
-            try
-            {
-                await OnSlashCommandHandler(command);
-            }
-            catch (Exception ex)
-            {
-                await command.Channel.SendMessageAsync(
-                    embed: new EmbedBuilder()
-                        .WithColor(Color.Red)
-                        .WithDescription(ex.Message)
-                        .Build()
-                );
-            }
-        };
-        _client.ButtonExecuted += OnButtonExecuted;
+        //_client.SlashCommandExecuted += async command =>
+        //{
+        //    try
+        //    {
+        //        await OnSlashCommandHandler(command);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        await command.Channel.SendMessageAsync(
+        //            embed: new EmbedBuilder()
+        //                .WithColor(Color.Red)
+        //                .WithDescription(ex.Message)
+        //                .Build()
+        //        );
+        //    }
+        //};
+        //_client.ButtonExecuted += OnButtonExecuted;
 
         _logger = logger;
         _backendApi = backendApi;
+        _interactionService = interactionService;
+        _interactionHandler = interactionHandler;
         _botOptions = botOptions.Value;
         _apiOptions = apiOptions.Value;
 
@@ -117,122 +119,6 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
                     }
                 );
             }
-        }
-    }
-
-    private async Task OnSlashCommandHandler(SocketSlashCommand command)
-    {
-        var subCommand = command.Data.Options.FirstOrDefault()?.Name;
-
-        if (subCommand == "version")
-        {
-            var version = await new GameVersionGetUseCase()
-                .ExecuteAsync(new GameVersionGetRequest());
-
-            var builder = new EmbedBuilder()
-                .WithColor(Color.Blue)
-                .WithCurrentTimestamp()
-                .WithTitle("狼人殺版本")
-                .WithDescription(version)
-                ;
-
-            
-            await command.RespondAsync(
-                embeds: new[] 
-                {
-                    builder.Build(),
-
-                }
-            );
-        }
-        else if (subCommand == "status")
-        {
-            if (command.Channel is SocketVoiceChannel channel)
-            {
-                // 呼叫 後端 Creat Game API 
-                try
-                {
-                    var gameDto = await _backendApi.GetGame(channel.Id);
-
-                    if (gameDto == null)
-                    {
-                        await command.RespondAsync(
-                            "沒有遊戲正在進行中。",
-                            components: BuildButtons(channel, gameDto)
-                        );
-                    }
-                    else
-                    {
-                        await command.RespondAsync(
-                            embed: BuildGameEmbed(channel, gameDto),
-                            components: BuildButtons(channel, gameDto)
-                        );
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    await command.RespondAsync(
-                        $"""
-                    ```
-                    {ex.Message}
-                    ```
-                    """
-                    );
-                }
-            }
-            else
-            {
-                var text = $"{command.Channel.Name} 是 ${command.Channel.GetChannelType()} 頻道 , 請在語音頻道使用此指令";
-
-                await command.RespondAsync(
-                    text,
-                    ephemeral: true
-                );
-            }
-        }
-
-        else if (subCommand == "invite")
-        {
-            if (command.Channel is SocketVoiceChannel channel)
-            {
-                var users = channel.Guild.Users; // 2 Users
-                var numberOfPlayers = command.Data.Options.First().Options.First();
-
-                if (numberOfPlayers.Value is long n)
-                {
-                    RandomGame(channel.Id, (int)n, users);
-                }
-                var gameDto = new GameDto { Id = channel.Id };
-                await command.RespondAsync(
-                    embeds: new[]
-                    {
-                        BuildGameEmbed(channel, gameDto)
-                    },
-                    components: BuildButtons(channel, gameDto)
-                );
-            }
-        }
-        else if (subCommand == "create")
-        {
-            if (command.Channel is SocketVoiceChannel channel)
-            {
-                var gameDto = await CreateGame(channel, command.User);
-
-                await command.RespondAsync(
-                    embeds: new[]
-                    {
-                        BuildGameEmbed(channel, gameDto),
-                    },
-                    components: BuildButtons(channel, gameDto)
-                );
-            }
-        }
-        else
-        {
-            await command.RespondAsync(
-                $"Unknown Command: {subCommand}"
-            );
         }
     }
 
@@ -339,24 +225,6 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
         }
     }
 
-    private void RandomGame(ulong channelId, int n, IEnumerable<IUser> users)
-    {
-        if (_allJoinedPlayers.ContainsKey(channelId) == false)
-        {
-            _allJoinedPlayers[channelId] = new();
-        }
-
-        var joinedPlayers = _allJoinedPlayers[channelId];
-
-        joinedPlayers.AddRange(
-            users
-                .Where(x => x.IsBot == false)
-                .Where(x => joinedPlayers.Contains(x.Id) == false)
-                .Take(n - joinedPlayers.Count)
-                .Select(x => x.Id)
-        );
-    }
-
     private Color RandomColor()
     {
         return new Color(_random.Next(256), _random.Next(256), _random.Next(256));
@@ -364,6 +232,7 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
 
     public async Task StartAsync()
     {
+        await _interactionHandler.InitializeAsync();
         await _client.LoginAsync(TokenType.Bot, _botOptions.Token);
         await _client.StartAsync();
         await _hubConnection.StartAsync();
@@ -373,7 +242,13 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
     {
         try
         {
-            await CreateGlobalApplicationCommandsOnDiscord();
+#if DEBUG
+            await _interactionService.RegisterCommandsToGuildAsync(1066997588961787955);
+#else
+            await _interactionService.RegisterCommandsGloballyAsync();
+#endif
+
+            //await CreateGlobalApplicationCommandsOnDiscord();
 
             _logger.LogInformation("Bot is connected!");
         }
@@ -501,8 +376,6 @@ public class DiscordSocketClientAdapter : IDiscordBotClient
 
     private MessageComponent BuildButtons(SocketVoiceChannel channel, GameDto? gameDto)
     {
-
-
         var builder = new ComponentBuilder();
 
         if (gameDto == null)
