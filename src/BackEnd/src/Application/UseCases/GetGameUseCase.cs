@@ -2,35 +2,34 @@
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 
-namespace Wsa.Gaas.Werewolf.Application.UseCases
+namespace Wsa.Gaas.Werewolf.Application.UseCases;
+
+public class GetGameRequest
 {
-    public class GetGameRequest
+    public ulong DiscordVoiceChannelId { get; set; }
+}
+
+public class GetGamesUseCase : UseCase<GetGameRequest, GetGameEvent>
+{
+    public GetGamesUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
     {
-        public ulong DiscordVoiceChannelId { get; set; }
     }
 
-    public class GetGamesUseCase : UseCase<GetGameRequest, GetGameEvent>
+    public override async Task ExecuteAsync(GetGameRequest request, IPresenter<GetGameEvent> presenter, CancellationToken cancellationToken = default)
     {
-        public GetGamesUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
+        // 查
+        var game = await Repository.FindByDiscordChannelIdAsync(request.DiscordVoiceChannelId);
+
+        if (game == null)
         {
+            throw new GameNotFoundException(request.DiscordVoiceChannelId);
         }
 
-        public override async Task ExecuteAsync(GetGameRequest request, IPresenter<GetGameEvent> presenter, CancellationToken cancellationToken = default)
-        {
-            // 查
-            var game = await Repository.FindByDiscordChannelIdAsync(request.DiscordVoiceChannelId);
+        // 改 (這個 use case 沒有改)
+        // 存 (這個 use case 沒有存)
 
-            if (game == null)
-            {
-                throw new GameNotFoundException(request.DiscordVoiceChannelId);
-            }
-
-            // 改 (這個 use case 沒有改)
-            // 存 (這個 use case 沒有存)
-
-            // 推
-            var gameEvent = new GetGameEvent(game);
-            await presenter.PresentAsync(gameEvent, cancellationToken);
-        }
+        // 推
+        var gameEvent = new GetGameEvent(game);
+        await presenter.PresentAsync(gameEvent, cancellationToken);
     }
 }

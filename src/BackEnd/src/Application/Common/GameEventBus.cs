@@ -1,60 +1,59 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Wsa.Gaas.Werewolf.Domain.Common;
 
-namespace Wsa.Gaas.Werewolf.Application.Common
+namespace Wsa.Gaas.Werewolf.Application.Common;
+
+public class GameEventBus
 {
-    public class GameEventBus
+    private readonly IServiceScopeFactory _factory;
+
+    public GameEventBus(IServiceScopeFactory facotry)
     {
-        private readonly IServiceScopeFactory _factory;
+        _factory = facotry;
+    }
 
-        public GameEventBus(IServiceScopeFactory facotry)
+    public virtual Task BroadcastAsync<T>(IEnumerable<T> gameEvents, CancellationToken cancellationToken = default)
+        where T : GameEvent
+    {
+        // Run this in sparate Thread
+        Task.Run(async () =>
         {
-            _factory = facotry;
-        }
+            using var scope = _factory.CreateScope();
+            var provider = scope.ServiceProvider;
 
-        public virtual Task BroadcastAsync<T>(IEnumerable<T> gameEvents, CancellationToken cancellationToken = default)
-            where T : GameEvent
-        {
-            // Run this in sparate Thread
-            Task.Run(async () =>
+            // Trigger Handlers
+
+            // Game Event Hub Handler
+            var handler = provider.GetRequiredService<IGameEventHandler>();
+
+            foreach (var gameEvent in gameEvents)
             {
-                using var scope = _factory.CreateScope();
-                var provider = scope.ServiceProvider;
+                await handler.Handle(gameEvent, cancellationToken);
 
-                // Trigger Handlers
+                var policyType = typeof(Policy<>).MakeGenericType(gameEvent.GetType());
 
-                // Game Event Hub Handler
-                var handler = provider.GetRequiredService<IGameEventHandler>();
+                var policy = provider.GetService(policyType);
 
-                foreach (var gameEvent in gameEvents)
+                if (policy != null)
                 {
-                    await handler.Handle(gameEvent, cancellationToken);
+                    var method = policy.GetType().GetMethod("Handle");
 
-                    var policyType = typeof(Policy<>).MakeGenericType(gameEvent.GetType());
-
-                    var policy = provider.GetService(policyType);
-                    
-                    if(policy != null)
-                    {
-                        var method = policy.GetType().GetMethod("Handle");
-
-                        method?.Invoke(policy, new object[] { gameEvent, cancellationToken });
-                    }
+                    method?.Invoke(policy, new object[] { gameEvent, cancellationToken });
                 }
+            }
 
 
-                
 
 
-            }, cancellationToken);
 
-            return Task.CompletedTask;
-        }
+        }, cancellationToken);
 
-        public virtual Task BroadcastAsync<T>(T gameEvent, CancellationToken cancellationToken = default)
-            where T : GameEvent
-        {
-            return BroadcastAsync(new[] { gameEvent }, cancellationToken);
-        }
+        return Task.CompletedTask;
+    }
+
+    public virtual Task BroadcastAsync<T>(T gameEvent, CancellationToken cancellationToken = default)
+        where T : GameEvent
+    {
+        return BroadcastAsync(new[] { gameEvent }, cancellationToken);
     }
 }

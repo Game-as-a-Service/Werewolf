@@ -1,9 +1,8 @@
-﻿namespace Wsa.Gaas.Werewolf.WebApi
+﻿namespace Wsa.Gaas.Werewolf.WebApi;
+
+public static class WebApiDefaults
 {
-    public static class WebApiDefaults
-    {
-        public const string SignalrEndpoint = "/events"
-            , SignalrPublishMethodName = "Publish"
-            ;
-    }
+    public const string SignalrEndpoint = "/events"
+        , SignalrPublishMethodName = "Publish"
+        ;
 }

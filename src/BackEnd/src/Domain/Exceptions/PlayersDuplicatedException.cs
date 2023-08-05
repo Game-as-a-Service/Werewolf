@@ -1,9 +1,8 @@
-﻿namespace Wsa.Gaas.Werewolf.Domain.Exceptions
+﻿namespace Wsa.Gaas.Werewolf.Domain.Exceptions;
+
+internal class PlayersDuplicatedException : GameException
 {
-    internal class PlayersDuplicatedException : GameException
+    public PlayersDuplicatedException() : base("Duplicate player id found")
     {
-        public PlayersDuplicatedException() : base("Duplicate player id found")
-        {
-        }
     }
 }

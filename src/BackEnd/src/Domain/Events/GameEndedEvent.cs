@@ -1,11 +1,10 @@
 ﻿using Wsa.Gaas.Werewolf.Domain.Objects;
 
-namespace Wsa.Gaas.Werewolf.Domain.Events
+namespace Wsa.Gaas.Werewolf.Domain.Events;
+
+public class GameEndedEvent : GameEvent
 {
-    public class GameEndedEvent : GameEvent
+    public GameEndedEvent(Game data) : base(data)
     {
-        public GameEndedEvent(Game data) : base(data)
-        {
-        }
     }
 }

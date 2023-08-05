@@ -2,35 +2,33 @@
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.WebApi.Common;
 
-namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
+namespace Wsa.Gaas.Werewolf.WebApi.Endpoints;
+
+public class StartGameEndpoint : WebApiEndpoint<StartGameRequest, GameStartedEvent, GetGameResponse>
 {
-    public class StartGameEndpoint : WebApiEndpoint<StartGameRequest, GameStartedEvent, GetGameResponse>
+    public override void Configure()
     {
-        public override void Configure()
-        {
-            Post("/games/{DiscordVoiceChannelId}/start");
-            AllowAnonymous();
-        }
-
-        public override async Task<GetGameResponse> ExecuteAsync(StartGameRequest req, CancellationToken ct)
-        {
-            await UseCase.ExecuteAsync(req, this, ct);
-
-            if (ViewModel == null)
-            {
-                throw new Exception("View Model is null");
-            }
-
-            // HTTP JSON Response
-            return ViewModel; // <= 把 ViewModel 轉 JSON
-        }
-
-        public override Task PresentAsync(GameStartedEvent gameEvent, CancellationToken cancellationToken = default)
-        {
-            ViewModel = new GetGameResponse(gameEvent);
-
-            return Task.CompletedTask;
-        }
+        Post("/games/{DiscordVoiceChannelId}/start");
+        AllowAnonymous();
     }
 
+    public override async Task<GetGameResponse> ExecuteAsync(StartGameRequest req, CancellationToken ct)
+    {
+        await UseCase.ExecuteAsync(req, this, ct);
+
+        if (ViewModel == null)
+        {
+            throw new Exception("View Model is null");
+        }
+
+        // HTTP JSON Response
+        return ViewModel; // <= 把 ViewModel 轉 JSON
+    }
+
+    public override Task PresentAsync(GameStartedEvent gameEvent, CancellationToken cancellationToken = default)
+    {
+        ViewModel = new GetGameResponse(gameEvent);
+
+        return Task.CompletedTask;
+    }
 }

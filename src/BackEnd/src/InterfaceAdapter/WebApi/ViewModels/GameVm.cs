@@ -1,23 +1,22 @@
 ﻿using Wsa.Gaas.Werewolf.Domain.Objects;
 
-namespace Wsa.Gaas.Werewolf.WebApi.ViewModels
-{
-    public class GameVm
-    {
-        public string Id { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
-        public List<PlayerVm> Players { get; set; } = new List<PlayerVm>();
-        public ulong? CurrentSpeakingPlayer { get; set; }
+namespace Wsa.Gaas.Werewolf.WebApi.ViewModels;
 
-        public static GameVm FromDomain(Game game)
+public class GameVm
+{
+    public string Id { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
+    public List<PlayerVm> Players { get; set; } = new List<PlayerVm>();
+    public ulong? CurrentSpeakingPlayer { get; set; }
+
+    public static GameVm FromDomain(Game game)
+    {
+        return new GameVm
         {
-            return new GameVm
-            {
-                Id = game.DiscordVoiceChannelId.ToString(),
-                Players = game.Players.Select(PlayerVm.FromDomain).ToList(),
-                Status = game.Status.ToString(),
-                CurrentSpeakingPlayer = game.CurrentSpeakingPlayer?.UserId
-            };
-        }
+            Id = game.DiscordVoiceChannelId.ToString(),
+            Players = game.Players.Select(PlayerVm.FromDomain).ToList(),
+            Status = game.Status.ToString(),
+            CurrentSpeakingPlayer = game.CurrentSpeakingPlayer?.UserId
+        };
     }
 }
