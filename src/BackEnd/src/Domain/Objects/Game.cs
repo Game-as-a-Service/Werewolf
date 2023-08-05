@@ -211,4 +211,45 @@ public class Game
 
         return new WitchUseAntidoteEvent(this);
     }
+
+    internal List<GameEvent> AnnounceNightResult()
+    {
+        var events = new List<GameEvent>();
+
+        // 檢查狼殺
+        var playerKilledByWerewolf = Players.SingleOrDefault(p => p.BuffStatus == BuffStatus.KilledByWerewolf);
+        if (playerKilledByWerewolf != null) 
+        { 
+            playerKilledByWerewolf.IsDead = true;
+            events.Add(new PlayerDiedGameEvent(this));
+        }
+
+        // 檢查女巫毒藥
+        var playerKilledByWitch = Players.SingleOrDefault(p => p.BuffStatus == BuffStatus.KilledByWitch);
+        if (playerKilledByWitch != null)
+        {
+            playerKilledByWitch.IsDead = true;
+            events.Add(new PlayerDiedGameEvent(this));
+        }
+
+        // 檢查同時被狼殺跟女巫毒
+        var playerKilledByWitchandWerewolf = Players.SingleOrDefault(p => p.BuffStatus == (BuffStatus.KilledByWitch | BuffStatus.KilledByWerewolf));
+        if (playerKilledByWitchandWerewolf != null)
+        {
+            playerKilledByWitchandWerewolf.IsDead = true;
+            events.Add(new PlayerDiedGameEvent(this));
+        }
+
+        // 清除狀態
+        Players.ForEach(p => p.BuffStatus = BuffStatus.None);
+
+        if (events.Count == 0)
+        {
+            events.Add(new SafetyEveGameEvent(this));
+        }
+
+        Status = GameStatus.LastNightResultAnnounced;
+
+        return events;
+    }
 }

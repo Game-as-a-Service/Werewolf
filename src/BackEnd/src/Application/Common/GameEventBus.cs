@@ -41,11 +41,6 @@ public class GameEventBus
                     method?.Invoke(policy, new object[] { gameEvent, cancellationToken });
                 }
             }
-
-
-
-
-
         }, cancellationToken);
 
         return Task.CompletedTask;

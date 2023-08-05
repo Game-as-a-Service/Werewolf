@@ -9,5 +9,6 @@ public enum GameStatus
     PlayerSpeaking,
     SeerRoundStarted,
     Ended,
-    WitchRoundStarted
+    WitchRoundStarted,
+    NightEnded,
 }
