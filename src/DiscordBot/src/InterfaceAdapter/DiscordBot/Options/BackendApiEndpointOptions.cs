@@ -2,6 +2,7 @@
 {
     public class BackendApiEndpointOptions
     {
-        public string Endpoint { get; set; } = string.Empty;
+        public string Restful { get; set; } = string.Empty;
+        public string SignalR { get; set; } = string.Empty;
     }
 }

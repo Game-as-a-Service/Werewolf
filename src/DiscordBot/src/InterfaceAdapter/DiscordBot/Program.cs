@@ -21,8 +21,6 @@ builder.Services
     .Configure<DiscordBotOptions>(opt => config.Bind(nameof(DiscordBotOptions), opt))
     .Configure<BackendApiEndpointOptions>(opt => config.Bind(nameof(BackendApiEndpointOptions), opt))
     .AddSingleton<IDiscordBotClient, DiscordSocketClientAdapter>()
-    .AddSingleton(x => new InteractionService(x.GetRequiredService<DiscordSocketClient>()))
-    .AddSingleton<InteractionHandler>()
     .AddSingleton(provider =>
     {
         return new DiscordSocketClient(new DiscordSocketConfig
@@ -34,7 +32,6 @@ builder.Services
         });
     })
     .AddSingleton<BackendApi>()
-    .AddSingleton<GameUI>()
     .AddHostedService<DiscordBotHostedService>()
     ;
 

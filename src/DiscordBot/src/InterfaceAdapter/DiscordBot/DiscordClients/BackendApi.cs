@@ -18,7 +18,7 @@ public class BackendApi
         _apiOptions = options.Value;
         _httpClient = new HttpClient
         {
-            BaseAddress = new Uri(_apiOptions.Endpoint),
+            BaseAddress = new Uri(_apiOptions.Restful),
         };
 
         _jsonOptions = new JsonSerializerOptions

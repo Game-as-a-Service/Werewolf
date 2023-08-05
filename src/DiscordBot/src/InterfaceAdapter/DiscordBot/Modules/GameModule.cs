@@ -9,13 +9,13 @@ using Wsa.Gaas.Werewolf.DiscordBot.Dtos;
 namespace Wsa.Gaas.Werewolf.DiscordBot.Modules
 {
     [Group("game", "遊戲")]
-    public class GetGameModule : InteractionModuleBase<SocketInteractionContext>
+    public class GameModule : InteractionModuleBase<SocketInteractionContext>
     {
         private readonly BackendApi _backendApi;
         private readonly Dictionary<ulong, List<ulong>> _allJoinedPlayers = new();
         private readonly Random _random = new();
 
-        public GetGameModule(
+        public GameModule(
             BackendApi backendApi
         )
         {
@@ -24,7 +24,7 @@ namespace Wsa.Gaas.Werewolf.DiscordBot.Modules
 
         // /game status
         [SlashCommand("status", "遊戲狀態")]
-        public async Task GetGame()
+        public async Task Status()
         {
 
             var channel = Context.Channel;
@@ -76,7 +76,7 @@ namespace Wsa.Gaas.Werewolf.DiscordBot.Modules
         }
 
         [SlashCommand("version", "遊戲版本")]
-        public async Task GetGameVersion()
+        public async Task Version()
         {
             var version = await new GameVersionGetUseCase()
                 .ExecuteAsync(new GameVersionGetRequest());
@@ -90,11 +90,11 @@ namespace Wsa.Gaas.Werewolf.DiscordBot.Modules
         }
 
         [SlashCommand("invite", "遊戲邀請")]
-        public async Task GameInvite(int numberOfPlayers)
+        public async Task Invite(int numberOfPlayers)
         {
             if (Context.Channel is SocketVoiceChannel channel)
             {
-                var users = channel.Guild.Users; // 2 Users
+                var users = channel.Guild.Users; 
 
                 RandomGame(channel.Id, numberOfPlayers, users);
 
@@ -111,7 +111,7 @@ namespace Wsa.Gaas.Werewolf.DiscordBot.Modules
         }
 
         [SlashCommand("create", "新增遊戲")]
-        public async Task GameCreate()
+        public async Task Create()
         {
             var channel = Context.Channel;
             var user = Context.User;
@@ -134,6 +134,66 @@ namespace Wsa.Gaas.Werewolf.DiscordBot.Modules
                 },
                 components: BuildButtons(channel, gameDto)
             );
+        }
+
+        [ComponentInteraction("btn-create-game", true)]
+        public async Task CreateGame()
+        {
+            await DeferAsync();
+
+            var channel = Context.Channel;
+            var user = Context.User;
+
+            // Data Transfer Object
+            var gameDto = await _backendApi.CreateGame(channel.Id)
+                ?? await _backendApi.GetGame(channel.Id);
+
+            if (_allJoinedPlayers.ContainsKey(gameDto!.Id) == false)
+            {
+                _allJoinedPlayers[gameDto.Id] = new List<ulong>
+                {
+                    user.Id,
+                };
+            }
+
+            gameDto = await _backendApi.GetGame(channel.Id) ?? new GameDto();
+
+            await Context.Interaction.ModifyOriginalResponseAsync(prop =>
+                {
+                    prop.Content = "# 遊戲已新增";
+                    prop.Embeds = new[]
+                    {
+                        BuildGameEmbed(channel, gameDto),
+                    };
+
+                prop.Components = BuildButtons(channel, gameDto);
+            });
+
+            //return gameDto;
+        }
+
+        [ComponentInteraction("btn-join-game", true)]
+        public async Task JoinGame()
+        {
+            var channelId = Context.Channel.Id;
+            var userId = Context.User.Id;
+            var join = true;
+
+            if (_allJoinedPlayers.ContainsKey(channelId) == false)
+            {
+                _allJoinedPlayers[channelId] = new();
+            }
+
+            var joinedPlayers = _allJoinedPlayers[channelId];
+
+            if (join && joinedPlayers.Contains(userId) == false && joinedPlayers.Count < 12)
+            {
+                joinedPlayers.Add(userId);
+            }
+            else if (join == false)
+            {
+                joinedPlayers.Remove(userId);
+            }
         }
 
         // TODO: call join game api

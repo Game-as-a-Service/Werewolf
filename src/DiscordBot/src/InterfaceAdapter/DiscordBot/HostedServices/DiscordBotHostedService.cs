@@ -1,18 +1,19 @@
-﻿using Wsa.Gaas.Werewolf.ChatBot.Application.Common;
+﻿using System.Net.Security;
+using Wsa.Gaas.Werewolf.ChatBot.Application.Common;
 
 namespace Wsa.Gaas.Werewolf.DiscordBot.HostedServices;
 
 public class DiscordBotHostedService : BackgroundService
 {
-    private readonly IDiscordBotClient _chatBotClient;
+    private readonly IDiscordBotClient _discordBotClient;
 
     public DiscordBotHostedService(IDiscordBotClient discordClient)
     {
-        _chatBotClient = discordClient;
+        _discordBotClient = discordClient;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        await _chatBotClient.StartAsync();
+        await _discordBotClient.StartAsync();
     }
 }
