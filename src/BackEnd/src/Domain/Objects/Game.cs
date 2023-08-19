@@ -267,5 +267,46 @@ public class Game
         return events;
     }
 
+    public WitchUsePoisonEvent WitchUsePoison(ulong witchUserId, ulong targetPlayerId)
+    {
+        var witch = Players.FirstOrDefault(x => x.UserId == witchUserId);
 
+        if (witch is null)
+        {
+            throw new PlayerNotFoundException(DiscordVoiceChannelId, witchUserId);
+        }
+
+        if (witch.Role is not Witch)
+        {
+            throw new PlayerNotWitchException("Player not witch");
+        }
+
+        if (witch.IsPoisonUsed)
+        {
+            throw new GameException("Witch poison is used");
+        }
+
+        // 找出被狼殺的玩家
+        var targetPlayer = Players.FirstOrDefault(x =>
+            x.UserId == targetPlayerId
+        );
+
+        if (targetPlayer == null)
+        {
+            throw new GameException("Target player not found");
+        }
+
+        if (targetPlayer.IsDead)
+        {
+            throw new GameException("Target player is dead");
+        }
+
+        // 標記被女巫毒
+        targetPlayer.BuffStatus |= BuffStatus.KilledByWitch;
+
+        // 標記毒藥已使用
+        witch.IsPoisonUsed = true;
+
+        return new WitchUsePoisonEvent(this);
+    }
 }

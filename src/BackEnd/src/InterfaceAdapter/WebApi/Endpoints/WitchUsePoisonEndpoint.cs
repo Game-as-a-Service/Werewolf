@@ -22,17 +22,13 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
         {
             await UseCase.ExecuteAsync(req, this, ct);
 
-            //if (ViewModel == null)
-            //{
-            //    throw new Exception("View Model is null");
-            //}
+            if (ViewModel == null)
+            {
+                throw new Exception("View Model is null");
+            }
 
-            // HTTP JSON Response
-            //return ViewModel; // <= 把 ViewModel 轉 JSON
-            return ViewModel;
+            return ViewModel; // <= 把 ViewModel 轉 JSON
         }
-
-
 
         public override Task PresentAsync(WitchUsePoisonEvent gameEvent, CancellationToken cancellationToken = default)
         {
