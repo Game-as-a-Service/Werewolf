@@ -10,13 +10,13 @@ public class WitchUseAntidoteRequest
     public ulong PlayerId { get; set; }
 }
 
-public class WitchUseAntidoteUseCase : UseCase<WitchUseAntidoteRequest, WitchUseAntidoteEvent>
+public class WitchUseAntidoteUseCase : UseCase<WitchUseAntidoteRequest, WitchAntidoteUsedEvent>
 {
     public WitchUseAntidoteUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
     {
     }
 
-    public override async Task ExecuteAsync(WitchUseAntidoteRequest request, IPresenter<WitchUseAntidoteEvent> presenter, CancellationToken cancellationToken = default)
+    public override async Task ExecuteAsync(WitchUseAntidoteRequest request, IPresenter<WitchAntidoteUsedEvent> presenter, CancellationToken cancellationToken = default)
     {
         // 查
         var game = Repository.FindByDiscordChannelId(request.DiscordVoiceChannelId);

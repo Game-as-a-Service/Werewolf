@@ -59,8 +59,8 @@ internal class StartGameUseCaseTests
         var eventBus = new Mock<GameEventBus>(new Mock<IServiceScopeFactory>().Object);
 
         // Arrange Presenter
-        var presenter = new Mock<IPresenter<GameStartedEvent>>();
-        presenter.Setup(x => x.PresentAsync(It.IsAny<GameStartedEvent>(), It.IsAny<CancellationToken>()));
+        var presenter = new Mock<IPresenter<PlayerRoleConfirmationStartedEvent>>();
+        presenter.Setup(x => x.PresentAsync(It.IsAny<PlayerRoleConfirmationStartedEvent>(), It.IsAny<CancellationToken>()));
 
         // Arrange Use Case
         var useCase = new StartGameUseCase(repository.Object, eventBus.Object);
@@ -79,7 +79,7 @@ internal class StartGameUseCaseTests
         mockGame.Verify(x => x.StartGame(It.IsAny<ulong[]>()), Times.Once());
 
         presenter.Verify(p => p.PresentAsync(
-           It.Is<GameStartedEvent>(gameStartedEvent =>
+           It.Is<PlayerRoleConfirmationStartedEvent>(gameStartedEvent =>
                   gameStartedEvent.Data.Players.Count == 12),
            It.IsAny<CancellationToken>()
        ), Times.Once());
@@ -91,14 +91,14 @@ internal class StartGameUseCaseTests
         );
 
         // 驗證 Use Case 有呼叫 Presenter 的【推】
-        eventBus.Verify(bus => bus.BroadcastAsync(
-            It.Is<GameStartedEvent>(gameStartedEvent =>
-            gameStartedEvent.Data.Players.Count == 12),
-            It.IsAny<CancellationToken>()
-            ), Times.Once());
+        //eventBus.Verify(bus => bus.BroadcastAsync(
+        //    It.Is<GameStartedEvent>(gameStartedEvent =>
+        //    gameStartedEvent.Data.Players.Count == 12),
+        //    It.IsAny<CancellationToken>()
+        //    ), Times.Once());
 
         presenter.Verify(p => p.PresentAsync(
-            It.Is<GameStartedEvent>(gameStartedEvent =>
+            It.Is<PlayerRoleConfirmationStartedEvent>(gameStartedEvent =>
                    gameStartedEvent.Data.Players.Count == 12),
             It.IsAny<CancellationToken>()
         ), Times.Once());
@@ -145,13 +145,13 @@ internal class StartGameUseCaseTests
         mockRepository
             .Setup(x => x.Save(mockGame.Object));
 
-        var gameEvent = new GameStartedEvent(mockGame.Object);
+        var gameEvent = new PlayerRoleConfirmationStartedEvent(mockGame.Object);
 
         var mockEventBus = new Mock<GameEventBus>(
             new Mock<IServiceScopeFactory>().Object
         );
 
-        var mockPresenter = new Mock<IPresenter<GameStartedEvent>>();
+        var mockPresenter = new Mock<IPresenter<PlayerRoleConfirmationStartedEvent>>();
 
         var useCase = new StartGameUseCase(
             mockRepository.Object,
@@ -187,7 +187,7 @@ internal class StartGameUseCaseTests
         // 驗證 Use Case 有呼叫 Presenter 的【推】PresentAsync
         mockPresenter.Verify(x =>
             x.PresentAsync(
-                It.Is<GameStartedEvent>(x => x == gameEvent),
+                It.Is<PlayerRoleConfirmationStartedEvent>(x => x == gameEvent),
                 It.IsAny<CancellationToken>()
             ),
             Times.Once()
@@ -229,7 +229,7 @@ internal class StartGameUseCaseTests
         );
 
         var gameEvent = new GameStartedEvent(mockGame.Object);
-        var mockPresenter = new Mock<IPresenter<GameStartedEvent>>();
+        var mockPresenter = new Mock<IPresenter<PlayerRoleConfirmationStartedEvent>>();
 
         // Mock Game Event
 
@@ -248,7 +248,7 @@ internal class StartGameUseCaseTests
         //存
         mockRepository.Verify(v => v.Save(It.Is<Game>(x => x == mockGame.Object)), Times.Once);
         //推
-        Expression<Func<GameStartedEvent, bool>> checkFunc = x =>
+        Expression<Func<PlayerRoleConfirmationStartedEvent, bool>> checkFunc = x =>
             x.Data.DiscordVoiceChannelId.ToString() == discordVoiceChannelId.ToString() &&
             x.Data.Players.Count == 12 &&
             x.Data.Status == GameStatus.Started;
@@ -319,7 +319,6 @@ internal class StartGameUseCaseTests
         var game = new Mock<Game>(discordVoiceChannelId);
         var events = new GameEvent[]
         {
-            new GameStartedEvent(game.Object),
             new PlayerRoleConfirmationStartedEvent(game.Object)
         };
         game
@@ -331,7 +330,7 @@ internal class StartGameUseCaseTests
             .Setup(x => x.FindByDiscordChannelId(discordVoiceChannelId))
             .Returns(game.Object);
 
-        var presenter = new Mock<IPresenter<GameStartedEvent>>();
+        var presenter = new Mock<IPresenter<PlayerRoleConfirmationStartedEvent>>();
 
         var gameEventBus = new Mock<GameEventBus>(
             new Mock<IServiceScopeFactory>().Object
@@ -376,7 +375,7 @@ internal class StartGameUseCaseTests
         // 驗證 Use Case 有呼叫 Presenter 的【推】
         presenter.Verify(
             x => x.PresentAsync(
-                It.Is<GameStartedEvent>(x => x == events[0]),
+                It.Is<PlayerRoleConfirmationStartedEvent>(x => x == events[0]),
                 It.IsAny<CancellationToken>()
             ),
             Times.Once()

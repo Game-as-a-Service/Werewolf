@@ -13,7 +13,7 @@ public class StartGameRequest
     public ulong[] Players { get; set; } = Array.Empty<ulong>();
 }
 
-public class StartGameUseCase : UseCase<StartGameRequest, GameStartedEvent>
+public class StartGameUseCase : UseCase<StartGameRequest, PlayerRoleConfirmationStartedEvent>
 {
     private readonly static object _lock = new();
 
@@ -21,7 +21,7 @@ public class StartGameUseCase : UseCase<StartGameRequest, GameStartedEvent>
     {
     }
 
-    public override async Task ExecuteAsync(StartGameRequest request, IPresenter<GameStartedEvent> presenter, CancellationToken cancellationToken = default)
+    public override async Task ExecuteAsync(StartGameRequest request, IPresenter<PlayerRoleConfirmationStartedEvent> presenter, CancellationToken cancellationToken = default)
     {
         Game? game;
         IEnumerable<GameEvent> events;
@@ -48,7 +48,7 @@ public class StartGameUseCase : UseCase<StartGameRequest, GameStartedEvent>
 
         // Restful API
         await presenter.PresentAsync(
-            (GameStartedEvent)events.First(x => x is GameStartedEvent),
+            (PlayerRoleConfirmationStartedEvent)events.First(x => x is PlayerRoleConfirmationStartedEvent),
             cancellationToken
         );
     }

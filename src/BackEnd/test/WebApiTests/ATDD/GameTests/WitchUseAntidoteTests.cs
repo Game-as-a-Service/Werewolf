@@ -23,7 +23,7 @@ internal class WitchUseAntidoteTests
     {
         var game = _server.CreateGameBuilder()
             .WithRandomDiscordVoiceChannel()
-            .WithGameStatus(GameStatus.WitchRoundStarted)
+            .WithGameStatus(GameStatus.WitchAntidoteRoundStarted)
             .WithRandomPlayers(9)
             .Build();
         var villager = game.Players.First(x => x.Role is Villager);

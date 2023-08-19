@@ -2,9 +2,9 @@
 
 namespace Wsa.Gaas.Werewolf.Domain.Events;
 
-public class WitchUseAntidoteEvent : GameEvent
+public class SeerRoundStartedEvent : GameEvent
 {
-    public WitchUseAntidoteEvent(Game data) : base(data)
+    public SeerRoundStartedEvent(Game data) : base(data)
     {
     }
 }

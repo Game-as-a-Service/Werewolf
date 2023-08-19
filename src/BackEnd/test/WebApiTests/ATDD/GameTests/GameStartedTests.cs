@@ -69,7 +69,7 @@ public class GameStartedTests
         var request = new StartGameRequest
         {
             DiscordVoiceChannelId = gameCreated.DiscordVoiceChannelId,
-            Players = RandomDistinctPlayers(6),
+            Players = _server.RandomDistinctPlayers(6),
         };
 
         /* Act & Assert */
@@ -78,7 +78,7 @@ public class GameStartedTests
             .Response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
         // too many players, expect error
-        request.Players = RandomDistinctPlayers(20);
+        request.Players = _server.RandomDistinctPlayers(20);
         (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, GetGameResponse>(request))
             .Response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
@@ -88,8 +88,8 @@ public class GameStartedTests
             .Response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
         // 12 players
-        request.Players = RandomDistinctPlayers(12);
-        var (_, result) = await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, GetGameResponse>(request);
+        request.Players = _server.RandomDistinctPlayers(12);
+        var (r3, result) = await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, GetGameResponse>(request);
 
         // Assert API response
         result!.Id.Should().Be(request.DiscordVoiceChannelId);
@@ -107,11 +107,6 @@ public class GameStartedTests
         gameVm.Should().BeOfType<GameVm>();
         gameVm.Status.Should().Be(GameStatus.PlayerRoleConfirmationStarted.ToString());
         gameVm.Players.Should().HaveSameCount(request.Players);
-
-
-        // next event should be PlayerRoleConfirmationStarted
-        gameVm = await _server.EventBuffer.ReceiveAsync();
-        gameVm.Status.Should().Be(GameStatus.PlayerRoleConfirmationStarted.ToString());
 
         // game already started, expect error
         (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, GetGameResponse>(request))
@@ -131,21 +126,6 @@ public class GameStartedTests
             while (result.Count < n)
             {
                 result.Add((ulong)_random.Next(0, n - 1));
-            }
-        }
-
-        return result.ToArray();
-    }
-
-    private ulong[] RandomDistinctPlayers(int n)
-    {
-        var result = new HashSet<ulong>();
-
-        if (n > 0)
-        {
-            while (result.Count < n)
-            {
-                result.Add((ulong)_random.Next());
             }
         }
 

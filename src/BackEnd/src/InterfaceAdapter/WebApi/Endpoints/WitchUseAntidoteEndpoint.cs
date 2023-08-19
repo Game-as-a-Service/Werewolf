@@ -10,7 +10,7 @@ public class WitchUseAntidoteResponse
     public required string Message { get; set; }
 }
 
-public class WitchUseAntidoteEndpoint : WebApiEndpoint<WitchUseAntidoteRequest, WitchUseAntidoteEvent, WitchUseAntidoteResponse>
+public class WitchUseAntidoteEndpoint : WebApiEndpoint<WitchUseAntidoteRequest, WitchAntidoteUsedEvent, WitchUseAntidoteResponse>
 {
     public override void Configure()
     {
@@ -34,7 +34,7 @@ public class WitchUseAntidoteEndpoint : WebApiEndpoint<WitchUseAntidoteRequest, 
 
 
 
-    public override Task PresentAsync(WitchUseAntidoteEvent gameEvent, CancellationToken cancellationToken = default)
+    public override Task PresentAsync(WitchAntidoteUsedEvent gameEvent, CancellationToken cancellationToken = default)
     {
         ViewModel = new WitchUseAntidoteResponse
         {

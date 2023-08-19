@@ -10,7 +10,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
         public required string Message { get; set; }
     }
 
-    public class WitchUsePoisonEndpoint : WebApiEndpoint<WitchUsePoisonRequest, WitchUsePoisonEvent, WitchUsePoisonResponse>
+    public class WitchUsePoisonEndpoint : WebApiEndpoint<WitchUsePoisonRequest, WitchPoisonUsedEvent, WitchUsePoisonResponse>
     {
         public override void Configure()
         {
@@ -30,7 +30,7 @@ namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
             return ViewModel; // <= 把 ViewModel 轉 JSON
         }
 
-        public override Task PresentAsync(WitchUsePoisonEvent gameEvent, CancellationToken cancellationToken = default)
+        public override Task PresentAsync(WitchPoisonUsedEvent gameEvent, CancellationToken cancellationToken = default)
         {
             ViewModel = new WitchUsePoisonResponse
             {

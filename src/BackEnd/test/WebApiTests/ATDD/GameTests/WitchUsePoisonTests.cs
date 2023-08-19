@@ -1,12 +1,10 @@
 ﻿using FastEndpoints;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.UseCases;
-using Wsa.Gaas.Werewolf.Domain.Objects.Roles;
 using Wsa.Gaas.Werewolf.Domain.Objects;
+using Wsa.Gaas.Werewolf.Domain.Objects.Roles;
 using Wsa.Gaas.Werewolf.WebApi.Endpoints;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
-using Moq;
-using Microsoft.Extensions.Options;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
 {
@@ -26,7 +24,7 @@ namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
             // Arrange
             var game = _server.CreateGameBuilder()
                 .WithRandomDiscordVoiceChannel()
-                .WithGameStatus(GameStatus.WitchRoundStarted)
+                .WithGameStatus(GameStatus.WitchAntidoteRoundStarted)
                 .WithRandomPlayers(9)
                 .Build();
 
