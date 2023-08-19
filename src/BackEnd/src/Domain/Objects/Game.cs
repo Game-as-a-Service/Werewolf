@@ -161,6 +161,7 @@ public class Game
             roles.Add(Role.VILLAGER);
         }
 
+        // TODO, 10 人 = 4 平民 + 3 神職 + 2 小狼 + 狼王
         if (n >= 11)
         {
             roles.Add(Role.ALPHAWEREWOLF);
@@ -221,7 +222,17 @@ public class Game
         if (playerKilledByWerewolf != null) 
         { 
             playerKilledByWerewolf.IsDead = true;
-            events.Add(new PlayerDiedGameEvent(this));
+
+            var @event = new PlayerDiedGameEvent(this);
+
+            var shouldTriggerShot = playerKilledByWerewolf.Role is Hunter or AlphaWerewolf;
+
+            if (shouldTriggerShot)
+            {
+                @event.Skill = SkillTrigger.Shot;
+            }
+
+            events.Add(@event);
         }
 
         // 檢查女巫毒藥
@@ -240,6 +251,8 @@ public class Game
             events.Add(new PlayerDiedGameEvent(this));
         }
 
+
+
         // 清除狀態
         Players.ForEach(p => p.BuffStatus = BuffStatus.None);
 
@@ -252,4 +265,6 @@ public class Game
 
         return events;
     }
+
+
 }
