@@ -1,7 +1,11 @@
+using Discord;
+using Discord.Interactions;
+using Discord.WebSocket;
 using Serilog;
 using Wsa.Gaas.Werewolf.ChatBot.Application.Common;
 using Wsa.Gaas.Werewolf.DiscordBot.DiscordClients;
 using Wsa.Gaas.Werewolf.DiscordBot.HostedServices;
+using Wsa.Gaas.Werewolf.DiscordBot.Modules;
 using Wsa.Gaas.Werewolf.DiscordBot.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +21,16 @@ builder.Services
     .Configure<DiscordBotOptions>(opt => config.Bind(nameof(DiscordBotOptions), opt))
     .Configure<BackendApiEndpointOptions>(opt => config.Bind(nameof(BackendApiEndpointOptions), opt))
     .AddSingleton<IDiscordBotClient, DiscordSocketClientAdapter>()
+    .AddSingleton(provider =>
+    {
+        return new DiscordSocketClient(new DiscordSocketConfig
+        {
+            GatewayIntents = GatewayIntents.MessageContent
+               | GatewayIntents.AllUnprivileged
+               | GatewayIntents.GuildMembers,
+            AlwaysDownloadUsers = true,
+        });
+    })
     .AddSingleton<BackendApi>()
     .AddHostedService<DiscordBotHostedService>()
     ;
