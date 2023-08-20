@@ -309,4 +309,34 @@ public class Game
 
         return new WitchUsePoisonEvent(this);
     }
+
+    public PlayerTriggerSkillEvent TriggerPlayerSkill(ulong playerId, ulong targetPlayerId)
+    {
+        // 檢查 playerId 是獵人
+        var checkHunter = Players.Single(p => p.UserId == playerId).Role is Hunter;
+        if (!checkHunter)
+        {
+            throw new GameException("This player is not hunter");
+        }
+        
+        // 檢查 targetPlayerId 還活著
+        var targetPlayer = Players.FirstOrDefault(x =>
+            x.UserId == targetPlayerId
+        );
+
+        if (targetPlayer == null)
+        {
+            throw new PlayerNotFoundException(DiscordVoiceChannelId, targetPlayerId);
+        }
+
+        if (targetPlayer.IsDead)
+        {
+            throw new GameException("Target player is already dead");
+        }
+
+        // 標記玩家死亡
+        targetPlayer.IsDead = true;
+
+        return new PlayerTriggerSkillEvent(this);
+    }
 }
