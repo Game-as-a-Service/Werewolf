@@ -11,13 +11,13 @@ namespace Wsa.Gaas.Werewolf.Application.UseCases
         public ulong TargetPlayerId { get; set; }
     }
 
-    public class WitchUsePoisonUseCase : UseCase<WitchUsePoisonRequest, WitchUsePoisonEvent>
+    public class WitchUsePoisonUseCase : UseCase<WitchUsePoisonRequest, WitchPoisonUsedEvent>
     {
         public WitchUsePoisonUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
         {
         }
 
-        public override async Task ExecuteAsync(WitchUsePoisonRequest request, IPresenter<WitchUsePoisonEvent> presenter, CancellationToken cancellationToken = default)
+        public override async Task ExecuteAsync(WitchUsePoisonRequest request, IPresenter<WitchPoisonUsedEvent> presenter, CancellationToken cancellationToken = default)
         {
             // 查
             var game = Repository.FindByDiscordChannelId(request.DiscordVoiceChannelId);

@@ -4,7 +4,7 @@ using Wsa.Gaas.Werewolf.WebApi.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApi.Endpoints;
 
-public class StartGameEndpoint : WebApiEndpoint<StartGameRequest, GameStartedEvent, GetGameResponse>
+public class StartGameEndpoint : WebApiEndpoint<StartGameRequest, PlayerRoleConfirmationStartedEvent, GetGameResponse>
 {
     public override void Configure()
     {
@@ -25,7 +25,7 @@ public class StartGameEndpoint : WebApiEndpoint<StartGameRequest, GameStartedEve
         return ViewModel; // <= 把 ViewModel 轉 JSON
     }
 
-    public override Task PresentAsync(GameStartedEvent gameEvent, CancellationToken cancellationToken = default)
+    public override Task PresentAsync(PlayerRoleConfirmationStartedEvent gameEvent, CancellationToken cancellationToken = default)
     {
         ViewModel = new GetGameResponse(gameEvent);
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using Wsa.Gaas.Werewolf.Domain.Common;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 using Wsa.Gaas.Werewolf.Domain.Objects.Roles;
@@ -38,7 +37,6 @@ public class Game
         Status = GameStatus.PlayerRoleConfirmationStarted;
 
         return new GameEvent[] {
-            new GameStartedEvent(this),
             new PlayerRoleConfirmationStartedEvent(this),
         };
     }
@@ -176,7 +174,7 @@ public class Game
         return roles;
     }
 
-    public WitchUseAntidoteEvent WitchUseAntidote(ulong witchUserId)
+    public WitchAntidoteUsedEvent WitchUseAntidote(ulong witchUserId)
     {
         var witch = Players.FirstOrDefault(x => x.UserId == witchUserId);
 
@@ -211,7 +209,7 @@ public class Game
         // 標記解藥已使用
         witch.IsAntidoteUsed = true;
 
-        return new WitchUseAntidoteEvent(this);
+        return new WitchAntidoteUsedEvent(this);
     }
 
     internal List<GameEvent> AnnounceNightResult()
@@ -220,8 +218,8 @@ public class Game
 
         // 檢查狼殺
         var playerKilledByWerewolf = Players.SingleOrDefault(p => p.BuffStatus == BuffStatus.KilledByWerewolf);
-        if (playerKilledByWerewolf != null) 
-        { 
+        if (playerKilledByWerewolf != null)
+        {
             playerKilledByWerewolf.IsDead = true;
 
             var @event = new PlayerDiedGameEvent(this);
@@ -252,8 +250,6 @@ public class Game
             events.Add(new PlayerDiedGameEvent(this));
         }
 
-
-
         // 清除狀態
         Players.ForEach(p => p.BuffStatus = BuffStatus.None);
 
@@ -267,7 +263,7 @@ public class Game
         return events;
     }
 
-    public WitchUsePoisonEvent WitchUsePoison(ulong witchUserId, ulong targetPlayerId)
+    public WitchPoisonUsedEvent WitchUsePoison(ulong witchUserId, ulong targetPlayerId)
     {
         var witch = Players.FirstOrDefault(x => x.UserId == witchUserId);
 
@@ -307,7 +303,37 @@ public class Game
         // 標記毒藥已使用
         witch.IsPoisonUsed = true;
 
-        return new WitchUsePoisonEvent(this);
+        return new WitchPoisonUsedEvent(this);
+    }
+
+    public WerewolfRoundStartedEvent StartWerewolfRound()
+    {
+        Status = GameStatus.WerewolfRoundStarted;
+
+        VoteManager.Clear();
+
+        return new WerewolfRoundStartedEvent(this);
+    }
+
+    public SeerRoundStartedEvent StartSeerRound()
+    {
+        Status = GameStatus.SeerRoundStarted;
+
+        return new SeerRoundStartedEvent(this);
+    }
+
+    public WitchAntidoteRoundStartedEvent StartWitchAntidoteRound()
+    {
+        Status = GameStatus.WitchAntidoteRoundStarted;
+
+        return new WitchAntidoteRoundStartedEvent(this);
+    }
+
+    public WitchPoisonRoundStartedEvent StartWitchPoisonRound()
+    {
+        Status = GameStatus.WitchPoisonRoundStarted;
+
+        return new WitchPoisonRoundStartedEvent(this);
     }
 
     public PlayerTriggerSkillEvent TriggerPlayerSkill(ulong playerId, ulong targetPlayerId)
@@ -318,7 +344,7 @@ public class Game
         {
             throw new GameException("This player is not hunter");
         }
-        
+
         // 檢查 targetPlayerId 還活著
         var targetPlayer = Players.FirstOrDefault(x =>
             x.UserId == targetPlayerId
@@ -339,4 +365,6 @@ public class Game
 
         return new PlayerTriggerSkillEvent(this);
     }
+
+    
 }

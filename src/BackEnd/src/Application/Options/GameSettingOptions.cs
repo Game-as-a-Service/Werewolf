@@ -2,5 +2,10 @@
 
 public class GameSettingOptions
 {
-    public TimeSpan PlayerRoleConfirmation { get; set; }
+    public TimeSpan PlayerRoleConfirmationTimer { get; set; }
+    public TimeSpan WerewolfRoundTimer { get; set; }
+    public TimeSpan SeerRoundTimer { get; set; }
+    public TimeSpan WitchAntidoteRoundTimer { get; set; }
+    public TimeSpan WitchPoisonRoundTimer { get; set; }
+
 }

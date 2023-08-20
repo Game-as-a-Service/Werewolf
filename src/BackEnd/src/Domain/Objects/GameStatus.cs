@@ -9,6 +9,8 @@ public enum GameStatus
     PlayerSpeaking,
     SeerRoundStarted,
     Ended,
-    WitchRoundStarted,
+    WitchAntidoteRoundStarted,
+    WitchPoisonRoundStarted,
     NightEnded,
+    WerewolfRoundStarted,
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Threading.Tasks.Dataflow;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.Options;
@@ -27,6 +28,8 @@ internal class WebApiTestServer : WebApplicationFactory<Program>
     // Buffer for storing GameEvent received
     public BufferBlock<GameVm> EventBuffer { get; } = new();
 
+    private readonly Random _random = new();
+
     public WebApiTestServer()
     {
         Client = CreateClient();
@@ -39,7 +42,12 @@ internal class WebApiTestServer : WebApplicationFactory<Program>
         {
             services.PostConfigure<GameSettingOptions>(opt =>
             {
-                opt.PlayerRoleConfirmation = TimeSpan.Zero;
+                opt.PlayerRoleConfirmationTimer 
+                    = opt.WerewolfRoundTimer
+                    = opt.SeerRoundTimer
+                    = opt.WitchAntidoteRoundTimer
+                    = opt.WitchPoisonRoundTimer
+                    = TimeSpan.Zero;
             });
         });
     }
@@ -85,5 +93,39 @@ internal class WebApiTestServer : WebApplicationFactory<Program>
     public GameBuilder CreateGameBuilder()
     {
         return new GameBuilder(GetRequiredService<IRepository>());
+    }
+
+    public ulong[] RandomDistinctPlayers(int n)
+    {
+        var result = new HashSet<ulong>();
+
+        if (n > 0)
+        {
+            while (result.Count < n)
+            {
+                result.Add((ulong)_random.Next());
+            }
+        }
+
+        return result.ToArray();
+    }
+
+    internal void ListenAll()
+    {
+        var types = typeof(GameEvent).Assembly.GetTypes()
+            .Where(x => x.IsAssignableTo(typeof(GameEvent)))
+            ;
+
+        foreach (var type in types)
+        {
+            var eventName = type.Name;
+            
+            // Store received GameVm to EventBuffer
+            Connection.On<GameVm>(eventName, e =>
+            {
+                var s = eventName;
+                EventBuffer.Post(e);
+            });
+        }
     }
 }

@@ -9,15 +9,17 @@ public class VoteManager
 
     public void Clear()
     {
+        votes.Clear();
+        voteResult.Clear();
     }
 
     // 計票
     public void Vote(ulong voterId, ulong voteeId)
     {
-        // 投過票了嗎?
+        // 投過票了嗎? 先把投票取消，在記錄新投票
         if (votes.ContainsKey(voterId))
         {
-            throw new Exception("Voted");
+            voteResult[voteeId]--;
         }
 
         // 紀錄投票
@@ -57,30 +59,19 @@ public class VoteManager
         {
             return null;
         }
-        else
-        {
-            // 最高票的玩家出局                
-            var maxVotes = nightVotes.Values.Max();
-            var maxVotePlayers = nightVotes
-                .Where(x => x.Value == maxVotes)
-                .Select(kv => kv.Key);
-            var isTie = maxVotePlayers.Count() > 1;
 
+        // 最高得票數
+        var maxVotes = nightVotes.Values.Max();
 
-            // 有平票 random
-            if (isTie)
-            {
-                // 隨機從最高票的玩家中選一個出局 方法1
-                return maxVotePlayers
-                    .OrderBy(_ => Guid.NewGuid())
-                    .First();
-            }
-            else // 沒有平票
-            {
-                return nightVotes
-                    .FirstOrDefault(x => x.Value == maxVotes).Key;
-            }
-        }
+        // 拿到最高得票數的玩家們
+        var maxVotePlayers = nightVotes
+            .Where(x => x.Value == maxVotes)
+            .Select(kv => kv.Key);
+
+        // 有平票則隨機選玩家出局
+        // 沒有平票則選最高票的玩家出局
+        return maxVotePlayers
+            .OrderBy(_ => Guid.NewGuid())
+            .First();
     }
-
 }
