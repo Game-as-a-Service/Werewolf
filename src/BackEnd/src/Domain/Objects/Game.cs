@@ -2,6 +2,7 @@
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 using Wsa.Gaas.Werewolf.Domain.Objects.Roles;
+using Wsa.Gaas.Werewolf.WebApi.Endpoints;
 
 namespace Wsa.Gaas.Werewolf.Domain.Objects;
 
@@ -212,7 +213,7 @@ public class Game
         return new WitchAntidoteUsedEvent(this);
     }
 
-    internal List<GameEvent> AnnounceNightResult()
+    public List<GameEvent> AnnounceNightResult()
     {
         var events = new List<GameEvent>();
 
@@ -336,6 +337,11 @@ public class Game
         return new WitchPoisonRoundStartedEvent(this);
     }
 
+    public IEnumerable<GameEvent> EndWitchPoisonRound()
+    {
+        return AnnounceNightResult();
+    }
+
     public PlayerTriggerSkillEvent TriggerPlayerSkill(ulong playerId, ulong targetPlayerId)
     {
         // 檢查 playerId 是獵人
@@ -366,5 +372,19 @@ public class Game
         return new PlayerTriggerSkillEvent(this);
     }
 
-    
+    public WerewolfSuicidedEvent WerewolfSuicide(ulong userId)
+    {
+        var player = Players.FirstOrDefault(x => x.UserId == userId);
+
+        if (player == null)
+        {
+            throw new PlayerNotFoundException(DiscordVoiceChannelId, userId);
+        }
+
+        // TODO: 檢查是不是狼人
+
+        player.IsDead = true;
+
+        return new WerewolfSuicidedEvent(this);
+    }
 }

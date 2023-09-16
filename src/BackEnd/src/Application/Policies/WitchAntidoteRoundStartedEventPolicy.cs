@@ -25,7 +25,6 @@ namespace Wsa.Gaas.Werewolf.Application.Policies
             var @event = game.StartWitchPoisonRound();
 
             await GameEventBus.BroadcastAsync(@event, cancellationToken);
-
         }
     }
 }
