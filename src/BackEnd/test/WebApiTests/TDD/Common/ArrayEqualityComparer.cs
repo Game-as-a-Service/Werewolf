@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.Common;
-
 public class ArrayEqualityComparer<T> : IEqualityComparer<T[]>
 {
     public bool Equals(T[]? x, T[]? y)

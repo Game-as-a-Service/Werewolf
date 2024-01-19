@@ -2,6 +2,8 @@
 
 namespace Wsa.Gaas.Werewolf.Domain.Events;
 
+using Wsa.Gaas.Werewolf.Domain.Common;
+
 public class PlayerRoleConfirmedEvent : GameEvent
 {
     public ulong PlayerId { get; set; }

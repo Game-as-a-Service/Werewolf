@@ -1,5 +1,6 @@
-﻿namespace Wsa.Gaas.Werewolf.Domain.Exceptions;
+﻿using Wsa.Gaas.Werewolf.Domain.Common;
 
+namespace Wsa.Gaas.Werewolf.Domain.Exceptions;
 internal class GameNotStartedException : GameException
 {
     public GameNotStartedException(ulong discordVoiceChannelId)

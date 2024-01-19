@@ -1,11 +1,11 @@
-﻿using Wsa.Gaas.Werewolf.Domain.Objects;
+﻿using Wsa.Gaas.Werewolf.Domain.Common;
+using Wsa.Gaas.Werewolf.Domain.Objects;
 
-namespace Wsa.Gaas.Werewolf.Domain.Events
+namespace Wsa.Gaas.Werewolf.Domain.Events;
+public class WitchPoisonRoundStartedEvent : GameEvent
 {
-    public class WitchPoisonRoundStartedEvent : GameEvent
+    public WitchPoisonRoundStartedEvent(Game data) : base(data)
     {
-        public WitchPoisonRoundStartedEvent(Game data) : base(data)
-        {
-        }
     }
 }
+

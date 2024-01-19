@@ -1,5 +1,4 @@
 ﻿namespace Wsa.Gaas.Werewolf.Domain.Objects;
-
 public class VoteManager
 {
     // Dic<投票的玩家, 被投的玩家>

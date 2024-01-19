@@ -9,6 +9,8 @@ using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests;
 
+using Wsa.Gaas.Werewolf.Application.UseCases;
+
 internal class GetGameTests
 {
     readonly WebApiTestServer _server = new();

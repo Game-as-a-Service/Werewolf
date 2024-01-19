@@ -3,7 +3,6 @@ using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.EntityFrameworkCore;
-
 public class EntityFrameworkCoreRepository : DbContext, IRepository
 {
     public EntityFrameworkCoreRepository(DbContextOptions opt) : base(opt)

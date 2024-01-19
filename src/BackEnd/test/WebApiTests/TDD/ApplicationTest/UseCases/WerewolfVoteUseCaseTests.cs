@@ -7,7 +7,6 @@ using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases;
-
 public class WerewolfVoteUseCaseTests
 {
     [Test]
@@ -79,7 +78,6 @@ public class WerewolfVoteUseCaseTests
         // 2. When / Act
         await useCase.ExecuteAsync(
             request,
-            mockPresenter.Object,
             CancellationToken.None
         );
 
@@ -106,25 +104,5 @@ public class WerewolfVoteUseCaseTests
             x.SaveAsync(It.Is<Game>(x => x == mockGame.Object)),
             Times.Once()
         );
-
-        // 驗證 Use Case 有呼叫 Presenter 的【推】
-        mockPresenter.Verify(x =>
-            x.PresentAsync(
-                It.Is<WerewolfVotedEvent>(x => x == gameEvent),
-                It.IsAny<CancellationToken>()
-            ),
-            Times.Once()
-        );
-
-        // 如果設置好一個測試，然後沒過，我們要修改程式碼的哪個部分??
-        // 我們應該修改，單元測試的【單元】
-        // 這邊的目標【單元】 是 Use Case
-        // 預計:
-        //   設置好這個測試，然後沒過，我們要修改程式碼的 Use Case (WerewolfVoteUseCase)
-
-        // Oliver: 我們可以驗證存的結果，有沒有跟我們預期的一樣 
-        // 因為【驗證存的結果】，如果沒有跟我們預期的一樣，我們會需要去改 Domain or Repository
-        // 所以不是我們要的。
-
     }
 }

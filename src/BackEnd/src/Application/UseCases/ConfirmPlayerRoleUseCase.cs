@@ -1,22 +1,21 @@
 ﻿using Wsa.Gaas.Werewolf.Application.Common;
-using Wsa.Gaas.Werewolf.Domain.Events;
-using Wsa.Gaas.Werewolf.Domain.Exceptions;
 
 namespace Wsa.Gaas.Werewolf.Application.UseCases;
-
 public class ConfirmPlayerRoleRequest
 {
     public ulong DiscordVoiceChannelId { get; set; }
     public ulong PlayerId { get; set; }
 }
 
-public class ConfirmPlayerRoleUseCase : UseCase<ConfirmPlayerRoleRequest, PlayerRoleConfirmedEvent>
+public record ConfirmPlayerRoleResponse(string GameId, string PlayerId, string Role);
+
+public class ConfirmPlayerRoleUseCase : UseCase<ConfirmPlayerRoleRequest, ConfirmPlayerRoleResponse>
 {
     public ConfirmPlayerRoleUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
     {
     }
 
-    public async override Task ExecuteAsync(ConfirmPlayerRoleRequest request, IPresenter<PlayerRoleConfirmedEvent> presenter, CancellationToken cancellationToken = default)
+    public async override Task<ConfirmPlayerRoleResponse> ExecuteAsync(ConfirmPlayerRoleRequest request, CancellationToken cancellationToken = default)
     {
         // Query
         var game = await Repository.FindByDiscordChannelIdAsync(request.DiscordVoiceChannelId);
@@ -32,6 +31,10 @@ public class ConfirmPlayerRoleUseCase : UseCase<ConfirmPlayerRoleRequest, Player
         // Save
 
         // Push
-        await presenter.PresentAsync(gameEvent, cancellationToken);
+        return new ConfirmPlayerRoleResponse(
+            gameEvent.Data.DiscordVoiceChannelId.ToString(),
+            gameEvent.PlayerId.ToString(),
+            gameEvent.Role
+        );
     }
 }

@@ -2,7 +2,6 @@
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.Common;
-
 internal class GameFaker : Faker<Game>
 {
     public GameFaker()

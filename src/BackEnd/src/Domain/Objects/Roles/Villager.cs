@@ -1,5 +1,4 @@
 ﻿namespace Wsa.Gaas.Werewolf.Domain.Objects.Roles;
-
 public class Villager : Role
 {
     public Villager()

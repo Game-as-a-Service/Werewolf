@@ -1,10 +1,7 @@
 ﻿using Wsa.Gaas.Werewolf.Application.UseCases;
-using Wsa.Gaas.Werewolf.Domain.Events;
-using Wsa.Gaas.Werewolf.WebApi.Common;
 
-namespace Wsa.Gaas.Werewolf.WebApi.Endpoints;
-
-public class CreateGameEndpoint : WebApiEndpoint<CreateGameRequest, GameCreatedEvent, GetGameResponse>
+namespace Wsa.Gaas.Werewolf.Application;
+public class CreateGameEndpoint : WebApiEndpoint<CreateGameRequest, CreateGameResponse>
 {
     public override void Configure()
     {
@@ -12,22 +9,8 @@ public class CreateGameEndpoint : WebApiEndpoint<CreateGameRequest, GameCreatedE
         AllowAnonymous();
     }
 
-    public override async Task<GetGameResponse> ExecuteAsync(CreateGameRequest req, CancellationToken ct)
+    public override async Task<CreateGameResponse> ExecuteAsync(CreateGameRequest req, CancellationToken ct)
     {
-        await UseCase.ExecuteAsync(req, this, ct);
-
-        if (ViewModel == null)
-        {
-            throw new Exception("View Model is null");
-        }
-
-        return ViewModel;
-    }
-
-    public override Task PresentAsync(GameCreatedEvent gameEvent, CancellationToken cancellationToken = default)
-    {
-        ViewModel = new GetGameResponse(gameEvent);
-
-        return Task.CompletedTask;
+        return await UseCase.ExecuteAsync(req, ct);
     }
 }

@@ -4,7 +4,6 @@ using Wsa.Gaas.Werewolf.Domain.Objects;
 using Wsa.Gaas.Werewolf.Domain.Objects.Roles;
 
 namespace Wsa.Gaas.Werewolf.EntityFrameworkCore.TypeConfigurations;
-
 internal class RoleTypeConfiguration : IEntityTypeConfiguration<Role>
     , IEntityTypeConfiguration<Domain.Objects.Roles.Werewolf>
     , IEntityTypeConfiguration<AlphaWerewolf>

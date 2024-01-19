@@ -2,7 +2,6 @@
 using Wsa.Gaas.Werewolf.Application.Common;
 
 namespace Wsa.Gaas.Werewolf.Application;
-
 public static class DependencyInjection
 {
     public static IServiceCollection AddWerewolfApplication(this IServiceCollection services)

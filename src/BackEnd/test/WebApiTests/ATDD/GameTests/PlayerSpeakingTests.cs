@@ -5,7 +5,6 @@ using Wsa.Gaas.Werewolf.Domain.Objects;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests;
-
 public class PlayerSpeakingTests
 {
     WebApiTestServer _server = new();

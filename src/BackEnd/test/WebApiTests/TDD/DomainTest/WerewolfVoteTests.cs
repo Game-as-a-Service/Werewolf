@@ -1,7 +1,6 @@
 ﻿using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.DomainTest;
-
 public class WerewolfVoteTests
 {
     [Test]

@@ -2,7 +2,6 @@
 using Wsa.Gaas.Werewolf.Domain.Common;
 
 namespace Wsa.Gaas.Werewolf.Application.Common;
-
 public class GameEventBus
 {
     private readonly IServiceScopeFactory _factory;

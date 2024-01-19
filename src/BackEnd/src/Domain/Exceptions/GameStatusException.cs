@@ -1,7 +1,7 @@
-﻿using Wsa.Gaas.Werewolf.Domain.Objects;
+﻿using Wsa.Gaas.Werewolf.Domain.Common;
+using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.Domain.Exceptions;
-
 internal class GameStatusException : GameException
 {
     public GameStatusException(GameStatus expected, GameStatus actual)

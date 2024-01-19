@@ -1,5 +1,4 @@
 ﻿namespace Wsa.Gaas.Werewolf.Application.Options;
-
 public class GameSettingOptions
 {
     public TimeSpan PlayerRoleConfirmationTimer { get; set; }

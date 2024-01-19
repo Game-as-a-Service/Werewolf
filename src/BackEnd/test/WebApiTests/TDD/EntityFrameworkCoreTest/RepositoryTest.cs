@@ -5,7 +5,6 @@ using Wsa.Gaas.Werewolf.Domain.Objects;
 using Wsa.Gaas.Werewolf.EntityFrameworkCore;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.EntityFrameworkCoreTest;
-
 internal class RepositoryTest
 {
     private readonly ServiceProvider _provider = new ServiceCollection()

@@ -2,11 +2,8 @@
 using Microsoft.AspNetCore.SignalR;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Common;
-using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 
-namespace Wsa.Gaas.Werewolf.WebApi;
-
-
+namespace Wsa.Gaas.Werewolf.Application;
 /**
  * https://learn.microsoft.com/en-us/aspnet/core/signalr/hubs?view=aspnetcore-7.0#create-and-use-hubs-3
  * > Hubs are transient:

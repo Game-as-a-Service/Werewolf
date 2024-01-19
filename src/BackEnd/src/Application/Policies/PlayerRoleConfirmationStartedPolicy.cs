@@ -5,7 +5,6 @@ using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 
 namespace Wsa.Gaas.Werewolf.Application.Policies;
-
 internal class PlayerRoleConfirmationStartedPolicy : Policy<PlayerRoleConfirmationStartedEvent>
 {
     public PlayerRoleConfirmationStartedPolicy(

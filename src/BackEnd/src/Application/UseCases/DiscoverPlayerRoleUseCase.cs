@@ -1,9 +1,6 @@
 ﻿using Wsa.Gaas.Werewolf.Application.Common;
-using Wsa.Gaas.Werewolf.Domain.Events;
-using Wsa.Gaas.Werewolf.Domain.Exceptions;
 
 namespace Wsa.Gaas.Werewolf.Application.UseCases;
-
 public class DiscoverPlayerRoleRequest
 {
     public ulong DiscordVoiceChannelId { get; set; }
@@ -11,13 +8,15 @@ public class DiscoverPlayerRoleRequest
     public int DiscoverPlayerNumber { get; set; }
 }
 
-public class DiscoverPlayerRoleUseCase : UseCase<DiscoverPlayerRoleRequest, SeerDiscoveredEvent>
+public record DiscoverPlayerRoleResponse(string GameId, string PlayerId, int DiscoveredPlayerNumber, string DiscoveredRoleFaction);
+
+public class DiscoverPlayerRoleUseCase : UseCase<DiscoverPlayerRoleRequest, DiscoverPlayerRoleResponse>
 {
     public DiscoverPlayerRoleUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
     {
     }
 
-    public override async Task ExecuteAsync(DiscoverPlayerRoleRequest request, IPresenter<SeerDiscoveredEvent> presenter, CancellationToken cancellationToken = default)
+    public override async Task<DiscoverPlayerRoleResponse> ExecuteAsync(DiscoverPlayerRoleRequest request, CancellationToken cancellationToken = default)
     {
         // Query
         var game = await Repository.FindByDiscordChannelIdAsync(request.DiscordVoiceChannelId);
@@ -28,11 +27,16 @@ public class DiscoverPlayerRoleUseCase : UseCase<DiscoverPlayerRoleRequest, Seer
         }
 
         // Update
-        var seerDiscoveredEvent = game.DiscoverPlayerRole(request.PlayerId, request.DiscoverPlayerNumber);
+        var gameEvent = game.DiscoverPlayerRole(request.PlayerId, request.DiscoverPlayerNumber);
 
         // Save
 
         // Push
-        await presenter.PresentAsync(seerDiscoveredEvent, cancellationToken);
+        return new DiscoverPlayerRoleResponse(
+            gameEvent.Data.DiscordVoiceChannelId.ToString(),
+            gameEvent.PlayerId.ToString(),
+            gameEvent.DiscoveredPlayerNumber,
+            gameEvent.DiscoveredRoleFaction.ToString()
+        );
     }
 }

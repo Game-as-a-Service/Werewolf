@@ -3,8 +3,7 @@ using System.Net;
 using Wsa.Gaas.Werewolf.Domain.Common;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 
-namespace Wsa.Gaas.Werewolf.WebApi.Extensions;
-
+namespace Wsa.Gaas.Werewolf.Application;
 public static class ExceptionHandlerExtensions
 {
     public static IApplicationBuilder UseJsonExceptionHandler(this IApplicationBuilder app, ILogger? logger = null, bool logStructuredException = false)

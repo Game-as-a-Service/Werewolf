@@ -3,7 +3,6 @@ using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.DomainTest;
-
 public class NightEndedTest
 {
     [Test]
@@ -32,9 +31,9 @@ public class NightEndedTest
 
         // Act: return 平安夜 events
         var events = game.AnnounceNightResult();
-        
+
         // Assert
-        foreach(var player in game.Players)
+        foreach (var player in game.Players)
         {
             // 每個人必須活著
             player.IsDead.Should().BeFalse();

@@ -1,11 +1,9 @@
 ﻿using Wsa.Gaas.Werewolf.Application.Common;
+using Wsa.Gaas.Werewolf.Application.Dtos;
 using Wsa.Gaas.Werewolf.Domain.Common;
-using Wsa.Gaas.Werewolf.Domain.Events;
-using Wsa.Gaas.Werewolf.Domain.Exceptions;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.Application.UseCases;
-
 public class StartGameRequest
 {
     public ulong DiscordVoiceChannelId { get; set; }
@@ -13,7 +11,27 @@ public class StartGameRequest
     public ulong[] Players { get; set; } = Array.Empty<ulong>();
 }
 
-public class StartGameUseCase : UseCase<StartGameRequest, PlayerRoleConfirmationStartedEvent>
+public class StartGameResponse
+{
+    public StartGameResponse() { }
+    public StartGameResponse(GameEvent gameEvent)
+    {
+        Id = gameEvent.Data.DiscordVoiceChannelId;
+        Players = gameEvent.Data.Players.Select(p => new PlayerDto
+        {
+            UserId = p.UserId,
+            Role = p.Role.Name,
+            PlayerNumber = p.PlayerNumber
+        }).ToList();
+        Status = gameEvent.Data.Status;
+    }
+
+    public ulong Id { get; set; }
+    public List<PlayerDto> Players { get; set; } = new List<PlayerDto>();
+    public GameStatus Status { get; set; }
+}
+
+public class StartGameUseCase : UseCase<StartGameRequest, StartGameResponse>
 {
     private readonly static object _lock = new();
 
@@ -21,7 +39,7 @@ public class StartGameUseCase : UseCase<StartGameRequest, PlayerRoleConfirmation
     {
     }
 
-    public override async Task ExecuteAsync(StartGameRequest request, IPresenter<PlayerRoleConfirmationStartedEvent> presenter, CancellationToken cancellationToken = default)
+    public override async Task<StartGameResponse> ExecuteAsync(StartGameRequest request, CancellationToken cancellationToken = default)
     {
         Game? game;
         IEnumerable<GameEvent> events;
@@ -47,9 +65,6 @@ public class StartGameUseCase : UseCase<StartGameRequest, PlayerRoleConfirmation
         await GameEventBus.BroadcastAsync(events, cancellationToken);
 
         // Restful API
-        await presenter.PresentAsync(
-            (PlayerRoleConfirmationStartedEvent)events.First(x => x is PlayerRoleConfirmationStartedEvent),
-            cancellationToken
-        );
+        return new StartGameResponse(events.First());
     }
 }

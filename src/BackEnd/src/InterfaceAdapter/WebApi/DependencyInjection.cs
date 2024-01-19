@@ -1,28 +1,24 @@
 ﻿using FastEndpoints;
-using Wsa.Gaas.Werewolf.Application;
+using FastEndpoints.Swagger;
 using Wsa.Gaas.Werewolf.Application.Common;
-using Wsa.Gaas.Werewolf.EntityFrameworkCore;
+using Wsa.Gaas.Werewolf.Application.Options;
 
-namespace Wsa.Gaas.Werewolf.WebApi;
-
+namespace Wsa.Gaas.Werewolf.Application;
 public static class DependencyInjection
 {
-    public static IServiceCollection AddWebApi(this IServiceCollection services)
+    public static IServiceCollection AddWebApi(this IServiceCollection services, IConfiguration configuration)
     {
-        // Application
-        services.AddWerewolfApplication();
-
-        // SignalR
-        services.AddSignalR();
-
-        // Web Api
-        services.AddFastEndpoints();
-
-        // 實作 IRepository
-        services.AddEntityFrameworkCoreRepository();
-
-        // 實作 IGameEventHandler
-        services.AddScoped<IGameEventHandler, GameEventHubHandler>();
+        services
+            .AddScoped<IGameEventHandler, GameEventHubHandler>()
+            .Configure<GameSettingOptions>(
+                opt => configuration.Bind(nameof(GameSettingOptions), opt)
+            )
+            .AddFastEndpoints()
+            .SwaggerDocument(
+                opt => { }
+            )
+            .AddSignalR()
+            ;
 
         return services;
     }

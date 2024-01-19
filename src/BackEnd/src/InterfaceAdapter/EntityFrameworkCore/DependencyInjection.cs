@@ -2,7 +2,6 @@
 using Wsa.Gaas.Werewolf.Application.Common;
 
 namespace Wsa.Gaas.Werewolf.EntityFrameworkCore;
-
 public static class DependencyInjection
 {
     public static IServiceCollection AddEntityFrameworkCoreRepository(this IServiceCollection services)
