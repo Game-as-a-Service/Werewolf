@@ -69,7 +69,7 @@ public class ConfirmPlayerRoleUseCaseTests
             await useCase.ExecuteAsync(request);
 
             // Then
-            
+
         }
 
 

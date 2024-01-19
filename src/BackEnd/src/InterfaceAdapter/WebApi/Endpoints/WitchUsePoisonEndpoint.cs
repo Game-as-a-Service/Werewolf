@@ -1,6 +1,4 @@
-﻿using Wsa.Gaas.Werewolf.Application.UseCases;
-
-namespace Wsa.Gaas.Werewolf.Application;
+﻿namespace Wsa.Gaas.Werewolf.Application;
 
 
 public class WitchUsePoisonEndpoint : WebApiEndpoint<WitchUsePoisonRequest, WitchUsePoisonResponse>

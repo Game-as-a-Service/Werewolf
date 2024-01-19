@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System.Linq.Expressions;
-using Wsa.Gaas.Werewolf.Application;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Common;

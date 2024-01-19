@@ -1,5 +1,4 @@
 ﻿using Wsa.Gaas.Werewolf.Application;
-using Wsa.Gaas.Werewolf.Application.UseCases;
 
 namespace Wsa.Gaas.Werewolf.WebApi.Endpoints;
 

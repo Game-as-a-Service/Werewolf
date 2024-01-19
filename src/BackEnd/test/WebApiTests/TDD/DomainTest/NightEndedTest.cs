@@ -1,5 +1,4 @@
-﻿using Bogus.DataSets;
-using Wsa.Gaas.Werewolf.Domain.Events;
+﻿using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.DomainTest;

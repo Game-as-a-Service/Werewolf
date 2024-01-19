@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .AddWebApi(builder.Configuration)
-    
+
     // Application
     .AddWerewolfApplication()
 

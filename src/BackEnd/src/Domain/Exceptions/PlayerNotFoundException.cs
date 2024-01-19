@@ -1,6 +1,4 @@
-﻿using Wsa.Gaas.Werewolf.Domain.Common;
-
-namespace Wsa.Gaas.Werewolf.Domain.Exceptions;
+﻿namespace Wsa.Gaas.Werewolf.Domain.Exceptions;
 public class PlayerNotFoundException : GameException
 {
     public PlayerNotFoundException(ulong discordVoiceChannelId, ulong playerId)

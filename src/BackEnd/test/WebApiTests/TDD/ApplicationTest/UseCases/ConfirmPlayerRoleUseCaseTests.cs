@@ -7,9 +7,6 @@ using Wsa.Gaas.Werewolf.Domain.Exceptions;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.Application;
-using Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases;
-
-
 public class ConfirmPlayerRoleUseCaseTests
 {
 

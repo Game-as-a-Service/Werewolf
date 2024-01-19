@@ -1,6 +1,4 @@
-﻿using Wsa.Gaas.Werewolf.Application.UseCases;
-
-namespace Wsa.Gaas.Werewolf.Application;
+﻿namespace Wsa.Gaas.Werewolf.Application;
 public class WitchUseAntidoteEndpoint : WebApiEndpoint<WitchUseAntidoteRequest, WitchUseAntidoteResponse>
 {
     public override void Configure()
