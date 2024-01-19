@@ -1,5 +1,4 @@
 ﻿using Wsa.Gaas.Werewolf.Application.Dtos;
-using Wsa.Gaas.Werewolf.Domain.Common;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.Application.UseCases;

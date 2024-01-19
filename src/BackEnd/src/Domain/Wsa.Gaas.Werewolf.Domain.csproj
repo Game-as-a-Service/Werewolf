@@ -1,21 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Services\**" />
-    <EmbeddedResource Remove="Services\**" />
-    <None Remove="Services\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Events\NewFile1.txt" />
-    <None Remove="Exceptions\NewFile1.txt" />
-  </ItemGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="Wsa.Gaas.Werewolf.WebApiTests" />

@@ -1,6 +1,5 @@
 global using Wsa.Gaas.Werewolf.Application.UseCases;
 using FastEndpoints;
-using FastEndpoints.Swagger;
 using System.Text.Json.Serialization;
 using Wsa.Gaas.Werewolf.Application;
 using Wsa.Gaas.Werewolf.Application.Common;
@@ -36,6 +35,6 @@ app.MapHub<GameEventHub>(WebApiDefaults.SignalrEndpoint);
 
 // Swagger
 app.UseOpenApi();
-app.UseSwaggerUi3(c => c.ConfigureDefaults());
+//app.UseSwaggerUi3(c => c.ConfigureDefaults());
 
 app.Run();
