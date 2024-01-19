@@ -1,9 +1,7 @@
 ﻿using Wsa.Gaas.Werewolf.Domain.Objects;
 
-namespace Wsa.Gaas.Werewolf.Domain.Events
+namespace Wsa.Gaas.Werewolf.Domain.Events;
+public class PlayerTriggerSkillEvent : GameEvent
 {
-    public class PlayerTriggerSkillEvent : GameEvent
-    {
-        public PlayerTriggerSkillEvent(Game data) : base(data) { }
-    }
+    public PlayerTriggerSkillEvent(Game data) : base(data) { }
 }

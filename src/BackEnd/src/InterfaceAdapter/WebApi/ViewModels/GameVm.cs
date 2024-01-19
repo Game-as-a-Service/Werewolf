@@ -1,7 +1,6 @@
 ﻿using Wsa.Gaas.Werewolf.Domain.Objects;
 
-namespace Wsa.Gaas.Werewolf.WebApi.ViewModels;
-
+namespace Wsa.Gaas.Werewolf.Application;
 public class GameVm
 {
     public string Id { get; set; } = string.Empty;

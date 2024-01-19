@@ -10,7 +10,6 @@ using Wsa.Gaas.Werewolf.Domain.Objects;
 using Wsa.Gaas.Werewolf.WebApiTests.TDD.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases;
-
 internal class StartGameUseCaseTests
 {
     [Description("""
@@ -66,7 +65,7 @@ internal class StartGameUseCaseTests
         var useCase = new StartGameUseCase(repository.Object, eventBus.Object);
 
         //When
-        await useCase.ExecuteAsync(request, presenter.Object);
+        await useCase.ExecuteAsync(request);
 
         //Then：查改存推
         // 驗證 Use Case 有呼叫 Repository 的【查】
@@ -161,7 +160,6 @@ internal class StartGameUseCaseTests
         // 2. When
         await useCase.ExecuteAsync(
            request,
-           mockPresenter.Object,
            CancellationToken.None
         );
 
@@ -237,7 +235,7 @@ internal class StartGameUseCaseTests
 
 
         //When
-        await useCase.ExecuteAsync(request, mockPresenter.Object);
+        await useCase.ExecuteAsync(request);
 
 
         //Then
@@ -342,7 +340,7 @@ internal class StartGameUseCaseTests
         );
 
         // Act
-        await useCase.ExecuteAsync(request, presenter.Object);
+        await useCase.ExecuteAsync(request);
 
         // Assert
         // 驗證 Use Case 有呼叫 Repository 的【查】
@@ -367,15 +365,6 @@ internal class StartGameUseCaseTests
         gameEventBus.Verify(
             x => x.BroadcastAsync(
                 It.Is<IEnumerable<GameEvent>>(x => x == events),
-                It.IsAny<CancellationToken>()
-            ),
-            Times.Once()
-        );
-
-        // 驗證 Use Case 有呼叫 Presenter 的【推】
-        presenter.Verify(
-            x => x.PresentAsync(
-                It.Is<PlayerRoleConfirmationStartedEvent>(x => x == events[0]),
                 It.IsAny<CancellationToken>()
             ),
             Times.Once()

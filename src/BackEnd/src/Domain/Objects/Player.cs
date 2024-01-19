@@ -1,7 +1,6 @@
 ﻿using Wsa.Gaas.Werewolf.Domain.Objects.Roles;
 
 namespace Wsa.Gaas.Werewolf.Domain.Objects;
-
 public class Player
 {
     public Guid Id { get; init; }

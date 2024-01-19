@@ -1,44 +1,43 @@
-﻿using Wsa.Gaas.Werewolf.Application.Common;
-using Wsa.Gaas.Werewolf.Domain.Events;
-using Wsa.Gaas.Werewolf.Domain.Exceptions;
-
-namespace Wsa.Gaas.Werewolf.Application.UseCases
+﻿namespace Wsa.Gaas.Werewolf.Application.UseCases;
+public class PlayerTriggerSkillRequest
 {
-    public class PlayerTriggerSkillRequest
+    public ulong DiscordVoiceChannelId { get; set; }
+    public ulong PlayerId { get; set; }
+    public ulong TargetPlayerId { get; set; }
+}
+
+public class PlayerTriggerSkillResponse { }
+public class PlayerTriggerSkillUseCase : UseCase<PlayerTriggerSkillRequest, PlayerTriggerSkillResponse>
+{
+    public PlayerTriggerSkillUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
     {
-        public ulong DiscordVoiceChannelId { get; set; }
-        public ulong PlayerId { get; set; }
-        public ulong TargetPlayerId { get; set; }
     }
 
-    public class PlayerTriggerSkillUseCase : UseCase<PlayerTriggerSkillRequest, PlayerTriggerSkillEvent>
+    public override async Task<PlayerTriggerSkillResponse> ExecuteAsync(PlayerTriggerSkillRequest request, CancellationToken cancellationToken = default)
     {
-        public PlayerTriggerSkillUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
+        // 查
+        var game = Repository.FindByDiscordChannelId(request.DiscordVoiceChannelId);
+
+        if (game == null)
         {
+            throw new GameNotFoundException(request.DiscordVoiceChannelId);
         }
 
-        public override async Task ExecuteAsync(PlayerTriggerSkillRequest request, IPresenter<PlayerTriggerSkillEvent> presenter, CancellationToken cancellationToken = default)
+        // 改
+        var @event = game.TriggerPlayerSkill(
+            request.PlayerId,
+            request.TargetPlayerId
+        );
+
+        // 存
+        await Repository.SaveAsync(game);
+
+        // 推
+        return new PlayerTriggerSkillResponse
         {
-            // 查
-            var game = Repository.FindByDiscordChannelId(request.DiscordVoiceChannelId);
-            
-            if(game == null)
-            {
-                throw new GameNotFoundException(request.DiscordVoiceChannelId);
-            }
 
-            // 改
-            var @event = game.TriggerPlayerSkill(
-                request.PlayerId,
-                request.TargetPlayerId
-            );
+        };
 
-            // 存
-            await Repository.SaveAsync(game);
-
-            // 推
-            await presenter.PresentAsync(@event, cancellationToken);
-            
-        }
     }
 }
+

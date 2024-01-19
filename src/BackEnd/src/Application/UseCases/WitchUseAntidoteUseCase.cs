@@ -1,22 +1,23 @@
-﻿using Wsa.Gaas.Werewolf.Application.Common;
-using Wsa.Gaas.Werewolf.Domain.Events;
-using Wsa.Gaas.Werewolf.Domain.Exceptions;
-
-namespace Wsa.Gaas.Werewolf.Application.UseCases;
-
+﻿namespace Wsa.Gaas.Werewolf.Application.UseCases;
 public class WitchUseAntidoteRequest
 {
     public ulong DiscordVoiceChannelId { get; set; }
     public ulong PlayerId { get; set; }
 }
 
-public class WitchUseAntidoteUseCase : UseCase<WitchUseAntidoteRequest, WitchAntidoteUsedEvent>
+public class WitchUseAntidoteResponse
+{
+    public required string Message { get; set; }
+}
+
+
+public class WitchUseAntidoteUseCase : UseCase<WitchUseAntidoteRequest, WitchUseAntidoteResponse>
 {
     public WitchUseAntidoteUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
     {
     }
 
-    public override async Task ExecuteAsync(WitchUseAntidoteRequest request, IPresenter<WitchAntidoteUsedEvent> presenter, CancellationToken cancellationToken = default)
+    public override async Task<WitchUseAntidoteResponse> ExecuteAsync(WitchUseAntidoteRequest request, CancellationToken cancellationToken = default)
     {
         // 查
         var game = Repository.FindByDiscordChannelId(request.DiscordVoiceChannelId);
@@ -33,6 +34,6 @@ public class WitchUseAntidoteUseCase : UseCase<WitchUseAntidoteRequest, WitchAnt
         await Repository.SaveAsync(game);
 
         // 推
-        await presenter.PresentAsync(events, cancellationToken);
+        return new WitchUseAntidoteResponse { Message = "Ok" };
     }
 }

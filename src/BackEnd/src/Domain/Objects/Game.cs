@@ -5,6 +5,8 @@ using Wsa.Gaas.Werewolf.Domain.Objects.Roles;
 
 namespace Wsa.Gaas.Werewolf.Domain.Objects;
 
+using Wsa.Gaas.Werewolf.Domain.Common;
+
 public class Game
 {
     public Guid Id { get; internal set; }
@@ -366,5 +368,5 @@ public class Game
         return new PlayerTriggerSkillEvent(this);
     }
 
-    
+
 }

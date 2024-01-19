@@ -3,7 +3,6 @@ using Wsa.Gaas.Werewolf.Application.Options;
 using Wsa.Gaas.Werewolf.Domain.Common;
 
 namespace Wsa.Gaas.Werewolf.Application.Common;
-
 internal abstract class Policy<T> : IGameEventHandler<T>
     where T : GameEvent
 {

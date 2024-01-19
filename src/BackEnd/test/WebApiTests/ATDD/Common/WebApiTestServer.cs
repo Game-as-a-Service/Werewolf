@@ -3,17 +3,14 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Threading.Tasks.Dataflow;
+using Wsa.Gaas.Werewolf.Application;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.Options;
 using Wsa.Gaas.Werewolf.Domain.Common;
-using Wsa.Gaas.Werewolf.WebApi;
-using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 using Wsa.Gaas.Werewolf.WebApiTests.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
-
 /// <summary>
 /// Start a test server which the entry point is at `Program`
 /// </summary>
@@ -42,7 +39,7 @@ internal class WebApiTestServer : WebApplicationFactory<Program>
         {
             services.PostConfigure<GameSettingOptions>(opt =>
             {
-                opt.PlayerRoleConfirmationTimer 
+                opt.PlayerRoleConfirmationTimer
                     = opt.WerewolfRoundTimer
                     = opt.SeerRoundTimer
                     = opt.WitchAntidoteRoundTimer
@@ -119,7 +116,7 @@ internal class WebApiTestServer : WebApplicationFactory<Program>
         foreach (var type in types)
         {
             var eventName = type.Name;
-            
+
             // Store received GameVm to EventBuffer
             Connection.On<GameVm>(eventName, e =>
             {

@@ -1,68 +1,67 @@
 ﻿using FastEndpoints;
+using Wsa.Gaas.Werewolf.Application;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 using Wsa.Gaas.Werewolf.Domain.Objects.Roles;
-using Wsa.Gaas.Werewolf.WebApi.Endpoints;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
-namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests
+namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests;
+public class WitchUsePoisonTests
 {
-    public class WitchUsePoisonTests
+    readonly WebApiTestServer _server = new();
+
+    [OneTimeSetUp]
+    public async Task OneTimeSetup()
     {
-        readonly WebApiTestServer _server = new();
+        await _server.StartAsync();
+    }
 
-        [OneTimeSetUp]
-        public async Task OneTimeSetup()
+    [Test]
+    public async Task WitchUsePoison()
+    {
+        // Arrange
+        var game = _server.CreateGameBuilder()
+            .WithRandomDiscordVoiceChannel()
+            .WithGameStatus(GameStatus.WitchAntidoteRoundStarted)
+            .WithRandomPlayers(9)
+            .Build();
+
+        var witch = game.Players.First(x => x.Role is Witch);
+
+        var targetPlayer = game.Players.First(x => x.IsDead == false);
+
+        var request = new WitchUsePoisonRequest
         {
-            await _server.StartAsync();
-        }
+            DiscordVoiceChannelId = game.DiscordVoiceChannelId,
+            PlayerId = witch.UserId,
+            TargetPlayerId = targetPlayer.UserId,
+        };
 
-        [Test]
-        public async Task WitchUsePoison()
-        {
-            // Arrange
-            var game = _server.CreateGameBuilder()
-                .WithRandomDiscordVoiceChannel()
-                .WithGameStatus(GameStatus.WitchAntidoteRoundStarted)
-                .WithRandomPlayers(9)
-                .Build();
+        // Act
+        var response = await _server.Client.POSTAsync<
+            WitchUsePoisonEndpoint,
+            WitchUsePoisonRequest,
+            WitchUsePoisonResponse>(request);
 
-            var witch = game.Players.First(x => x.Role is Witch);
+        // Assert 200
+        response.Response.EnsureSuccessStatusCode();
 
-            var targetPlayer = game.Players.First(x => x.IsDead == false);
+        // 
+        var repository = _server.GetRequiredService<IRepository>();
 
-            var request = new WitchUsePoisonRequest
-            {
-                DiscordVoiceChannelId = game.DiscordVoiceChannelId,
-                PlayerId = witch.UserId,
-                TargetPlayerId = targetPlayer.UserId,
-            };
-            
-            // Act
-            var response = await _server.Client.POSTAsync<
-                WitchUsePoisonEndpoint,
-                WitchUsePoisonRequest,
-                WitchUsePoisonResponse>(request);
+        var actualGame = repository.FindByDiscordChannelId(game.DiscordVoiceChannelId);
 
-            // Assert 200
-            response.Response.EnsureSuccessStatusCode();
+        var actualTargetPlayer = actualGame!.Players.First(x => x.UserId == targetPlayer.UserId);
+        var actualWitch = actualGame!.Players.First(x => x.Role is Witch);
 
-            // 
-            var repository = _server.GetRequiredService<IRepository>();
+        // 新標記被女巫毒
+        ((actualTargetPlayer.BuffStatus & BuffStatus.KilledByWitch) == BuffStatus.KilledByWitch)
+            .Should().BeTrue();
 
-            var actualGame = repository.FindByDiscordChannelId(game.DiscordVoiceChannelId);
+        // 女巫毒藥已使用
+        actualWitch.IsPoisonUsed.Should().BeTrue();
 
-            var actualTargetPlayer = actualGame!.Players.First(x => x.UserId == targetPlayer.UserId);
-            var actualWitch = actualGame!.Players.First(x => x.Role is Witch);
-
-            // 新標記被女巫毒
-            ((actualTargetPlayer.BuffStatus & BuffStatus.KilledByWitch) == BuffStatus.KilledByWitch)
-                .Should().BeTrue();
-
-            // 女巫毒藥已使用
-            actualWitch.IsPoisonUsed.Should().BeTrue();
-
-        }
     }
 }
+

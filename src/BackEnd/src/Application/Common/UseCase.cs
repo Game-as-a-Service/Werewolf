@@ -1,9 +1,5 @@
-﻿using Wsa.Gaas.Werewolf.Domain.Common;
-
-namespace Wsa.Gaas.Werewolf.Application.Common;
-
-public abstract class UseCase<TRequest, TGameEvent>
-    where TGameEvent : GameEvent
+﻿namespace Wsa.Gaas.Werewolf.Application.Common;
+public abstract class UseCase<TRequest, TResponse>
 {
     protected IRepository Repository { get; }
     protected GameEventBus GameEventBus { get; }
@@ -14,5 +10,5 @@ public abstract class UseCase<TRequest, TGameEvent>
         GameEventBus = gameEventBus;
     }
 
-    public abstract Task ExecuteAsync(TRequest request, IPresenter<TGameEvent> presenter, CancellationToken cancellationToken = default);
+    public abstract Task<TResponse> ExecuteAsync(TRequest request, CancellationToken cancellationToken = default);
 }

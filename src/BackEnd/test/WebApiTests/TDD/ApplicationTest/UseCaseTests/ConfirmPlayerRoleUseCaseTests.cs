@@ -7,8 +7,6 @@ using Wsa.Gaas.Werewolf.Domain.Exceptions;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCaseTests;
-
-
 public class ConfirmPlayerRoleUseCaseTests
 {
 
@@ -68,16 +66,10 @@ public class ConfirmPlayerRoleUseCaseTests
                 PlayerId = playerId,
             };
 
-            await useCase.ExecuteAsync(request, presenter.Object);
+            await useCase.ExecuteAsync(request);
 
             // Then
-            presenter.Verify(p => p.PresentAsync(
-                It.Is<PlayerRoleConfirmedEvent>(gameEvent =>
-                       gameEvent.PlayerId == playerId
-                    && gameEvent.Role == expectedRole
-                ),
-                It.IsAny<CancellationToken>()
-            ));
+
         }
 
 
@@ -127,7 +119,7 @@ public class ConfirmPlayerRoleUseCaseTests
         // ONLY For Exception
         Assert.ThrowsAsync(
             typeof(GameNotFoundException),
-            async () => await useCase.ExecuteAsync(request, presenter.Object, cancellationToken)
+            async () => await useCase.ExecuteAsync(request, cancellationToken)
         );
 
         return Task.CompletedTask;

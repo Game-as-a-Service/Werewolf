@@ -1,45 +1,17 @@
-﻿using Wsa.Gaas.Werewolf.Application.UseCases;
-using Wsa.Gaas.Werewolf.Domain.Events;
-using Wsa.Gaas.Werewolf.WebApi.Common;
+﻿namespace Wsa.Gaas.Werewolf.Application;
 
-namespace Wsa.Gaas.Werewolf.WebApi.Endpoints
+
+public class WitchUsePoisonEndpoint : WebApiEndpoint<WitchUsePoisonRequest, WitchUsePoisonResponse>
 {
-
-    public class WitchUsePoisonResponse
+    public override void Configure()
     {
-        public required string Message { get; set; }
+        Post("/games/{DiscordVoiceChannelId}/players/{playerId}:usePoison");
+        AllowAnonymous();
     }
 
-    public class WitchUsePoisonEndpoint : WebApiEndpoint<WitchUsePoisonRequest, WitchPoisonUsedEvent, WitchUsePoisonResponse>
+    public override async Task<WitchUsePoisonResponse> ExecuteAsync(WitchUsePoisonRequest req, CancellationToken ct)
     {
-        public override void Configure()
-        {
-            Post("/games/{DiscordVoiceChannelId}/players/{playerId}:usePoison");
-            AllowAnonymous();
-        }
-
-        public override async Task<WitchUsePoisonResponse> ExecuteAsync(WitchUsePoisonRequest req, CancellationToken ct)
-        {
-            await UseCase.ExecuteAsync(req, this, ct);
-
-            if (ViewModel == null)
-            {
-                throw new Exception("View Model is null");
-            }
-
-            return ViewModel; // <= 把 ViewModel 轉 JSON
-        }
-
-        public override Task PresentAsync(WitchPoisonUsedEvent gameEvent, CancellationToken cancellationToken = default)
-        {
-            ViewModel = new WitchUsePoisonResponse
-            {
-                Message = "Ok",
-            };
-
-            return Task.CompletedTask;
-        }
+        return await UseCase.ExecuteAsync(req, ct);
     }
-
-
 }
+

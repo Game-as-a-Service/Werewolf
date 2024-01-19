@@ -1,6 +1,4 @@
 ﻿namespace Wsa.Gaas.Werewolf.Domain.Exceptions;
-
-
 internal class PlayersNumberNotSupportedException : GameException
 {
     public PlayersNumberNotSupportedException()

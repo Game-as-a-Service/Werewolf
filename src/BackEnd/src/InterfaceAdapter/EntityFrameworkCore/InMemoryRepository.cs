@@ -2,7 +2,6 @@
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.EntityFrameworkCore;
-
 public class InMemoryRepository : IRepository
 {
     private readonly Dictionary<ulong, Game> _discordIdMemory = new();

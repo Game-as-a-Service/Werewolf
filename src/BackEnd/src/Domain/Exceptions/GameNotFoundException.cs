@@ -1,5 +1,4 @@
 ﻿namespace Wsa.Gaas.Werewolf.Domain.Exceptions;
-
 public class GameNotFoundException : GameException
 {
     public GameNotFoundException(ulong discordChannelId)

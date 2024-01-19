@@ -6,9 +6,7 @@ using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
-namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.ApplicationTest.UseCases;
-
-
+namespace Wsa.Gaas.Werewolf.Application;
 public class ConfirmPlayerRoleUseCaseTests
 {
 
@@ -48,10 +46,6 @@ public class ConfirmPlayerRoleUseCaseTests
         );
         gameEventBus.Setup(x => x.BroadcastAsync(It.IsAny<PlayerRoleConfirmedEvent>(), It.IsAny<CancellationToken>()));
 
-        // Arrange Presenter
-        var presenter = new Mock<IPresenter<PlayerRoleConfirmedEvent>>();
-        presenter.Setup(x => x.PresentAsync(It.IsAny<PlayerRoleConfirmedEvent>(), It.IsAny<CancellationToken>()));
-
         // Arrange Use Case
         var useCase = new ConfirmPlayerRoleUseCase(
             repository.Object,
@@ -66,16 +60,8 @@ public class ConfirmPlayerRoleUseCaseTests
         };
 
         // When
-        await useCase.ExecuteAsync(request, presenter.Object);
+        await useCase.ExecuteAsync(request);
 
-        // Then
-        presenter.Verify(p => p.PresentAsync(
-            It.Is<PlayerRoleConfirmedEvent>(gameEvent =>
-                   gameEvent.PlayerId == playerId
-                && gameEvent.Role == expectedRole
-            ),
-            It.IsAny<CancellationToken>()
-        ));
     }
 
     [Test]
@@ -105,7 +91,7 @@ public class ConfirmPlayerRoleUseCaseTests
         // Assert or Then
         Assert.ThrowsAsync(
             typeof(GameNotFoundException),
-            async () => await useCase.ExecuteAsync(request, presenter.Object, CancellationToken.None)
+            async () => await useCase.ExecuteAsync(request, CancellationToken.None)
         );
 
     }

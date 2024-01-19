@@ -1,7 +1,6 @@
 ﻿using Wsa.Gaas.Werewolf.Domain.Objects;
 
 namespace Wsa.Gaas.Werewolf.Application.Common;
-
 public interface IRepository
 {
     // 讀

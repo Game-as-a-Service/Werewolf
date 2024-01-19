@@ -1,16 +1,14 @@
 using FastEndpoints;
 using System.Net;
 using System.Threading.Tasks.Dataflow;
+using Wsa.Gaas.Werewolf.Application;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.UseCases;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Objects;
-using Wsa.Gaas.Werewolf.WebApi.Endpoints;
-using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests;
-
 public class GameStartedTests
 {
     readonly WebApiTestServer _server = new();
@@ -84,12 +82,12 @@ public class GameStartedTests
 
         // duplicate players, expect error
         request.Players = RandomDuplicatePlayers(9);
-        (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, GetGameResponse>(request))
+        (await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request))
             .Response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
         // 12 players
         request.Players = _server.RandomDistinctPlayers(12);
-        var (r3, result) = await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, GetGameResponse>(request);
+        var (r3, result) = await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest, StartGameResponse>(request);
 
         // Assert API response
         result!.Id.Should().Be(request.DiscordVoiceChannelId);

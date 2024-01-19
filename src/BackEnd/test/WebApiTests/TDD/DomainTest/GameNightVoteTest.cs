@@ -1,5 +1,4 @@
 ﻿namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.DomainTest;
-
 public class GameNightVoteTest
 {
     //[Test]

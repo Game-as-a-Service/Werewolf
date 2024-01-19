@@ -1,24 +1,22 @@
+global using Wsa.Gaas.Werewolf.Application.UseCases;
 using FastEndpoints;
 using FastEndpoints.Swagger;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Text.Json.Serialization;
+using Wsa.Gaas.Werewolf.Application;
 using Wsa.Gaas.Werewolf.Application.Common;
-using Wsa.Gaas.Werewolf.Application.Options;
-using Wsa.Gaas.Werewolf.WebApi;
-using Wsa.Gaas.Werewolf.WebApi.Extensions;
+using Wsa.Gaas.Werewolf.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddWebApi();
-builder.Services.Configure<GameSettingOptions>(
-    opt => builder.Configuration.Bind(nameof(GameSettingOptions), opt)
-);
+builder.Services
+    .AddWebApi(builder.Configuration)
 
+    // Application
+    .AddWerewolfApplication()
 
-builder.Services.SwaggerDocument(opt =>
-{
-
-});
+    // Infrastructure
+    .AddEntityFrameworkCoreRepository()
+    ;
 
 var app = builder.Build();
 
