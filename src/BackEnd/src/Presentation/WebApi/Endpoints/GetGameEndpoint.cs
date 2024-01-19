@@ -1,0 +1,18 @@
+﻿using Wsa.Gaas.Werewolf.WebApi.Common;
+
+namespace Wsa.Gaas.Werewolf.WebApi.Endpoints;
+
+public class GetGameEndpoint : WebApiEndpoint<GetGameRequest, GetGameResponse>
+{
+    public override void Configure()
+    {
+        Get("/games/{DiscordVoiceChannelId}");
+        AllowAnonymous();
+    }
+
+    public override async Task<GetGameResponse> ExecuteAsync(GetGameRequest req, CancellationToken ct)
+    {
+        // 執行 UseCase.Execute();
+        return await UseCase.ExecuteAsync(req, ct);
+    }
+}
