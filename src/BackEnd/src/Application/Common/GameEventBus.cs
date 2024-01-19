@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Wsa.Gaas.Werewolf.Domain.Common;
 
 namespace Wsa.Gaas.Werewolf.Application.Common;
 public class GameEventBus

@@ -1,6 +1,4 @@
-﻿using Wsa.Gaas.Werewolf.Domain.Common;
-
-namespace Wsa.Gaas.Werewolf.Application.Common;
+﻿namespace Wsa.Gaas.Werewolf.Application.Common;
 public interface IPresenter<TGameEvent>
     where TGameEvent : GameEvent
 {

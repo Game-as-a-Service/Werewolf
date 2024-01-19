@@ -17,6 +17,11 @@ internal class RepositoryTest
         var repository = GetRepository();
         repository.Initialize();
     }
+    [OneTimeTearDown]
+    public void OneTimeTearDown()
+    {
+        _provider.Dispose();
+    }
 
     private IRepository GetRepository()
     {
@@ -32,7 +37,7 @@ internal class RepositoryTest
         var game = new Game();
         repository.Save(game);
 
-        game.StartGame(new ulong[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+        game.StartGame([1, 2, 3, 4, 5, 6, 7, 8, 9]);
         repository.Save(game);
 
         game.CurrentSpeakingPlayerId = game.Players.First(x => x.UserId == 3).Id;
