@@ -1,30 +1,23 @@
-global using Wsa.Gaas.Werewolf.Application.UseCases;
 using FastEndpoints;
 using System.Text.Json.Serialization;
 using Wsa.Gaas.Werewolf.Application;
-using Wsa.Gaas.Werewolf.Application.Common;
-using Wsa.Gaas.Werewolf.SqlServer;
 using Wsa.Gaas.Werewolf.WebApi;
-using Wsa.Gaas.Werewolf.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
-    .AddWebApi(builder.Configuration)
-
     // Application
     .AddWerewolfApplication()
-
     // Infrastructure
-    .AddEntityFrameworkCoreRepository()
+    .AddWerewolfInfrastructure()
+    // Web API
+    .AddWerewolfWebApi(builder.Configuration)
     ;
 
 var app = builder.Build();
 
-app.Services.CreateScope().ServiceProvider.GetRequiredService<IRepository>().Initialize();
-
 // Error Handling
-app.UseJsonExceptionHandler();
+app.UseExceptionHandler(opt => { });
 
 // Web API
 app.UseFastEndpoints(c =>
@@ -37,6 +30,6 @@ app.MapHub<GameEventHub>(WebApiDefaults.SignalrEndpoint);
 
 // Swagger
 app.UseOpenApi();
-//app.UseSwaggerUi3(c => c.ConfigureDefaults());
+
 
 app.Run();

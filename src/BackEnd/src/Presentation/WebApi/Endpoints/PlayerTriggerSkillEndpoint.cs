@@ -1,6 +1,4 @@
-﻿using Wsa.Gaas.Werewolf.WebApi.Common;
-
-namespace Wsa.Gaas.Werewolf.WebApi.Endpoints;
+﻿namespace Wsa.Gaas.Werewolf.WebApi.Endpoints;
 
 
 public class PlayerTriggerSkillEndpoint : WebApiEndpoint<PlayerTriggerSkillRequest, PlayerTriggerSkillResponse>
@@ -9,11 +7,6 @@ public class PlayerTriggerSkillEndpoint : WebApiEndpoint<PlayerTriggerSkillReque
     {
         Post("/games/{DiscordVoiceChannelId}/players/{PlayerId}:killPlayer");
         AllowAnonymous();
-    }
-
-    public override async Task<PlayerTriggerSkillResponse> ExecuteAsync(PlayerTriggerSkillRequest req, CancellationToken ct)
-    {
-        return await UseCase.ExecuteAsync(req, ct);
     }
 
 }

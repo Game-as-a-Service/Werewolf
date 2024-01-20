@@ -8,6 +8,9 @@ public abstract class WebApiEndpoint<TRequest, TResponse> : Endpoint<TRequest, T
 {
     public required UseCase<TRequest, TResponse> UseCase { get; set; }
 
-    public abstract override Task<TResponse> ExecuteAsync(TRequest req, CancellationToken ct);
+    public override Task<TResponse> ExecuteAsync(TRequest req, CancellationToken ct)
+    {
+        return UseCase.ExecuteAsync(req, ct);
+    }
 
 }

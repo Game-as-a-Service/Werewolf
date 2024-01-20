@@ -1,7 +1,7 @@
 ﻿using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
-namespace Wsa.Gaas.Werewolf.SqlServer;
+namespace Wsa.Gaas.Werewolf.InMemory;
 public class InMemoryRepository : IRepository
 {
     private readonly Dictionary<ulong, Game> _discordIdMemory = new();
@@ -34,10 +34,6 @@ public class InMemoryRepository : IRepository
         _idMemory.TryGetValue(id, out var game);
 
         return Task.FromResult(game);
-    }
-
-    public void Initialize()
-    {
     }
 
     public void Save(Game game)

@@ -69,18 +69,4 @@ public class SqlServerRepository : DbContext, IRepository
 
         modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
     }
-
-    public void Initialize()
-    {
-        if (Database.IsInMemory())
-        {
-            Database.EnsureCreated();
-        }
-        else if (Database.IsSqlServer())
-        {
-            Database.Migrate();
-        }
-    }
-
-
 }

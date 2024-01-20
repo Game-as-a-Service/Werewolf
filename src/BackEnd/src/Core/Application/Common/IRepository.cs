@@ -13,6 +13,4 @@ public interface IRepository
     Task SaveAsync(Game game);
     void Save(Game game);
 
-
-    void Initialize();
 }

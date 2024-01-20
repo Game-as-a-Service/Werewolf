@@ -15,11 +15,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\InMemory\Wsa.Gaas.Werewolf.InMemory.csproj" />
     <ProjectReference Include="..\..\Infrastructure\SqlServer\Wsa.Gaas.Werewolf.SqlServer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="Wsa.Gaas.Werewolf.WebApiTests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>

@@ -4,18 +4,15 @@ using Wsa.Gaas.Werewolf.Application.Common;
 namespace Wsa.Gaas.Werewolf.SqlServer;
 public static class DependencyInjection
 {
-    public static IServiceCollection AddEntityFrameworkCoreRepository(this IServiceCollection services)
+    public static IServiceCollection AddSqlServer(this IServiceCollection services)
     {
-        //services.AddDbContext<IRepository, EntityFrameworkCoreRepository>(opt =>
+        //services.AddDbContext<IRepository, SqlServerRepository>(opt =>
         //{
-        //    opt.UseInMemoryDatabase(nameof(EntityFrameworkCoreRepository));
-        //    //opt.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;Initial Catalog=TestDb");
+        //    opt.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;Initial Catalog=TestDb");
 
         //    opt.EnableDetailedErrors();
         //    opt.EnableSensitiveDataLogging();
         //});
-
-        services.AddSingleton<IRepository, InMemoryRepository>();
 
         return services;
     }

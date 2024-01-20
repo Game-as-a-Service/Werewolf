@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wsa.Gaas.Werewolf.WebApi", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wsa.Gaas.Werewolf.WebApiTests", "BackEnd\tests\WebApiTests\Wsa.Gaas.Werewolf.WebApiTests.csproj", "{D440102E-1AF4-4AF7-BA81-9D634D8B71C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wsa.Gaas.Werewolf.InMemory", "BackEnd\src\Infrastructure\InMemory\Wsa.Gaas.Werewolf.InMemory.csproj", "{736343C0-3A82-4758-AFA8-CC0A34D5D49F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{D440102E-1AF4-4AF7-BA81-9D634D8B71C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D440102E-1AF4-4AF7-BA81-9D634D8B71C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D440102E-1AF4-4AF7-BA81-9D634D8B71C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{736343C0-3A82-4758-AFA8-CC0A34D5D49F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{736343C0-3A82-4758-AFA8-CC0A34D5D49F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{736343C0-3A82-4758-AFA8-CC0A34D5D49F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{736343C0-3A82-4758-AFA8-CC0A34D5D49F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +68,7 @@ Global
 		{492186A4-7E80-47CE-892B-347D035D0C03} = {AEA04D8A-32C1-4367-9845-8A3D0BD8B335}
 		{D0B7A647-A58B-44CD-9A18-5F5FE67A237E} = {931657A8-F27C-4DEF-8CB3-F3F3C0A58DB4}
 		{D440102E-1AF4-4AF7-BA81-9D634D8B71C7} = {6DD38477-AD9E-494C-93ED-03F088E825A9}
+		{736343C0-3A82-4758-AFA8-CC0A34D5D49F} = {AEA04D8A-32C1-4367-9845-8A3D0BD8B335}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {33B3EEBE-2969-407B-9B47-3269738B8633}

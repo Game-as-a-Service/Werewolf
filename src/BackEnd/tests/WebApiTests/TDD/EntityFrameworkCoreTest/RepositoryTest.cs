@@ -2,21 +2,20 @@
 using System.Collections.Immutable;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Domain.Objects;
-using Wsa.Gaas.Werewolf.SqlServer;
+using Wsa.Gaas.Werewolf.WebApi;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.TDD.EntityFrameworkCoreTest;
 internal class RepositoryTest
 {
     private readonly ServiceProvider _provider = new ServiceCollection()
-            .AddEntityFrameworkCoreRepository()
+            .AddWerewolfInfrastructure()
             .BuildServiceProvider();
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        var repository = GetRepository();
-        repository.Initialize();
     }
+
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
