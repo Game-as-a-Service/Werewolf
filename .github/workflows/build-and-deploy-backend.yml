@@ -8,10 +8,10 @@ on:
       - .github/workflows/build-and-deploy-backend.yml
 
 env:
-  DOTNET_VERSION: '7.0.x'
+  DOTNET_VERSION: '8.0.x'
   DOTNET_APP_SOURCE_PATH: './src/'
   DOTNET_APP_BACKEND_SOLUTION: 'Wsa.Gaas.Werewolf.BackEnd.sln'
-  DOTNET_APP_BACKEND_PROJECT_PATH: './src/BackEnd/src/InterfaceAdapter/WebApi'
+  DOTNET_APP_BACKEND_PROJECT_PATH: './src/BackEnd/src/Presentation/WebApi'
 
 jobs:
   build:
@@ -21,13 +21,13 @@ jobs:
     # Checkout the repo
     - name: git checkout
       uses: actions/checkout@v3
-    
+
     # Setup .NET SDK
     - name: Setup .NET SDK ${{ env.DOTNET_VERSION }}
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-  
+
     # Run dotnet build and test
     - name: Backend - dotnet restore, build and test
       working-directory: ${{ env.DOTNET_APP_SOURCE_PATH }}
@@ -70,11 +70,11 @@ jobs:
     # Download All Artifacts
     - name: Download All Artifacts
       uses: actions/download-artifact@v3
-    
+
     # Display file structures
     - name: Display structure of downloaded files
       run: ls -R
-  
+
     # Deploy to Azure App Service
     - name: Deploy to Backend Azure App Service
       uses: azure/webapps-deploy@v2
@@ -98,11 +98,11 @@ jobs:
       with:
         name: backend-app
         path: ./backend-app
-    
+
     # Display file structures
     - name: Display structure of downloaded files
       run: ls -R
-  
+
     # Deploy to Azure App Service
     - name: Deploy to Azure App Service
       uses: azure/webapps-deploy@v2

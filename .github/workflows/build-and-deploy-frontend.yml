@@ -8,7 +8,7 @@ on:
       - .github/workflows/build-and-deploy-frontend.yml
 
 env:
-  DOTNET_VERSION: '7.0.x'
+  DOTNET_VERSION: '8.0.x'
   DOTNET_APP_SOURCE_PATH: './src/'
   DOTNET_APP_FRONTEND_SOLUTION: 'Wsa.Gaas.Werewolf.DiscordBot.sln'
   DOTNET_APP_FRONTEND_PROJECT_PATH: './src/DiscordBot/src/InterfaceAdapter/DiscordBot'
@@ -21,13 +21,13 @@ jobs:
     # Checkout the repo
     - name: git checkout
       uses: actions/checkout@v3
-    
+
     # Setup .NET SDK
     - name: Setup .NET SDK ${{ env.DOTNET_VERSION }}
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-  
+
     # Run dotnet build and test
     - name: Frontend - dotnet restore, build and test
       working-directory: ${{ env.DOTNET_APP_SOURCE_PATH }}
@@ -84,7 +84,7 @@ jobs:
     # Display file structures
     - name: Display structure of downloaded files
       run: ls -R
-  
+
     # Deploy to Azure App Service
     - name: Deploy to Frontend Azure App Service
       uses: azure/webapps-deploy@v2
