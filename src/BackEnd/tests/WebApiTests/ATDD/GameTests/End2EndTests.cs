@@ -1,8 +1,8 @@
 ﻿using FastEndpoints;
 using System.Threading.Tasks.Dataflow;
-using Wsa.Gaas.Werewolf.Application.UseCases;
+using Wsa.Gaas.Werewolf.Application.UseCases.Games;
 using Wsa.Gaas.Werewolf.Domain.Objects;
-using Wsa.Gaas.Werewolf.WebApi.Endpoints;
+using Wsa.Gaas.Werewolf.WebApi.Endpoints.Games;
 using Wsa.Gaas.Werewolf.WebApi.ViewModels;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
@@ -23,19 +23,19 @@ internal class End2EndTests
         /* Arrange */
         _server.ListenAll();
 
-        var createGameRequest = new CreateGameRequest()
+        var createGameRequest = new GameCreateRequest()
         {
             DiscordVoiceChannelId = (ulong)new Random().Next(),
         };
 
-        var startGameRequest = new StartGameRequest
+        var startGameRequest = new GameStartRequest
         {
             DiscordVoiceChannelId = createGameRequest.DiscordVoiceChannelId,
             Players = _server.RandomDistinctPlayers(9),
         };
 
-        await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest>(createGameRequest);
-        await _server.Client.POSTAsync<StartGameEndpoint, StartGameRequest>(startGameRequest);
+        await _server.Client.POSTAsync<GameCreateEndpoint, GameCreateRequest>(createGameRequest);
+        await _server.Client.POSTAsync<GameStartEndpoint, GameStartRequest>(startGameRequest);
 
         var tokenSource = new CancellationTokenSource();
 

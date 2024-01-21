@@ -2,9 +2,9 @@ using FastEndpoints;
 using System.Net;
 using System.Threading.Tasks.Dataflow;
 using Wsa.Gaas.Werewolf.Application.Common;
-using Wsa.Gaas.Werewolf.Application.UseCases;
+using Wsa.Gaas.Werewolf.Application.UseCases.Games;
 using Wsa.Gaas.Werewolf.Domain.Events;
-using Wsa.Gaas.Werewolf.WebApi.Endpoints;
+using Wsa.Gaas.Werewolf.WebApi.Endpoints.Games;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests;
@@ -35,16 +35,16 @@ public class GameCreatedTests
         /* Arrange */
         _server.ListenOn<GameCreatedEvent>();
 
-        var request = new CreateGameRequest()
+        var request = new GameCreateRequest()
         {
             DiscordVoiceChannelId = (ulong)new Random().Next(),
         };
 
         /* Act */
-        var (r1, result) = await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, GetGameResponse>(request);
+        var (r1, result) = await _server.Client.POSTAsync<GameCreateEndpoint, GameCreateRequest, GameGetResponse>(request);
 
         // 2nd Call should get 400 error
-        var (response, r2) = await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, GetGameResponse>(request);
+        var (response, r2) = await _server.Client.POSTAsync<GameCreateEndpoint, GameCreateRequest, GameGetResponse>(request);
 
         /* Assert */
         // Check Rest API Result

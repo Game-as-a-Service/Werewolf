@@ -1,8 +1,8 @@
 ﻿using FastEndpoints;
 using Wsa.Gaas.Werewolf.Application.Common;
-using Wsa.Gaas.Werewolf.Application.UseCases;
+using Wsa.Gaas.Werewolf.Application.UseCases.Players;
 using Wsa.Gaas.Werewolf.Domain.Objects;
-using Wsa.Gaas.Werewolf.WebApi.Endpoints;
+using Wsa.Gaas.Werewolf.WebApi.Endpoints.Players;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests;
@@ -56,14 +56,14 @@ public class PlayerRoleConfirmedTests
             var expectedRole = player.Role!.Name;
 
             // Act - Rest API call
-            var request = new ConfirmPlayerRoleRequest()
+            var request = new PlayerGetRoleRequest()
             {
                 DiscordVoiceChannelId = game.DiscordVoiceChannelId,
                 PlayerId = playerId,
             };
 
             var (response, result) = await _server.Client
-                .GETAsync<ConfirmPlayerRoleEndpoint, ConfirmPlayerRoleRequest, ConfirmPlayerRoleResponse>(request);
+                .GETAsync<PlayerGetRoleEndpoint, PlayerGetRoleRequest, PlayerGetRoleResponse>(request);
 
             // Assert API Result
             response!.Should().BeSuccessful();

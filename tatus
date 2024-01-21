@@ -1,0 +1,538 @@
+[33mcommit 72f8099be114a98f482b3841abbf755f0ad9206c[m[33m ([m[1;36mHEAD -> [m[1;32mdevelop[m[33m, [m[1;31morigin/develop[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Jan 21 00:15:41 2024 +1100
+
+    Update .NET version in build workflows
+
+[33mcommit b76bd1f9be1b890f8ce3ecf25f262ef20ee6fa98[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Jan 21 00:12:51 2024 +1100
+
+    Remove unused code and update method implementation
+
+[33mcommit 612f7b662352717d150e7bee0f795a3fac150b40[m
+Author: Rick Su [SSW] <email@rick.su>
+Date:   Sat Jan 20 10:57:39 2024 +1100
+
+    Refactor/nuget upgrade (#74)
+    
+    * Restructure folders
+    
+    * Refactor WebApiEndpoint to use TResponse instead of TViewModel
+
+[33mcommit b14eeb694d06d1fa76869f16a2ea14946b69d2c8[m
+Author: Rick Su [SSW] <email@rick.su>
+Date:   Fri Jan 19 22:39:07 2024 +1100
+
+    nuget and .net8 upgrade (#73)
+
+[33mcommit 1e497354e4aad45a3755e601de42559fa766bc9a[m
+Author: Rick Su [SSW] <email@rick.su>
+Date:   Fri Jan 19 22:18:20 2024 +1100
+
+    Refactor/presenter (#72)
+    
+    * Refactor
+    
+    * Clean namespace
+
+[33mcommit c5e5bd845d71b9ffa390d767e0befdf807e0042e[m[33m ([m[1;32mfeatures/refactor-signalr[m[33m)[m
+Author: Rick Su [SSW] <email@rick.su>
+Date:   Sun Aug 20 18:57:19 2023 +1000
+
+    feat: Add timers for Werewolf / Seer / Witch (#68)
+
+[33mcommit e3ebc3991f004e1e498e96ea81154ddb1417e7e8[m
+Author: Rick Su [SSW] <email@rick.su>
+Date:   Sun Aug 20 17:27:28 2023 +1000
+
+    feat: 增加獵人觸發技能 (#67)
+
+[33mcommit e0d5adbaa78d0ee7c4c3fc1e2d7b14cc77ca6ff4[m
+Author: Rick Su [SSW] <email@rick.su>
+Date:   Sat Aug 19 22:25:57 2023 +1000
+
+    Feature/refactor interaction (#66)
+    
+    * feat: 前端「確認角色身分」5 秒後能夠收到 SignalR 訊息，並列印「確認角色身分結束」
+    
+    * feat: 女巫使用毒藥
+
+[33mcommit ed876f83082be5467ee85a7ed55b2938cb573df5[m
+Author: Rick Su [SSW] <email@rick.su>
+Date:   Sat Aug 19 21:53:27 2023 +1000
+
+    Done 宣布昨晚結果 (#65)
+
+[33mcommit f0fbfcb96f3e2aafc8828722aad5c71733a2642c[m
+Author: Rick Su [SSW] <email@rick.su>
+Date:   Sun Aug 6 01:28:34 2023 +1000
+
+    2023-08-05 宣布昨晚結果 - 平安夜 & 1 人死亡 (#62)
+    
+    * chore: code clean up
+    
+    * feat: 平安夜 + 1人死亡
+
+[33mcommit 6f2b49ad3a6bfbac2ead6a74e65b148e98ca3ee9[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Jul 23 01:26:17 2023 +1000
+
+    feat: 女巫使用解藥 (Happy Path)
+
+[33mcommit 2d7216b4df138fd55a2a103db13b78a212703109[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sat Jul 22 23:35:47 2023 +1000
+
+    feat: 驗證角色身分 30 秒
+
+[33mcommit 1e6c74e14c473befb7221ea6acdcf95c1c2a07a5[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sat Jul 15 22:53:25 2023 +1000
+
+    feat: Add SignalR Client
+
+[33mcommit 5370940cbab49dc23a28c72a620ebcf122cca835[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Tue Jul 11 11:00:41 2023 +1000
+
+    Feature/backend api endpoint (#58)
+    
+    * feat: add BackendApiEndpointOptions
+    
+    * fix: possible null reference
+
+[33mcommit 65ed0730822c5f0e20f870b0e364912241d212ee[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Tue Jul 11 02:30:27 2023 +1000
+
+    Feature/start game button (#57)
+    
+    * refactor: game UI
+    
+    * feat: Add confirm player role button
+    fix: Backend api response json format
+    
+    * fix: unit test
+
+[33mcommit 7a11ca7a8548312da45806d9e79a62edff27e81b[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Mon Jul 10 10:44:48 2023 +1000
+
+    fix: Create Game Response format
+
+[33mcommit e770bcf062b46732325acfb9f3093f12676b63f3[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Mon Jul 10 10:39:36 2023 +1000
+
+    feat: add unit test for GET /games/{id} with 404 error case
+
+[33mcommit ffed3565d4ba6bd79b307b8bfe50b04f6b355a6e[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sat Jul 8 22:58:17 2023 +1000
+
+    fix: GET /games/{id} 404 error case
+
+[33mcommit 12c198e3ff184c6476548df4f8fae5c541e08b95[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Wed Jul 5 22:35:53 2023 +1000
+
+    ignore appsettings.local.json
+
+[33mcommit d1f4b916f77ca1c575ddd7b58b591b8e1dbd1455[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Tue Jul 4 23:18:51 2023 +1000
+
+    feat: Add /game invite {n}
+
+[33mcommit dc36ceb12e55dfabee7719f8f95360e53eac09fe[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Tue Jun 27 12:46:20 2023 +1000
+
+    Add Join/Leave Button (#55)
+
+[33mcommit e0ba9630dcea8a5184a304b2234129dc023ae49e[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Jun 25 01:16:03 2023 +1000
+
+    Fix CI/CD path filter case-sensitive
+
+[33mcommit bb6d75661ec0f090e2c09e377e3d22383f4cdae5[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Jun 25 01:12:21 2023 +1000
+
+    Add API GET /games/{gameId}
+
+[33mcommit e5a11626095cb845fb4665bf7b72051ae267182e[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sat Jun 24 23:58:25 2023 +1000
+
+    Add Game Status Slash Command
+
+[33mcommit 0c8f02a1020f5803151a8ab9caaeea9cd311b562[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Jun 18 01:39:37 2023 +1000
+
+    WIP
+
+[33mcommit c1b46f004fd192b60c89f1832f8b6a67155a8c53[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Jun 11 15:06:52 2023 +1000
+
+    Add ArrayEqualityComparator to pass test
+
+[33mcommit 62ca6f382a3225ea4aa8528917bd403790591121[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Jun 11 02:40:51 2023 +1000
+
+    WIP, no pass
+
+[33mcommit 4900c102fe49167c325f335352c3e9a698ad012b[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Jun 4 20:32:20 2023 +1000
+
+    :white_check_mark: Unit Test for Use Case
+    
+    :arrow_up: Upgrade NuGet Packages
+
+[33mcommit 8f4e1998bf9fb97c07bf2af4ab9d058092c2d19d[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Jun 4 01:38:03 2023 +1000
+
+    週六第二場 Mob Programming
+
+[33mcommit 30c3695a28bdde1d88f2e530f032a3a2c00d9092[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Wed Jun 14 00:40:02 2023 +1000
+
+    fix ci/cd trigger path
+
+[33mcommit 5794e79977a2cbb6a96643e48f4afe7ba2c3b8ea[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Wed Jun 14 00:38:24 2023 +1000
+
+    bump verion 1.0.1
+
+[33mcommit e88d69667b0218d02226a66ff14343aa8e37b2d3[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Jun 11 16:37:59 2023 +1000
+
+    Feature/mob programming (#52)
+    
+    Fix compile error
+
+[33mcommit 68aa74911565e96dd057ad47637b09ff87d1918a[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Jun 11 15:21:33 2023 +1000
+
+    Feature/mob programming (#51)
+    
+    Mob Programming on 2023-06-10
+
+[33mcommit a19f523c57fd257821852c951e2e6fce2bb8fcf8[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Jun 11 13:23:18 2023 +1000
+
+    FrontEnd Project Setup and CI/CD (#39)
+
+[33mcommit a6921b197f2e26282d314f5834c9694b361d6752[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun May 28 01:38:29 2023 +1000
+
+    Done 3 個 TDD Test Cases
+
+[33mcommit 36886811d494133c93dc579efcc6f438453eb809[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun May 21 02:12:08 2023 +1000
+
+    WIP
+
+[33mcommit 7baaebf75a3a8fa4d06cc5378edc013cb7547959[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sat May 20 19:12:48 2023 +1000
+
+    Issue #22 殺死票數最高的玩家
+    Issue #47 狼人沒投票
+
+[33mcommit 737a76f7f211d3316ba36552e8768683837b9a2d[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Mon Apr 10 10:10:42 2023 +1000
+
+    Features/weekly progress (#41)
+    
+    * Add Commit Hash to Version
+    
+    * TDD
+    
+    * Fix Compiler Error and Pass the test
+    
+    * Live Coding
+    
+    * Add TDD Domain Test
+    
+    * File name change
+    
+    * Re-Mock GameEventBus
+    
+    * Refactor and rename test case
+
+[33mcommit 45ec96f4d02b8846cdd9c2ddc63dec7c1a325930[m
+Author: luweita <ec21402@gmail.com>
+Date:   Tue Mar 21 07:07:13 2023 +0800
+
+    Issues #33 關閉遊戲,#35 關閉已關閉的遊戲 (#36)
+
+[33mcommit 153d1bb8055a33b41e0f7cc89414db756a51cb8e[m
+Author: yoyo890121 <yoyo890121@hotmail.com>
+Date:   Mon Mar 6 07:28:51 2023 +0800
+
+    docs: Fix setup typo (#32)
+
+[33mcommit 43a000c7a1d2465694f041b702f4d8fba3112bf1[m
+Author: CrimsonNightZero <31186669+CrimsonNightZero@users.noreply.github.com>
+Date:   Tue Feb 28 20:19:13 2023 +0800
+
+    #27 預言家查驗 - 查驗結果並不會告知角色 (PR #29)
+    
+    * feat: Add SeerDiscoverTest usecase
+    
+    * Fix Compile Error
+    
+    * fix: Remove discovery result to server
+    
+    ---------
+    
+    Co-authored-by: Rick Su <35659961+ricksu978@users.noreply.github.com>
+
+[33mcommit 3f15e947adc78a9526d0751614fef31b4bb6b6dc[m
+Author: CrimsonNightZero <31186669+CrimsonNightZero@users.noreply.github.com>
+Date:   Tue Feb 28 05:47:57 2023 +0800
+
+    #17 預言家查驗 - 只能查驗場上存活的玩家 (PR #28)
+    
+    * feat: Add SeerDiscoverNotSurvivedTest usecase
+    
+    * Fix Compile Error
+    
+    ---------
+    
+    Co-authored-by: Rick Su <35659961+ricksu978@users.noreply.github.com>
+
+[33mcommit 5eb7aa0545fb2a7da85d9c20f3dd4bbf87926aef[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Fri Feb 24 23:46:34 2023 +1100
+
+    #24 Add TDD for IRepository (#26)
+    
+    - Add TDD for IRepository
+    - Minor Refactor
+
+[33mcommit 6cb5423745181c6f9adf76908a607bd5bdd2d834[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sat Feb 18 19:59:19 2023 +1100
+
+    Fix dotnet publish condition
+
+[33mcommit c6d1c6a6c3e6e87db633f3cb702b7e4bbf9dee6c[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sat Feb 18 02:07:36 2023 +1100
+
+    GitHub Action: fix dotnet publish condition
+
+[33mcommit 04f8c03d2109aef78bc9ccbc2e0675371f5e85ec[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sat Feb 18 02:05:45 2023 +1100
+
+    GItHub Action: Fix artifact name
+
+[33mcommit 556e29bf3b51ca08b9dc040478b433c12bd46d50[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sat Feb 18 02:03:24 2023 +1100
+
+    Update build-and-deploy.yml
+
+[33mcommit 84a581d637eae3c5598654a85d2a8b4af3f94cc2[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sat Feb 18 02:01:42 2023 +1100
+
+    Fix develop deployment condition
+
+[33mcommit 213507aa9b0a4623caf05ecdce163cc2ed7f250c[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sat Feb 18 01:59:12 2023 +1100
+
+    Issue/20 (#21)
+    
+    確認角色身分 - 玩家確認 角色身分
+
+[33mcommit bcd2c51c9234f3c130bad91dbae8345ec9e93bbe[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Wed Feb 15 08:41:24 2023 +1100
+
+    ASP.Net / FastEndpoints NuGet Upgrade
+
+[33mcommit 3419e3997b4c57d232a39a83281c311a92eeba06[m
+Merge: 1ef114b b3e7845
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Feb 12 21:14:29 2023 +1100
+
+    Merge pull request #15 from Game-as-a-Service/features/player_spake
+    
+    #8 SpeakingOrder - PeaceNight
+
+[33mcommit 1ef114b4c3ea05f192bde0f5f798b31e85647d10[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Feb 12 20:50:52 2023 +1100
+
+    Update README.md
+
+[33mcommit 5763ad9c87beb6f46f4086377950639cce06f609[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Feb 12 20:36:27 2023 +1100
+
+    Enhance status badge
+
+[33mcommit 43dc1b96c0407e4c8128972e1e439eb8c2122623[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Feb 12 20:31:49 2023 +1100
+
+    CI/CD Add status badge
+
+[33mcommit 69c18d32a0fd1b4ad296f52d944dbd55050cf633[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Feb 12 20:27:38 2023 +1100
+
+    Walking skeleton (#16)
+    
+    Combine Build and Deploy workflows into one workflow
+    
+    - GitHub Action cannot download Artifact across workflows
+
+[33mcommit b3e784507b8030a1b6a6e468014bcaceea1be3c3[m
+Author: chimmyJay <chimm9jay@gmail.com>
+Date:   Sun Feb 12 03:27:00 2023 +0800
+
+    #8 SpeakingOrder - PeaceNight
+
+[33mcommit 0a4c3b590538403a58024e161beaac622e875645[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Feb 12 19:15:56 2023 +1100
+
+    Dump steps context
+
+[33mcommit d179bf8892daf13fec15c50cf644aa0f629c7fe5[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Feb 12 19:11:42 2023 +1100
+
+    Try using marketplace action
+
+[33mcommit 007a02c5a8eaf64627ec7af49fc643b388a086e5[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Feb 12 19:04:59 2023 +1100
+
+    Update deploy.yml
+
+[33mcommit b5b63f2626bb20d992e5f3dd37bdcf7b8dd544dd[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Feb 12 18:55:35 2023 +1100
+
+    Add condition check for previous job status
+
+[33mcommit dfa18cf8fec14c06c737b5b7878af652db7b7395[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Feb 12 18:53:05 2023 +1100
+
+    Walking skeleton (#14)
+    
+    * Added GitHub Action for CI/CD
+
+[33mcommit d90eea29cfcf33382d7b29cd8f5d2a0bc9bb3f44[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Fri Feb 10 18:15:40 2023 +1100
+
+    #9 #10 #11 #12 #13 Add GameCreatedTests and GameStartedTests
+    
+    ## Clean Architecture Refactor
+    - Rename GameEvenPublisher to GameEventBus
+    - Fix SignalR method name
+    
+    ## IRepository
+    - Use pure In-Memory
+
+[33mcommit e09959368a74984a1a9a441b525215fc68507446[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Thu Feb 9 00:06:00 2023 +1100
+
+    Refactor IEventPublisher / Add Policy
+
+[33mcommit 2854ef03b69d5757b6a270cd0082ad3dc88030b4[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Wed Feb 8 11:44:08 2023 +1100
+
+    Fix namespace typo
+
+[33mcommit d216405cf51a6d63af9cf76342d15595ebad9a96[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Tue Feb 7 19:41:45 2023 +1100
+
+    ATDD: Add CreateGameUseCase
+
+[33mcommit 65e3f329428b0a430f9aa51ecda94a5d740bf85d[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Thu Feb 2 20:48:14 2023 +1100
+
+    Update setup.md
+
+[33mcommit 7c414826ab261d80d8faa55d0c72c8b32f2a681a[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Thu Feb 2 20:09:06 2023 +1100
+
+    初始化專案 part 2
+
+[33mcommit 6498a31a7df98505fd274737bb18195d88319f1f[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Tue Jan 24 13:02:42 2023 +1100
+
+    Update README.md
+
+[33mcommit 5a4afb2e13eefc42a06b42627c869fff618bf3d4[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Wed Jan 18 11:52:23 2023 +1100
+
+    Update README.md
+
+[33mcommit 5d644eca026da43e1dcb6981de18f8323146d508[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Wed Jan 18 11:38:39 2023 +1100
+
+    初始化專案
+
+[33mcommit 4a79bad89a24ff0bd87fd1736a0467e367f47112[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Wed Jan 18 09:46:40 2023 +1100
+
+    Create setup.md
+
+[33mcommit e9d389c78f00f207c66b5ba8e56e9bf0dd030fb5[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Mon Jan 16 10:14:14 2023 +1100
+
+    Update README.md
+
+[33mcommit 158f6d161c21d772bbadf22f3e6006983fc0f770[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Mon Jan 16 10:13:13 2023 +1100
+
+    Update README.md
+
+[33mcommit 412b0e3aadc4beacbfcc7a99b464964426017e60[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Jan 15 23:29:03 2023 +1100
+
+    Update README.md
+
+[33mcommit 021528fe6b0a8c599c8b0cb79e7e3c0404a53223[m
+Author: Rick Su <35659961+ricksu978@users.noreply.github.com>
+Date:   Sun Jan 15 23:21:10 2023 +1100
+
+    Initial commit

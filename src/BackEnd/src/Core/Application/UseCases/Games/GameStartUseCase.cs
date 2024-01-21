@@ -1,18 +1,18 @@
 ﻿using Wsa.Gaas.Werewolf.Application.Dtos;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
-namespace Wsa.Gaas.Werewolf.Application.UseCases;
-public class StartGameRequest
+namespace Wsa.Gaas.Werewolf.Application.UseCases.Games;
+public class GameStartRequest
 {
     public ulong DiscordVoiceChannelId { get; set; }
 
     public ulong[] Players { get; set; } = Array.Empty<ulong>();
 }
 
-public class StartGameResponse
+public class GameStartResponse
 {
-    public StartGameResponse() { }
-    public StartGameResponse(GameEvent gameEvent)
+    public GameStartResponse() { }
+    public GameStartResponse(GameEvent gameEvent)
     {
         Id = gameEvent.Data.DiscordVoiceChannelId;
         Players = gameEvent.Data.Players.Select(p => new PlayerDto
@@ -29,15 +29,15 @@ public class StartGameResponse
     public GameStatus Status { get; set; }
 }
 
-public class StartGameUseCase : UseCase<StartGameRequest, StartGameResponse>
+public class GameStartUseCase : UseCase<GameStartRequest, GameStartResponse>
 {
     private readonly static object _lock = new();
 
-    public StartGameUseCase(IRepository repository, GameEventBus eventPublisher) : base(repository, eventPublisher)
+    public GameStartUseCase(IRepository repository, GameEventBus eventPublisher) : base(repository, eventPublisher)
     {
     }
 
-    public override async Task<StartGameResponse> ExecuteAsync(StartGameRequest request, CancellationToken cancellationToken = default)
+    public override async Task<GameStartResponse> ExecuteAsync(GameStartRequest request, CancellationToken cancellationToken = default)
     {
         Game? game;
         IEnumerable<GameEvent> events;
@@ -63,6 +63,6 @@ public class StartGameUseCase : UseCase<StartGameRequest, StartGameResponse>
         await GameEventBus.BroadcastAsync(events, cancellationToken);
 
         // Restful API
-        return new StartGameResponse(events.First());
+        return new GameStartResponse(events.First());
     }
 }

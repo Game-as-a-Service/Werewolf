@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System.Linq.Expressions;
 using Wsa.Gaas.Werewolf.Application.Common;
-using Wsa.Gaas.Werewolf.Application.UseCases;
+using Wsa.Gaas.Werewolf.Application.UseCases.Games;
 using Wsa.Gaas.Werewolf.Domain.Common;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Objects;
@@ -24,7 +24,7 @@ internal class StartGameUseCaseTests
         var faker = new Faker();
 
         //Given
-        var request = new StartGameRequest()
+        var request = new GameStartRequest()
         {
             DiscordVoiceChannelId = faker.Random.ULong(),
             Players = new ulong[]
@@ -62,7 +62,7 @@ internal class StartGameUseCaseTests
         presenter.Setup(x => x.PresentAsync(It.IsAny<PlayerRoleConfirmationStartedEvent>(), It.IsAny<CancellationToken>()));
 
         // Arrange Use Case
-        var useCase = new StartGameUseCase(repository.Object, eventBus.Object);
+        var useCase = new GameStartUseCase(repository.Object, eventBus.Object);
 
         //When
         await useCase.ExecuteAsync(request);
@@ -113,7 +113,7 @@ internal class StartGameUseCaseTests
         // 1. Given
         var faker = new Faker();
 
-        var request = new StartGameRequest()
+        var request = new GameStartRequest()
         {
             DiscordVoiceChannelId = faker.Random.ULong(),
             Players = new ulong[]
@@ -152,7 +152,7 @@ internal class StartGameUseCaseTests
 
         var mockPresenter = new Mock<IPresenter<PlayerRoleConfirmationStartedEvent>>();
 
-        var useCase = new StartGameUseCase(
+        var useCase = new GameStartUseCase(
             mockRepository.Object,
             mockEventBus.Object
         );
@@ -206,7 +206,7 @@ internal class StartGameUseCaseTests
         var discordVoiceChannelId = faker.Random.ULong();
         var players = Enumerable.Range(0, 12).Select(x => faker.Random.ULong()).ToArray();
 
-        var request = new StartGameRequest()
+        var request = new GameStartRequest()
         {
             DiscordVoiceChannelId = discordVoiceChannelId,
             Players = players,
@@ -231,7 +231,7 @@ internal class StartGameUseCaseTests
 
         // Mock Game Event
 
-        var useCase = new StartGameUseCase(mockRepository.Object, mockEventBus.Object);
+        var useCase = new GameStartUseCase(mockRepository.Object, mockEventBus.Object);
 
 
         //When
@@ -274,13 +274,13 @@ internal class StartGameUseCaseTests
         }
 
 
-        var request = new StartGameRequest()
+        var request = new GameStartRequest()
         {
             DiscordVoiceChannelId = faker.Random.ULong(),
             Players = players
         };
 
-        var req = new Faker<StartGameRequest>()
+        var req = new Faker<GameStartRequest>()
             .RuleFor(x => x.DiscordVoiceChannelId, f => f.Random.ULong());
 
 
@@ -308,7 +308,7 @@ internal class StartGameUseCaseTests
             .ToArray()
             ;
 
-        var request = new StartGameRequest()
+        var request = new GameStartRequest()
         {
             DiscordVoiceChannelId = discordVoiceChannelId,
             Players = players,
@@ -334,7 +334,7 @@ internal class StartGameUseCaseTests
             new Mock<IServiceScopeFactory>().Object
         );
 
-        var useCase = new StartGameUseCase(
+        var useCase = new GameStartUseCase(
             repository.Object,
             gameEventBus.Object
         );

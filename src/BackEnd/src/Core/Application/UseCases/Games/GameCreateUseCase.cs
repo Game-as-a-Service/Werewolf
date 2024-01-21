@@ -1,15 +1,15 @@
 ﻿using Wsa.Gaas.Werewolf.Application.Dtos;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
-namespace Wsa.Gaas.Werewolf.Application.UseCases;
-public class CreateGameRequest
+namespace Wsa.Gaas.Werewolf.Application.UseCases.Games;
+public class GameCreateRequest
 {
     public ulong DiscordVoiceChannelId { get; set; }
 }
 
-public class CreateGameResponse
+public class GameCreateResponse
 {
-    public CreateGameResponse(GameEvent gameEvent)
+    public GameCreateResponse(GameEvent gameEvent)
     {
         Id = gameEvent.Data.DiscordVoiceChannelId;
         Players = gameEvent.Data.Players.Select(p => new PlayerDto
@@ -26,15 +26,15 @@ public class CreateGameResponse
     public GameStatus Status { get; set; }
 }
 
-public class CreateGameUseCase : UseCase<CreateGameRequest, CreateGameResponse>
+public class GameCreateUseCase : UseCase<GameCreateRequest, GameCreateResponse>
 {
     private readonly static object _lock = new();
 
-    public CreateGameUseCase(IRepository repository, GameEventBus eventPublisher) : base(repository, eventPublisher)
+    public GameCreateUseCase(IRepository repository, GameEventBus eventPublisher) : base(repository, eventPublisher)
     {
     }
 
-    public override async Task<CreateGameResponse> ExecuteAsync(CreateGameRequest request, CancellationToken cancellationToken = default)
+    public override async Task<GameCreateResponse> ExecuteAsync(GameCreateRequest request, CancellationToken cancellationToken = default)
     {
         Game? game;
 
@@ -62,6 +62,6 @@ public class CreateGameUseCase : UseCase<CreateGameRequest, CreateGameResponse>
         await GameEventBus.BroadcastAsync(new[] { gameEvent }, cancellationToken);
 
         // Restful API
-        return new CreateGameResponse(gameEvent);
+        return new GameCreateResponse(gameEvent);
     }
 }

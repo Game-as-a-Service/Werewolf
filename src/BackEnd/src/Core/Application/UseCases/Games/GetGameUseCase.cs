@@ -1,20 +1,20 @@
 ﻿using Wsa.Gaas.Werewolf.Application.Dtos;
 using Wsa.Gaas.Werewolf.Domain.Objects;
 
-namespace Wsa.Gaas.Werewolf.Application.UseCases;
-public class GetGameRequest
+namespace Wsa.Gaas.Werewolf.Application.UseCases.Games;
+public class GameGetRequest
 {
     public ulong DiscordVoiceChannelId { get; set; }
 }
 
-public class GetGameResponse
+public class GameGetResponse
 {
-    public GetGameResponse()
+    public GameGetResponse()
     {
 
     }
 
-    public GetGameResponse(GameEvent gameEvent)
+    public GameGetResponse(GameEvent gameEvent)
     {
         Id = gameEvent.Data.DiscordVoiceChannelId;
         Players = gameEvent.Data.Players.Select(p => new PlayerDto
@@ -31,13 +31,13 @@ public class GetGameResponse
     public GameStatus Status { get; set; }
 }
 
-public class GetGamesUseCase : UseCase<GetGameRequest, GetGameResponse>
+public class GamesGetUseCase : UseCase<GameGetRequest, GameGetResponse>
 {
-    public GetGamesUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
+    public GamesGetUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
     {
     }
 
-    public override async Task<GetGameResponse> ExecuteAsync(GetGameRequest request, CancellationToken cancellationToken = default)
+    public override async Task<GameGetResponse> ExecuteAsync(GameGetRequest request, CancellationToken cancellationToken = default)
     {
         // 查
         var game = await Repository.FindByDiscordChannelIdAsync(request.DiscordVoiceChannelId);
@@ -53,6 +53,6 @@ public class GetGamesUseCase : UseCase<GetGameRequest, GetGameResponse>
         // 推
         var gameEvent = new GetGameEvent(game);
 
-        return new GetGameResponse(gameEvent);
+        return new GameGetResponse(gameEvent);
     }
 }

@@ -1,22 +1,22 @@
 ﻿using Wsa.Gaas.Werewolf.Domain.Objects;
 
-namespace Wsa.Gaas.Werewolf.Application.UseCases;
-public class EndGameRequest
+namespace Wsa.Gaas.Werewolf.Application.UseCases.Games;
+public class GameEndRequest
 {
     public ulong DiscordVoiceChannelId { get; set; }
 }
 
-public record EndGameResponse();
+public record GameEndResponse();
 
-public class EndGameUseCase : UseCase<EndGameRequest, EndGameResponse>
+public class GameEndUseCase : UseCase<GameEndRequest, GameEndResponse>
 {
     private readonly static object _lock = new();
 
-    public EndGameUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
+    public GameEndUseCase(IRepository repository, GameEventBus gameEventBus) : base(repository, gameEventBus)
     {
     }
 
-    public override Task<EndGameResponse> ExecuteAsync(EndGameRequest request, CancellationToken cancellationToken = default)
+    public override Task<GameEndResponse> ExecuteAsync(GameEndRequest request, CancellationToken cancellationToken = default)
     {
         Game? game;
         lock (_lock)
@@ -40,6 +40,6 @@ public class EndGameUseCase : UseCase<EndGameRequest, EndGameResponse>
         // SignalR 中斷連線
 
         // Restful API
-        return Task.FromResult(new EndGameResponse());
+        return Task.FromResult(new GameEndResponse());
     }
 }

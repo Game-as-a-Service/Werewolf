@@ -1,4 +1,4 @@
-﻿namespace Wsa.Gaas.Werewolf.Application.UseCases;
+﻿namespace Wsa.Gaas.Werewolf.Application.UseCases.Players;
 public class WitchUseAntidoteRequest
 {
     public ulong DiscordVoiceChannelId { get; set; }

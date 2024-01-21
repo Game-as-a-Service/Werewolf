@@ -8,7 +8,7 @@ using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests;
 
-using Wsa.Gaas.Werewolf.Application.UseCases;
+using Wsa.Gaas.Werewolf.Application.UseCases.Games;
 
 internal class GetGameTests
 {
@@ -44,7 +44,7 @@ internal class GetGameTests
         };
         options.Converters.Add(new JsonStringEnumConverter());
 
-        var dto = await response.Content.ReadFromJsonAsync<GetGameResponse>(options);
+        var dto = await response.Content.ReadFromJsonAsync<GameGetResponse>(options);
         dto!.Id.Should().Be(game.DiscordVoiceChannelId);
         dto.Status.Should().Be(GameStatus.Started);
         dto.Players.Should().HaveCount(playerCount);

@@ -1,9 +1,9 @@
 ﻿using FastEndpoints;
 using System.Net;
 using Wsa.Gaas.Werewolf.Application.Common;
-using Wsa.Gaas.Werewolf.Application.UseCases;
+using Wsa.Gaas.Werewolf.Application.UseCases.Games;
 using Wsa.Gaas.Werewolf.Domain.Events;
-using Wsa.Gaas.Werewolf.WebApi.Endpoints;
+using Wsa.Gaas.Werewolf.WebApi.Endpoints.Games;
 using Wsa.Gaas.Werewolf.WebApiTests.ATDD.Common;
 
 namespace Wsa.Gaas.Werewolf.WebApiTests.ATDD.GameTests;
@@ -35,22 +35,22 @@ public class GameEndedTests
         /* Arrange */
         _server.ListenOn<GameCreatedEvent>();
 
-        var createGameRq = new CreateGameRequest()
+        var createGameRq = new GameCreateRequest()
         {
             DiscordVoiceChannelId = (ulong)new Random().Next(),
         };
 
         //Create game
-        var (_, createGameResponse) = await _server.Client.POSTAsync<CreateGameEndpoint, CreateGameRequest, GetGameResponse>(createGameRq);
+        var (_, createGameResponse) = await _server.Client.POSTAsync<GameCreateEndpoint, GameCreateRequest, GameGetResponse>(createGameRq);
 
-        var request = new EndGameRequest()
+        var request = new GameEndRequest()
         {
             DiscordVoiceChannelId = createGameResponse!.Id
         };
 
-        var (_, result) = await _server.Client.POSTAsync<EndGameEndpoint, EndGameRequest, EndGameResponse>(request);
+        var (_, result) = await _server.Client.POSTAsync<GameEndEndpoint, GameEndRequest, GameEndResponse>(request);
 
-        var (response, _) = await _server.Client.POSTAsync<EndGameEndpoint, EndGameRequest, EndGameResponse>(request);
+        var (response, _) = await _server.Client.POSTAsync<GameEndEndpoint, GameEndRequest, GameEndResponse>(request);
 
         /* Assert */
 

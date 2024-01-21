@@ -1,4 +1,6 @@
-﻿namespace Wsa.Gaas.Werewolf.WebApi.Endpoints;
+﻿using Wsa.Gaas.Werewolf.Application.UseCases.Players;
+
+namespace Wsa.Gaas.Werewolf.WebApi.Endpoints.Players;
 
 public class WitchUsePoisonEndpoint : WebApiEndpoint<WitchUsePoisonRequest, WitchUsePoisonResponse>
 {

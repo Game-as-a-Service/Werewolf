@@ -43,7 +43,7 @@ public class Game
         };
     }
 
-    public PlayerRoleConfirmedEvent ConfirmPlayerRole(ulong playerId)
+    public PlayerRoleConfirmedEvent PlayerGetRole(ulong playerId)
     {
         var player = Players.FirstOrDefault(x => x.UserId == playerId)
             ?? throw new PlayerNotFoundException(DiscordVoiceChannelId, playerId);
