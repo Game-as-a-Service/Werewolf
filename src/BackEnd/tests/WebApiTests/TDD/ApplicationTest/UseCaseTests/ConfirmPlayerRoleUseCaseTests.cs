@@ -2,6 +2,7 @@
 using Moq;
 using Wsa.Gaas.Werewolf.Application.Common;
 using Wsa.Gaas.Werewolf.Application.UseCases;
+using Wsa.Gaas.Werewolf.Application.UseCases.Players;
 using Wsa.Gaas.Werewolf.Domain.Events;
 using Wsa.Gaas.Werewolf.Domain.Exceptions;
 using Wsa.Gaas.Werewolf.Domain.Objects;
@@ -49,7 +50,7 @@ public class ConfirmPlayerRoleUseCaseTests
         presenter.Setup(x => x.PresentAsync(It.IsAny<PlayerRoleConfirmedEvent>(), It.IsAny<CancellationToken>()));
 
         // Arrange Use Case
-        var useCase = new ConfirmPlayerRoleUseCase(
+        var useCase = new PlayerGetRoleUseCase(
             repository.Object,
             gameEventBus.Object
         );
@@ -60,7 +61,7 @@ public class ConfirmPlayerRoleUseCaseTests
             var playerId = player.UserId;
             var expectedRole = player.Role.Name;
 
-            var request = new ConfirmPlayerRoleRequest
+            var request = new PlayerGetRoleRequest
             {
                 DiscordVoiceChannelId = discordVoiceChannelId,
                 PlayerId = playerId,
@@ -81,7 +82,7 @@ public class ConfirmPlayerRoleUseCaseTests
         // Arrange or Given
         ulong discordVoiceChannelId = 3;
         ulong playerId = 2;
-        var request = new ConfirmPlayerRoleRequest
+        var request = new PlayerGetRoleRequest
         {
             DiscordVoiceChannelId = discordVoiceChannelId,
             PlayerId = playerId,
@@ -105,7 +106,7 @@ public class ConfirmPlayerRoleUseCaseTests
         gameEventBus.Setup(x => x.BroadcastAsync(It.IsAny<PlayerRoleConfirmedEvent>(), It.IsAny<CancellationToken>()));
 
 
-        var useCase = new ConfirmPlayerRoleUseCase(
+        var useCase = new PlayerGetRoleUseCase(
             repository.Object,
             gameEventBus.Object
         );
