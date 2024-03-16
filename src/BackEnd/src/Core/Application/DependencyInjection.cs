@@ -8,9 +8,6 @@ public static class DependencyInjection
         // Inject Use Cases
         services.AddUseCases();
 
-        // Inject Policies
-        services.AddPolicies();
-
         // GameEvenPublisher
         services.AddScoped<GameEventBus>();
 
@@ -26,23 +23,6 @@ public static class DependencyInjection
         foreach (var type in types)
         {
             if (type.BaseType?.IsGenericType == true && type.BaseType?.GetGenericTypeDefinition() == useCaseType)
-            {
-                services.AddScoped(type.BaseType, type);
-            }
-        }
-
-        return services;
-    }
-
-    private static IServiceCollection AddPolicies(this IServiceCollection services)
-    {
-        var assembly = typeof(DependencyInjection).Assembly;
-        var types = assembly.GetTypes();
-        var policyType = typeof(Policy<>);
-
-        foreach (var type in types)
-        {
-            if (type.BaseType?.IsGenericType == true && type.BaseType?.GetGenericTypeDefinition() == policyType)
             {
                 services.AddScoped(type.BaseType, type);
             }
